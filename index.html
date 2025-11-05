@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Investment Growth & Crypto Profit Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="container header">
+    <h1>Investment Growth & Crypto Profit Calculator</h1>
+    <p class="tagline">Se hvad dine penge kan blive værd — hurtigt og enkelt.</p>
+  </header>
+
+  <main class="container grid">
+    <!-- Input panel -->
+    <section class="card">
+      <h2>Indtast dine tal</h2>
+
+      <form id="calc-form" class="form" novalidate>
+        <div class="form-row">
+          <label for="initial">Startbeløb (DKK)</label>
+          <input type="number" id="initial" min="0" step="100" placeholder="fx 10.000" value="20000" />
+        </div>
+
+        <div class="form-row">
+          <label for="monthly">Månedligt indskud (DKK)</label>
+          <input type="number" id="monthly" min="0" step="50" placeholder="fx 1.000" value="2500" />
+        </div>
+
+        <div class="form-row">
+          <label for="years">Antal år</label>
+          <input type="number" id="years" min="1" max="60" step="1" placeholder="fx 10" value="10" />
+        </div>
+
+        <div class="form-row field-with-tip">
+          <label for="expReturn">Forventet årligt afkast (%)</label>
+          <div class="input-wrap">
+            <input type="number" id="expReturn" step="0.1" min="-50" max="50" placeholder="fx 7" value="7" />
+            <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
+          </div>
+          <div class="tooltip">Vejl.: Global aktieindeks: 6–8 %, Enkeltaktier: 8–12 %, Ejendomme: 4–6 %, Crypto: 10–30 %.</div>
+        </div>
+
+        <div class="form-row split-2">
+          <div class="form-cell">
+            <label for="feePreset">Forvalg af omkostninger</label>
+            <select id="feePreset">
+              <option value="manual">Manuelt (jeg taster selv)</option>
+              <option value="global_index">Global indeksfond (~0,20 %)</option>
+              <option value="danish_index">Dansk indeksfond (~0,50 %)</option>
+              <option value="etf_broker">ETF/Broker (~0,35 %)</option>
+              <option value="robo">Robo-rådgiver (~0,75 %)</option>
+              <option value="single_stocks">Enkeltaktier (0,00 %)</option>
+              <option value="crypto_hold">Crypto buy & hold (0,00 %)</option>
+            </select>
+          </div>
+
+          <div class="form-cell field-with-tip">
+            <label for="fees">Årlige omkostninger (%)</label>
+            <div class="input-wrap">
+              <input type="number" id="fees" min="0" max="10" step="0.01" placeholder="fx 0,20" value="0.50" />
+              <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
+            </div>
+            <div class="tooltip">TER = Total Expense Ratio (årlige løbende omkostninger ved investering).</div>
+          </div>
+        </div>
+
+        <button id="calc-btn" type="submit" class="btn-primary">Beregn</button>
+      </form>
+
+      <!-- Monte Carlo under input-panelet (venstre kolonne) -->
+      <section class="card">
+        <h2>Usikkerhed (Monte Carlo)</h2>
+
+        <div class="callout">
+          <strong>Hvad viser dette?</strong><br />
+          Vi simulerer mange mulige forløb ud fra dit forventede afkast og din valgte volatilitet (hvor meget afkastet kan svinge).<br /><br />
+          • <strong>P10</strong> = de 10 % laveste resultater (dårlig scenario)<br />
+          • <strong>P50</strong> = medianen (mest sandsynlige udfald)<br />
+          • <strong>P90</strong> = de 10 % bedste scenarier (optimistisk udfald).<br /><br />
+          Den orange “sky” i grafen svarer til området mellem P10–P90.
+        </div>
+
+        <div class="form-row split-2">
+          <div class="form-cell field-with-tip">
+            <label for="volatility">Årlig volatilitet (%)</label>
+            <div class="input-wrap">
+              <input type="number" id="volatility" min="0" max="200" step="1" value="25" />
+              <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
+            </div>
+            <div class="tooltip">Volatilitet = hvor meget værdien forventes at svinge — fx aktier 15–20 %, crypto 60–100 %.</div>
+          </div>
+
+          <div class="form-cell field-with-tip">
+            <label for="simulations">Antal simuleringer</label>
+            <div class="input-wrap">
+              <input type="number" id="simulations" min="50" max="3000" step="50" value="350" />
+              <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
+            </div>
+            <div class="tooltip">Flere simuleringer = mere stabilt interval, men lidt langsommere.</div>
+          </div>
+        </div>
+
+        <button id="mc-btn" type="button" class="btn-secondary">Simulér usikkerhed</button>
+
+        <div class="table-wrap">
+          <table class="tbl" id="mc-table">
+            <thead>
+              <tr><th>År (antal)</th><th>Slutværdi P10</th><th>P50 (median)</th><th>P90</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- Resultater (højre) -->
+    <section class="card">
+      <h2>Resultater</h2>
+
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">Total indskud</div><div id="kpi-contrib" class="kpi-value">–</div></div>
+        <div class="kpi"><div class="kpi-label">Rentegevinst</div><div id="kpi-interest" class="kpi-value">–</div></div>
+        <div class="kpi"><div class="kpi-label">Slutværdi</div><div id="kpi-final" class="kpi-value">–</div></div>
+        <div class="kpi kpi-inline field-with-tip">
+          <div class="kpi-row">
+            <div class="kpi-label">Årligt effektivt afkast (%)</div>
+            <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
+            <div id="kpi-cagr" class="kpi-value">–</div>
+          </div>
+          <div class="tooltip">IRR (månedlige pengestrømme). Fallback: netto årlig sats (afkast minus omkostninger), hvis IRR ikke kan findes.</div>
+        </div>
+      </div>
+
+      <div class="chart-wrap">
+        <div class="chart-tools">
+          <button id="btn-save-png" class="tool-btn" title="Download graf som PNG">PNG</button>
+          <button id="btn-export-year" class="tool-btn" title="Download årstabel som CSV">CSV (år)</button>
+          <button id="btn-export-mc" class="tool-btn" title="Download Monte Carlo som CSV">CSV (MC)</button>
+          <button id="btn-share" class="tool-btn" title="Kopiér delbart link">Del</button>
+        </div>
+        <canvas id="area-chart"></canvas>
+        <p id="chart-note">(effektiv netto p.a.: <span id="chart-cagr">–</span>)</p>
+      </div>
+
+      <div class="table-wrap">
+        <table class="tbl" id="year-table">
+          <thead><tr><th>År</th><th>Samlet indskud</th><th>Afkast</th><th>Saldo</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    <p>Developed by Nicki Svaneby</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
