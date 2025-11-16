@@ -1,49 +1,83 @@
+
 <!doctype html>
 <html lang="da">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Investment Growth & Crypto Profit Calculator</title>
+  <title>Finlytics – Investment & Growth Calculator</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="container header">
-    <h1>Investment Growth & Crypto Profit Calculator</h1>
-    <p class="tagline">Se hvad dine penge kan blive værd — hurtigt og enkelt.</p>
+  <header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Se hvad dine penge kan blive værd — hurtigt og visuelt.</h1>
+      <p class="hero-subtitle">
+        Finlytics er et gratis, avanceret investeringsværktøj, der giver dig et realistisk billede af din økonomiske fremtid.
+      </p>
+      <ul class="hero-bullets">
+  <li>📈 Visualisér din investering år for år.</li>
+  <li>📊 Sammenlign strategier side om side.</li>
+  <li>🤖 Simulér risiko og usikkerhed med Monte Carlo.</li>
+</ul>
+<p class="hero-disclaimer">
+  Beregningerne er vejledende og er ikke en garanti for fremtidige afkast.
+</p>
+      <button class="hero-cta" onclick="document.getElementById('input-card').scrollIntoView({ behavior: 'smooth' });">
+        Start beregning
+      </button>
+    </div>
+  </div>
+</header>
+
+  <header class="container site-header">
+    <div class="brand">
+      <div class="logo">F</div>
+      <div class="brand-text">
+        <h1>Finlytics</h1>
+        <p>Smarter investing. Minimal friction.</p>
+      </div>
+    </div>
+    <nav class="actions">
+      <button id="btn-report-pdf-big" class="btn btn-glow">Rapport (PDF)</button>
+      <button id="btn-clear-data-big" class="btn btn-danger">Ryd alt</button>
+    </nav>
   </header>
 
   <main class="container grid">
-    <!-- Input panel -->
-    <section class="card">
+    <!-- Inputs -->
+    <section class="card" id="input-card">
       <h2>Indtast dine tal</h2>
-
       <form id="calc-form" class="form" novalidate>
-        <div class="form-row">
+        <div class="row">
           <label for="initial">Startbeløb (DKK)</label>
-          <input type="number" id="initial" min="0" step="100" placeholder="fx 10.000" value="20000" />
+          <input id="initial" type="number" min="0" step="100" placeholder="fx 10.000" autocomplete="off"/>
         </div>
-
-        <div class="form-row">
+        <div class="row">
           <label for="monthly">Månedligt indskud (DKK)</label>
-          <input type="number" id="monthly" min="0" step="50" placeholder="fx 1.000" value="2500" />
+          <input id="monthly" type="number" min="0" step="50" placeholder="fx 1.000" autocomplete="off"/>
         </div>
-
-        <div class="form-row">
+        <div class="row">
           <label for="years">Antal år</label>
-          <input type="number" id="years" min="1" max="60" step="1" placeholder="fx 10" value="10" />
+          <input id="years" type="number" min="1" max="60" step="1" placeholder="fx 10" autocomplete="off"/>
         </div>
 
-        <div class="form-row field-with-tip">
-          <label for="expReturn">Forventet årligt afkast (%)</label>
-          <div class="input-wrap">
-            <input type="number" id="expReturn" step="0.1" min="-50" max="50" placeholder="fx 7" value="7" />
-            <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
+        <div class="row two">
+          <div class="cell tip">
+            <label for="expReturn">Forventet årligt afkast (%)</label>
+            <div class="with-tip">
+              <input id="expReturn" type="number" step="0.1" min="-50" max="50" placeholder="fx 7" autocomplete="off"/></div>
+  <ul class="helper-list">
+  <li>Typisk: globalt indeks 6–8 %</li>
+  <li>dansk indeks 5–7 %</li>
+  <li>bred ETF 5–7 %</li>
+  <li>robo 3–6 %</li>
+  <li>enkeltaktier 0–20 %+ (varierer)</li>
+  <li>crypto meget svingende</li>
+</ul>
           </div>
-          <div class="tooltip">Vejl.: Global aktieindeks: 6–8 %, Enkeltaktier: 8–12 %, Ejendomme: 4–6 %, Crypto: 10–30 %.</div>
-        </div>
 
-        <div class="form-row split-2">
-          <div class="form-cell">
+          <div class="cell">
             <label for="feePreset">Forvalg af omkostninger</label>
             <select id="feePreset">
               <option value="manual">Manuelt (jeg taster selv)</option>
@@ -55,97 +89,114 @@
               <option value="crypto_hold">Crypto buy & hold (0,00 %)</option>
             </select>
           </div>
-
-          <div class="form-cell field-with-tip">
-            <label for="fees">Årlige omkostninger (%)</label>
-            <div class="input-wrap">
-              <input type="number" id="fees" min="0" max="10" step="0.01" placeholder="fx 0,20" value="0.50" />
-              <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
-            </div>
-            <div class="tooltip">TER = Total Expense Ratio (årlige løbende omkostninger ved investering).</div>
-          </div>
         </div>
 
-        <button id="calc-btn" type="submit" class="btn-primary">Beregn</button>
+        <div class="row tip">
+          <label for="fees">Årlige omkostninger (%)</label>
+          <div class="with-tip">
+            <input id="fees" type="number" min="0" max="10" step="0.01" placeholder="fx 0,20" autocomplete="off"/></div>
+  <ul class="helper-list">
+  <li>TER (årlige omkostninger): globale indeksfonde ~0</li>
+  <li>20 %</li>
+  <li>danske ~0</li>
+  <li>50 %</li>
+  <li>ETF ~0</li>
+  <li>35 %</li>
+  <li>robo typisk højere</li>
+</ul>
+        </div>
+
+        <button id="calc-btn" type="submit" class="btn btn-primary">Beregn</button>
       </form>
 
-      <!-- Monte Carlo under input-panelet (venstre kolonne) -->
-      <section class="card">
-        <h2>Usikkerhed (Monte Carlo)</h2>
-
-        <div class="callout">
-          <strong>Hvad viser dette?</strong><br />
-          Vi simulerer mange mulige forløb ud fra dit forventede afkast og din valgte volatilitet (hvor meget afkastet kan svinge).<br /><br />
-          • <strong>P10</strong> = de 10 % laveste resultater (dårlig scenario)<br />
-          • <strong>P50</strong> = medianen (mest sandsynlige udfald)<br />
-          • <strong>P90</strong> = de 10 % bedste scenarier (optimistisk udfald).<br /><br />
-          Den orange “sky” i grafen svarer til området mellem P10–P90.
-        </div>
-
-        <div class="form-row split-2">
-          <div class="form-cell field-with-tip">
+      <section class="card sub">
+        <h3>Monte Carlo – usikkerhed</h3>
+        <div class="row two">
+          <div class="cell tip">
             <label for="volatility">Årlig volatilitet (%)</label>
-            <div class="input-wrap">
-              <input type="number" id="volatility" min="0" max="200" step="1" value="25" />
-              <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
-            </div>
-            <div class="tooltip">Volatilitet = hvor meget værdien forventes at svinge — fx aktier 15–20 %, crypto 60–100 %.</div>
+            <div class="with-tip">
+              <input id="volatility" type="number" min="0" max="200" step="1" value="18"/></div>
+  <ul class="helper-list">
+  <li>Vejledende volatilitet: aktier 15–20 %</li>
+  <li>obligationer 5–10 %</li>
+  <li>crypto 50 %+</li>
+</ul>
           </div>
-
-          <div class="form-cell field-with-tip">
+          <div class="cell tip">
             <label for="simulations">Antal simuleringer</label>
-            <div class="input-wrap">
-              <input type="number" id="simulations" min="50" max="3000" step="50" value="350" />
-              <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
-            </div>
-            <div class="tooltip">Flere simuleringer = mere stabilt interval, men lidt langsommere.</div>
+            <div class="with-tip">
+              <input id="simulations" type="number" min="50" max="3000" step="50" value="1000"/></div>
+  <ul class="helper-list">
+  <li>1.000 simuleringer anbefales som god balance mellem hastighed og stabilitet</li>
+</ul>
           </div>
         </div>
-
-        <button id="mc-btn" type="button" class="btn-secondary">Simulér usikkerhed</button>
+        <button id="mc-btn" type="button" class="btn btn-secondary">Simulér usikkerhed</button>
 
         <div class="table-wrap">
-          <table class="tbl" id="mc-table">
-            <thead>
-              <tr><th>År (antal)</th><th>Slutværdi P10</th><th>P50 (median)</th><th>P90</th></tr>
-            </thead>
+          <table id="mc-table" class="table">
+            <thead><tr><th>År</th><th>P10</th><th>P50</th><th>P90</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
       </section>
     </section>
 
-    <!-- Resultater (højre) -->
+    <!-- Results -->
     <section class="card">
       <h2>Resultater</h2>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Total indskud</div><div id="kpi-contrib" class="value">–</div></div>
+        <div class="kpi"><div class="label">Rentegevinst</div><div id="kpi-interest" class="value">–</div></div>
+        <div class="kpi"><div class="label">Slutværdi</div><div id="kpi-final" class="value">–</div></div>
+        <div class="kpi"><div class="label">Årligt effektivt afkast</div><div id="kpi-cagr" class="value">–</div></div>
+      </div>
 
-      <div class="kpi-grid">
-        <div class="kpi"><div class="kpi-label">Total indskud</div><div id="kpi-contrib" class="kpi-value">–</div></div>
-        <div class="kpi"><div class="kpi-label">Rentegevinst</div><div id="kpi-interest" class="kpi-value">–</div></div>
-        <div class="kpi"><div class="kpi-label">Slutværdi</div><div id="kpi-final" class="kpi-value">–</div></div>
-        <div class="kpi kpi-inline field-with-tip">
-          <div class="kpi-row">
-            <div class="kpi-label">Årligt effektivt afkast (%)</div>
-            <button type="button" class="tip-btn" aria-label="Info" title="Info">i</button>
-            <div id="kpi-cagr" class="kpi-value">–</div>
-          </div>
-          <div class="tooltip">IRR (månedlige pengestrømme). Fallback: netto årlig sats (afkast minus omkostninger), hvis IRR ikke kan findes.</div>
+      <div class="toolbar">
+        <button id="btn-save-png" class="chip">PNG</button>
+        <button id="btn-export-year" class="chip">CSV (år)</button>
+        <button id="btn-export-mc" class="chip">CSV (MC)</button>
+        <button id="btn-share" class="chip">Del</button>
+        <button id="btn-save-scenario-a" class="chip small-hidden">Gem som A</button>
+        <button id="btn-compare-with-a" class="chip small-hidden">Sammenlign A↔B</button>
+        <button id="btn-clear-compare" class="chip small-hidden">Ryd</button>
+      </div>
+
+      <h3 class="section-title">Udvikling over tid</h3>
+      <div class="chart-wrap">
+        <canvas id="area-chart"></canvas>
+        <p class="note">Effektiv netto p.a.: <span id="chart-cagr">–</span></p>
+      </div>
+      <p class="chart-explain">Den blå linje viser din investerings udvikling. Den grå linje viser dine samlede indskud over tid.</p>
+
+      <div class="compare-actions">
+        <button id="btn-save-a-big" class="btn btn-line">Gem som A</button>
+        <button id="btn-compare-big" class="btn btn-line">Sammenlign A↔B</button>
+        <button id="btn-clear-cmp-big" class="btn btn-danger">Ryd sammenligning</button>
+      </div>
+
+      <div id="compare-summary" class="compare-summary" hidden>
+        <strong>Sammenligning</strong>
+        <div class="rows">
+          <div><span class="dot dot-a"></span> A (gemt): <span id="cmp-a-final">–</span> • CAGR: <span id="cmp-a-cagr">–</span></div>
+          <div><span class="dot dot-b"></span> B (nuv.): <span id="cmp-b-final">–</span> • CAGR: <span id="cmp-b-cagr">–</span></div>
         </div>
       </div>
 
-      <div class="chart-wrap">
-        <div class="chart-tools">
-          <button id="btn-save-png" class="tool-btn" title="Download graf som PNG">PNG</button>
-          <button id="btn-export-year" class="tool-btn" title="Download årstabel som CSV">CSV (år)</button>
-          <button id="btn-export-mc" class="tool-btn" title="Download Monte Carlo som CSV">CSV (MC)</button>
-          <button id="btn-share" class="tool-btn" title="Kopiér delbart link">Del</button>
-        </div>
-        <canvas id="area-chart"></canvas>
-        <p id="chart-note">(effektiv netto p.a.: <span id="chart-cagr">–</span>)</p>
+      <div id="compare-kpis" class="compare-kpis" hidden>
+        <table class="table tight">
+          <thead><tr><th>KPI</th><th>A (gemt)</th><th>B (nuv.)</th><th>Forskel</th></tr></thead>
+          <tbody>
+            <tr><td>Total indskud</td><td id="cmp-a-contrib">–</td><td id="cmp-b-contrib">–</td><td id="cmp-d-contrib">–</td></tr>
+            <tr><td>Rentegevinst</td><td id="cmp-a-gain">–</td><td id="cmp-b-gain">–</td><td id="cmp-d-gain">–</td></tr>
+            <tr><td>Slutværdi</td><td id="cmp-a-final-2">–</td><td id="cmp-b-final-2">–</td><td id="cmp-d-final">–</td></tr>
+            <tr><td>CAGR</td><td id="cmp-a-cagr-2">–</td><td id="cmp-b-cagr-2">–</td><td id="cmp-d-cagr">–</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="table-wrap">
-        <table class="tbl" id="year-table">
+        <table id="year-table" class="table">
           <thead><tr><th>År</th><th>Samlet indskud</th><th>Afkast</th><th>Saldo</th></tr></thead>
           <tbody></tbody>
         </table>
@@ -153,10 +204,11 @@
     </section>
   </main>
 
-  <footer class="container footer">
-    <p>Developed by Nicki Svaneby</p>
+  <footer class="container foot">
+    <span>© 2025 Finlytics</span>
   </footer>
 
+  <script>document.querySelector('.foot span').innerHTML = "© " + new Date().getFullYear() + " Finlytics";</script>
   <script src="script.js"></script>
 </body>
 </html>
