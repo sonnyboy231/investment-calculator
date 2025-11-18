@@ -1,6 +1,6 @@
 // =============================================
 // Finlytics — Script (PRO Mode Enabled)
-// Version: 2025-Q1 (Reverse + Hover)
+// Version: 2025-Q1
 // =============================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,10 +33,135 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const monthlyFromAnnual = (a) => Math.pow(1 + a, 1 / 12) - 1;
 
+  // --- Language / i18n ---
+  let currentLang = "da";
+
+  const I18N = {
+    da: {
+      hero_title: "Se hvad dine penge kan blive værd — hurtigt og visuelt.",
+      hero_subtitle: "Finlytics er et gratis, avanceret investeringsværktøj, der giver dig et realistisk billede af din økonomiske fremtid.",
+      hero_bullet_1: "📈 Visualisér din investering år for år.",
+      hero_bullet_2: "📊 Sammenlign strategier side om side.",
+      hero_bullet_3: "🤖 Simulér risiko og usikkerhed med Monte Carlo.",
+      hero_disclaimer: "Beregningerne er vejledende og er ikke en garanti for fremtidige afkast.",
+      hero_cta: "Start beregning",
+      tagline: "Smarter investing. Minimal friction.",
+      btn_report_pdf: "Rapport (PDF)",
+      nav_about: "Om Finlytics",
+      btn_clear_all: "Ryd alt",
+      section_inputs: "Indtast dine tal",
+      label_initial: "Startbeløb (DKK)",
+      label_monthly: "Månedligt indskud (DKK)",
+      label_years: "Antal år",
+      label_exp_return: "Forventet årligt afkast (%)",
+      label_fee_preset: "Forvalg af omkostninger",
+      label_fees: "Årlige omkostninger (%)",
+      btn_calculate: "Beregn",
+      section_mc: "Monte Carlo – usikkerhed",
+      label_volatility: "Årlig volatilitet (%)",
+      label_simulations: "Antal simuleringer",
+      btn_mc: "Simulér usikkerhed",
+      section_results: "Resultater",
+      kpi_contrib: "Total indskud",
+      kpi_interest: "Rentegevinst",
+      kpi_final: "Slutværdi",
+      kpi_cagr: "Årligt effektivt afkast",
+      btn_png: "PNG",
+      btn_csv_year: "CSV (år)",
+      btn_csv_mc: "CSV (MC)",
+      btn_share: "Del",
+      btn_save_a: "Gem som A",
+      btn_compare_ab: "Sammenlign A↔B",
+      btn_clear_compare: "Ryd sammenligning",
+      section_chart: "Udvikling over tid",
+      label_chart_cagr: "Effektiv netto p.a.:",
+      chart_explain: "Den blå linje viser din investerings udvikling. Den grå linje viser dine samlede indskud.",
+      section_compare: "Sammenligning",
+      label_a_saved: "A (gemt):",
+      label_b_current: "B (nuv.):",
+      th_kpi: "KPI",
+      th_diff: "Forskel",
+      th_total_contrib: "Samlet indskud",
+      th_gain: "Afkast",
+      th_balance: "Saldo",
+      footer_copy: "© " + new Date().getFullYear() + " Finlytics"
+    },
+    en: {
+      hero_title: "See what your money can grow into — fast and visually.",
+      hero_subtitle: "Finlytics is a free, advanced investment tool that gives you a realistic view of your financial future.",
+      hero_bullet_1: "📈 Visualise your investment year by year.",
+      hero_bullet_2: "📊 Compare strategies side by side.",
+      hero_bullet_3: "🤖 Simulate risk and uncertainty with Monte Carlo.",
+      hero_disclaimer: "All calculations are estimates and not a guarantee of future returns.",
+      hero_cta: "Start calculation",
+      tagline: "Smarter investing. Minimal friction.",
+      btn_report_pdf: "Report (PDF)",
+      nav_about: "About Finlytics",
+      btn_clear_all: "Clear all",
+      section_inputs: "Enter your numbers",
+      label_initial: "Initial investment (DKK)",
+      label_monthly: "Monthly contribution (DKK)",
+      label_years: "Number of years",
+      label_exp_return: "Expected annual return (%)",
+      label_fee_preset: "Fee presets",
+      label_fees: "Annual fees (%)",
+      btn_calculate: "Calculate",
+      section_mc: "Monte Carlo – uncertainty",
+      label_volatility: "Annual volatility (%)",
+      label_simulations: "Number of simulations",
+      btn_mc: "Run simulation",
+      section_results: "Results",
+      kpi_contrib: "Total contributions",
+      kpi_interest: "Return / growth",
+      kpi_final: "Final value",
+      kpi_cagr: "Effective annual return",
+      btn_png: "PNG",
+      btn_csv_year: "CSV (years)",
+      btn_csv_mc: "CSV (MC)",
+      btn_share: "Share",
+      btn_save_a: "Save as A",
+      btn_compare_ab: "Compare A↔B",
+      btn_clear_compare: "Clear comparison",
+      section_chart: "Growth over time",
+      label_chart_cagr: "Effective net p.a.:",
+      chart_explain: "The blue line shows your investment growth. The grey line shows your total contributions.",
+      section_compare: "Comparison",
+      label_a_saved: "A (saved):",
+      label_b_current: "B (current):",
+      th_kpi: "KPI",
+      th_diff: "Difference",
+      th_total_contrib: "Total contributions",
+      th_gain: "Return",
+      th_balance: "Balance",
+      footer_copy: "© " + new Date().getFullYear() + " Finlytics"
+    }
+  };
+
+  function applyLang(lang) {
+    currentLang = (lang === "en") ? "en" : "da";
+    document.documentElement.lang = currentLang === "en" ? "en" : "da";
+
+    const dict = I18N[currentLang] || I18N.da;
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const txt = dict[key];
+      if (txt != null) {
+        el.textContent = txt;
+      }
+    });
+
+    // Update language toggle buttons
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      const langCode = btn.getAttribute("data-lang");
+      if (langCode === currentLang) btn.classList.add("lang-active");
+      else btn.classList.remove("lang-active");
+    });
+  }
+
   // --- DOM Elements ---
   const initialEl = $("#initial");
   const monthlyEl = $("#monthly");
-  const targetEl = $("#target");
   const yearsEl = $("#years");
   const expEl = $("#expReturn");
   const feePresetEl = $("#feePreset");
@@ -47,7 +172,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const kFinal = $("#kpi-final");
   const kCagr = $("#kpi-cagr");
   const chartCagr = $("#chart-cagr");
-  const monthlyHelper = $("#monthly-helper");
 
   const canvas = $("#area-chart");
 
@@ -214,37 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
       effAnnual
     };
   }
-
-  // ======================================
-  // Reverse: beregn nødvendigt månedligt indskud ud fra slutmål
-  // ======================================
-  function computeRequiredMonthly(initial, targetFinal, years, expPct, feePct) {
-    const rA = toPct(expPct) / 100;
-    const fA = toPct(feePct) / 100;
-    const rM = monthlyFromAnnual(rA);
-    const fM = monthlyFromAnnual(fA);
-
-    const g = (1 + rM) * (1 - fM);
-    const n = Math.max(0, Math.round(years * 12));
-
-    if (n <= 0) return 0;
-
-    // Hvis ingen vækst/omkostninger (g ~ 1), simpel lineær udvikling
-    if (Math.abs(g - 1) < 1e-8) {
-      const needed = targetFinal - initial;
-      const c = needed / n;
-      return c > 0 && isFinite(c) ? c : 0;
-    }
-
-    const gToN = Math.pow(g, n);
-    const numerator = (targetFinal - initial * gToN) * (g - 1);
-    const denominator = g * (gToN - 1);
-    let c = numerator / denominator;
-
-    if (!isFinite(c) || c < 0) c = 0;
-    return c;
-  }
-
   // ======================================
   // HiDPI Canvas Setup
   // ======================================
@@ -265,12 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Drawing the Chart
   // ======================================
 
-  let lastRowsB = null;
-  let lastRowsA = null;
-  let currentBand = null;
-  let hoverIndex = null;
-
-  function drawChart(rowsB, band = null, rowsA = null, activeIdx = null) {
+  function drawChart(rowsB, band = null, rowsA = null) {
     if (!canvas) return;
     const { ctx, W, H } = setupHiDPICanvas(canvas);
     ctx.clearRect(0, 0, W, H);
@@ -313,6 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = band.p90.length - 1; i >= 0; i--)
         ctx.lineTo(x(i + 1), y(band.p90[i]));
+
       ctx.closePath();
       ctx.fillStyle = "rgba(255,165,0,0.22)";
       ctx.fill();
@@ -387,56 +476,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ctx.textBaseline = "top";
     ctx.fillText(fmtDKK.format(rowsB[rowsB.length - 1].balance), padL + 6, padT + 2);
-
-    // Hover marker + tooltip
-    if (typeof activeIdx === "number" && activeIdx >= 0 && activeIdx < rowsB.length) {
-      const row = rowsB[activeIdx];
-      const px = x(activeIdx + 1);
-      const py = y(row.balance);
-
-      // Marker
-      ctx.beginPath();
-      ctx.arc(px, py, 4, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "#2563eb";
-      ctx.stroke();
-
-      // Tooltip label
-      const label = "År " + row.year + ": " + fmtDKK.format(row.balance);
-      ctx.font = "12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-      const textWidth = ctx.measureText(label).width;
-      const boxPaddingX = 6;
-      const boxPaddingY = 4;
-      const boxWidth = textWidth + boxPaddingX * 2;
-      const boxHeight = 20;
-
-      let bx = px + 8;
-      let by = py - 30;
-
-      if (bx + boxWidth > W - 8) {
-        bx = px - boxWidth - 8;
-      }
-      if (by < padT + 4) {
-        by = py + 10;
-      }
-
-      ctx.beginPath();
-      ctx.roundRect
-        ? ctx.roundRect(bx, by, boxWidth, boxHeight, 4)
-        : ctx.rect(bx, by, boxWidth, boxHeight);
-      ctx.fillStyle = "rgba(15,23,42,0.9)";
-      ctx.fill();
-      ctx.strokeStyle = "rgba(148,163,184,0.9)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      ctx.fillStyle = "#e5e7eb";
-      ctx.textAlign = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText(label, bx + boxPaddingX, by + boxHeight / 2);
-    }
   }
 
   // ======================================
@@ -477,53 +516,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const ctx = canvas.getContext("2d");
       if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-    lastRowsB = null;
-    lastRowsA = null;
-    currentBand = null;
-    hoverIndex = null;
   }
-
   // ======================================
   // Base Calculation Runner
   // ======================================
 
+  let currentBand = null;
+
   function runBaseCalc() {
     const initial = toNum(initialEl.value);
-    let monthly = toNum(monthlyEl.value);
+    const monthly = toNum(monthlyEl.value);
     const years = Math.max(1, parseInt(yearsEl.value || "1", 10));
     const expPct = toPct(expEl.value);
     const feePct = toPct(feesEl.value);
-
-    const target = targetEl ? toNum(targetEl.value) : 0;
-    const reverseMode = targetEl && target > 0;
-
-    // Undgå -99% og mærkelige outputs, hvis alt er tomt
-    if (!reverseMode && initial <= 0 && monthly <= 0) {
-      if (monthlyHelper) monthlyHelper.textContent = "";
-      clearUI();
-      return;
-    }
-
-    if (reverseMode) {
-      const reqMonthly = computeRequiredMonthly(initial, target, years, expPct, feePct);
-      monthly = reqMonthly;
-
-      if (monthlyEl) {
-        monthlyEl.value = reqMonthly && isFinite(reqMonthly)
-          ? Math.round(reqMonthly).toString()
-          : "";
-      }
-
-      if (monthlyHelper) {
-        monthlyHelper.textContent =
-          reqMonthly > 0
-            ? "Beregnet månedligt indskud for at nå dit slutmål (afrundet)."
-            : "Slutmålet kan ikke nås med de nuværende forudsætninger — prøv at justere år eller afkast.";
-      }
-    } else if (monthlyHelper) {
-      monthlyHelper.textContent = "";
-    }
 
     const res = computeProjection(initial, monthly, years, expPct, feePct);
 
@@ -547,11 +552,7 @@ document.addEventListener("DOMContentLoaded", () => {
       chartCagr.textContent = s;
     }
 
-    lastRowsB = res.rows;
-    lastRowsA = null;
-    hoverIndex = null;
-
-    drawChart(lastRowsB, currentBand, lastRowsA, hoverIndex);
+    drawChart(res.rows, currentBand, null);
     renderTable(res.rows);
   }
 
@@ -636,7 +637,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams({
       initial: String(initialEl?.value || ""),
       monthly: String(monthlyEl?.value || ""),
-      target: String(targetEl?.value || ""),
       years: String(yearsEl?.value || ""),
       exp: String(expEl?.value || ""),
       fees: String(feesEl?.value || ""),
@@ -662,7 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleClearAll() {
     try {
-      ["#initial", "#monthly", "#target", "#years", "#expReturn",
+      ["#initial", "#monthly", "#years", "#expReturn",
        "#fees", "#volatility", "#simulations"]
         .forEach(sel => {
           const el = $(sel);
@@ -670,7 +670,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
       if (feePresetEl) feePresetEl.value = "manual";
-      if (monthlyHelper) monthlyHelper.textContent = "";
 
       try {
         localStorage.removeItem("scenarioA");
@@ -679,6 +678,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (cmpBox) cmpBox.hidden = true;
       if (cmpKPIsBox) cmpKPIsBox.hidden = true;
 
+      currentBand = null;
       clearUI();
 
       if (location.search)
@@ -688,7 +688,6 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(e);
     }
   }
-
   // ======================================
   // Monte Carlo Simulation
   // ======================================
@@ -745,7 +744,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return {
       initial: String(initialEl?.value || ""),
       monthly: String(monthlyEl?.value || ""),
-      target: String(targetEl?.value || ""),
       years: String(yearsEl?.value || ""),
       exp: String(expEl?.value || ""),
       fees: String(feesEl?.value || ""),
@@ -843,11 +841,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resA = computeProjection(initA, monA, yrsA, expA, feeA);
 
     currentBand = null;
-    lastRowsB = resB.rows;
-    lastRowsA = resA.rows;
-    hoverIndex = null;
-
-    drawChart(lastRowsB, currentBand, lastRowsA, hoverIndex);
+    drawChart(resB.rows, null, resA.rows);
 
     // Summary box
     if (cmpBox) {
@@ -909,13 +903,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleClearCompare() {
     currentBand = null;
-    lastRowsA = null;
-    hoverIndex = null;
     runBaseCalc();
     if (cmpBox) cmpBox.hidden = true;
     if (cmpKPIsBox) cmpKPIsBox.hidden = true;
   }
-
   // ======================================
   // PDF PRO GENERATOR (2-SIDED)
   // ======================================
@@ -932,10 +923,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const kpiFinal = kFinal.textContent;
       const kpiCagrTxt = kCagr.textContent;
 
-      const yearsTbody = $("#year-table tbody");
-      const yearRows = yearsTbody ? Array.from(yearsTbody.children) : [];
-
-      const targetVal = targetEl ? targetEl.value : "";
+      const years = $("#year-table tbody");
+      const yearRows = years ? Array.from(years.children) : [];
 
       const win = window.open("", "_blank");
       if (!win) return;
@@ -1058,7 +1047,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <table>
             <tr><th>Startbeløb</th><td>${initialEl.value || ""} kr</td></tr>
             <tr><th>Månedligt indskud</th><td>${monthlyEl.value || ""} kr</td></tr>
-            <tr><th>Slutmål (hvis angivet)</th><td>${targetVal || ""} kr</td></tr>
             <tr><th>Antal år</th><td>${yearsEl.value || ""}</td></tr>
             <tr><th>Forventet afkast</th><td>${expEl.value || ""} %</td></tr>
             <tr><th>Årlige omkostninger</th><td>${feesEl.value || ""} %</td></tr>
@@ -1195,11 +1183,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toPct(expEl.value), toPct(feesEl.value)
     );
 
-    lastRowsB = base.rows;
-    lastRowsA = null;
-    hoverIndex = null;
-
-    drawChart(lastRowsB, currentBand, lastRowsA, hoverIndex);
+    drawChart(base.rows, currentBand, null);
 
     if (mcBody) {
       mcBody.innerHTML = base.rows
@@ -1215,52 +1199,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // ======================================
-  // Chart hover events
-  // ======================================
-
-  if (canvas) {
-    canvas.addEventListener("mousemove", (e) => {
-      if (!lastRowsB || !lastRowsB.length) return;
-
-      const rect = canvas.getBoundingClientRect();
-      const mx = e.clientX - rect.left;
-      const W = rect.width;
-      const padL = 56, padR = 10;
-      const innerW = W - padL - padR;
-      const n = lastRowsB.length;
-
-      if (innerW <= 0) return;
-
-      let t = (mx - padL) / innerW;
-      const idx = Math.round(t * (n - 1));
-
-      if (idx < 0 || idx >= n) {
-        if (hoverIndex !== null) {
-          hoverIndex = null;
-          drawChart(lastRowsB, currentBand, lastRowsA, hoverIndex);
-        }
-        return;
-      }
-
-      if (idx !== hoverIndex) {
-        hoverIndex = idx;
-        drawChart(lastRowsB, currentBand, lastRowsA, hoverIndex);
-      }
-    });
-
-    canvas.addEventListener("mouseleave", () => {
-      if (hoverIndex !== null && lastRowsB && lastRowsB.length) {
-        hoverIndex = null;
-        drawChart(lastRowsB, currentBand, lastRowsA, hoverIndex);
-      }
-    });
-  }
-
-  // ======================================
   // INIT
   // ======================================
 
   (function init() {
+    // Language: choose from URL (?lang=en) or browser, default da
+    let initial = "da";
+    try {
+      const params = new URLSearchParams(window.location.search || "");
+      const urlLang = params.get("lang");
+      if (urlLang === "en" || urlLang === "da") {
+        initial = urlLang;
+      } else if (navigator.language && navigator.language.toLowerCase().startsWith("en")) {
+        initial = "en";
+      }
+    } catch {}
+
+    applyLang(initial);
+
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const langCode = btn.getAttribute("data-lang");
+        applyLang(langCode);
+      });
+    });
+
     document.querySelectorAll("input")
       .forEach(inp => inp.setAttribute("autocomplete", "off"));
 

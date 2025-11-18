@@ -14,19 +14,23 @@
       <div class="logo">F</div>
       <div class="brand-text">
         <h1>Finlytics</h1>
-        <p>Smarter investing. Minimal friction.</p>
+        <p data-i18n="tagline">Smarter investing. Minimal friction.</p>
       </div>
     </div>
 
     <nav class="actions">
-      <a href="index.html" class="btn btn-line">Tilbage</a>
+      <div class="lang-toggle">
+        <button type="button" class="lang-btn lang-active" data-lang="da">DA</button>
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+      </div>
+      <a href="index.html" class="btn btn-line" data-i18n="btn_back">Tilbage</a>
     </nav>
   </header>
 
 
   <!-- ABOUT HERO -->
   <section class="container about-hero">
-    <h1>Om Finlytics</h1>
+    <h1 data-i18n="about_title">Om Finlytics</h1>
     <p class="about-sub">
       Finlytics er et gratis, moderne investeringsværktøj designet til at gøre 
       økonomisk planlægning enkel, hurtig og visuelt forståelig.
@@ -90,12 +94,14 @@
 
 
   <footer class="container foot">
-    <span>© 2025 Finlytics</span>
+    <span data-i18n="footer_copy">© 2025 Finlytics</span>
   </footer>
 
 <script>
   document.querySelector('.foot span').innerHTML = "© " + new Date().getFullYear() + " Finlytics";
 </script>
+
+<script src="script.js"></script>
 
 </body>
 </html>
