@@ -310,3 +310,104 @@ input:active{ transform: translateY(1px) }
     margin-bottom: 12px;
   }
 }
+
+/* ============================================
+   ABOUT PAGE – EXTENDED STYLING (Finlytics Pro)
+   ============================================ */
+
+.about-hero {
+  padding: 40px 0 20px;
+  text-align: center;
+}
+
+.about-hero h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #eaf0ff;
+}
+
+.about-sub {
+  color: var(--muted);
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.about-block {
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.about-block h2 {
+  margin-top: 26px;
+  font-size: 20px;
+  color: #eaf0ff;
+}
+
+.about-features {
+  margin-top: 32px;
+  font-size: 15px;
+}
+
+.about-features h2 {
+  margin-bottom: 14px;
+  font-size: 20px;
+}
+
+.feature-list {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.feature-list li {
+  margin: 6px 0;
+}
+
+.about-founder {
+  margin-top: 36px;
+  line-height: 1.7;
+}
+
+.about-founder h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #eaf0ff;
+}
+
+.about-contact {
+  margin-top: 36px;
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+.about-contact h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #eaf0ff;
+}
+
+.about-contact .muted {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* Mobile optimization */
+@media (max-width: 700px) {
+  .about-hero h1 {
+    font-size: 26px;
+  }
+  .about-sub {
+    font-size: 14px;
+  }
+  .feature-list li {
+    font-size: 14px;
+  }
+}
