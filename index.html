@@ -12,22 +12,22 @@
   <header class="hero">
     <div class="hero-inner">
       <div class="hero-text">
-        <h1 class="hero-title"><span data-i18n="hero_title">Se hvad dine penge kan blive værd — hurtigt og visuelt.</span></h1>
-        <p class="hero-subtitle" data-i18n="hero_subtitle">
+        <h1 class="hero-title">Se hvad dine penge kan blive værd — hurtigt og visuelt.</h1>
+        <p class="hero-subtitle">
           Finlytics er et gratis, avanceret investeringsværktøj, der giver dig et realistisk billede af din økonomiske fremtid.
         </p>
 
         <ul class="hero-bullets">
-          <li data-i18n="hero_bullet_1">📈 Visualisér din investering år for år.</li>
-          <li data-i18n="hero_bullet_2">📊 Sammenlign strategier side om side.</li>
-          <li data-i18n="hero_bullet_3">🤖 Simulér risiko og usikkerhed med Monte Carlo.</li>
+          <li>📈 Visualisér din investering år for år.</li>
+          <li>📊 Sammenlign strategier side om side.</li>
+          <li>🤖 Simulér risiko og usikkerhed med Monte Carlo.</li>
         </ul>
 
-        <p class="hero-disclaimer" data-i18n="hero_disclaimer">
+        <p class="hero-disclaimer">
           Beregningerne er vejledende og er ikke en garanti for fremtidige afkast.
         </p>
 
-        <button class="hero-cta" data-i18n="hero_cta"
+        <button class="hero-cta"
           onclick="document.getElementById('input-card').scrollIntoView({ behavior: 'smooth' });">
           Start beregning
         </button>
@@ -41,18 +41,18 @@
       <div class="logo">F</div>
       <div class="brand-text">
         <h1>Finlytics</h1>
-        <p><span data-i18n="tagline">Smarter investing. Minimal friction.</span></p>
+        <p>Smarter investing. Minimal friction.</p>
       </div>
     </div>
 
+    
     <nav class="actions">
-      <div class="lang-toggle">
-        <button type="button" class="lang-btn lang-active" data-lang="da">DA</button>
-        <button type="button" class="lang-btn" data-lang="en">EN</button>
-      </div>
-      <button id="btn-report-pdf-big" class="btn btn-glow"><span data-i18n="btn_report_pdf">Rapport (PDF)</span></button>
-      <a href="about.html" class="btn btn-line"><span data-i18n="nav_about">Om Finlytics</span></a>
-      <button id="btn-clear-data-big" class="btn btn-danger"><span data-i18n="btn_clear_all">Ryd alt</span></button>
+      <a href="index.html" class="btn btn-glow">Investeringsberegner</a>
+      <a href="tax.html" class="btn btn-line">Skatteberegner</a>
+      <a href="tax-helper.html" class="btn btn-line">Årsopgørelsesguide</a>
+      <a href="about.html" class="btn btn-line">Om Finlytics</a>
+      <button id="btn-report-pdf-big" class="btn btn-glow">Rapport (PDF)</button>
+      <button id="btn-clear-data-big" class="btn btn-danger">Ryd alt</button>
     </nav>
   </header>
 
@@ -61,27 +61,40 @@
 
     <!-- ===== INPUT CARD (LEFT COLUMN) ===== -->
     <section class="card" id="input-card">
-      <h2><span data-i18n="section_inputs">Indtast dine tal</span></h2>
+      <h2>Indtast dine tal</h2>
+      <p class="helper-text">
+        Du kan enten taste et fast <strong>månedligt indskud</strong> eller et <strong>slutmål</strong>.
+        Hvis du udfylder slutmål, beregner Finlytics automatisk det nødvendige månedlige indskud for dig.
+      </p>
 
       <form id="calc-form" class="form" novalidate>
         <div class="row">
-          <label for="initial"><span data-i18n="label_initial">Startbeløb (DKK)</span></label>
+          <label for="initial">Startbeløb (DKK)</label>
           <input id="initial" type="number" min="0" step="100" placeholder="fx 10.000" autocomplete="off"/>
         </div>
 
         <div class="row">
-          <label for="monthly"><span data-i18n="label_monthly">Månedligt indskud (DKK)</span></label>
+          <label for="monthly">Månedligt indskud (DKK)</label>
           <input id="monthly" type="number" min="0" step="50" placeholder="fx 1.000" autocomplete="off"/>
         </div>
 
         <div class="row">
-          <label for="years"><span data-i18n="label_years">Antal år</span></label>
+          <label for="target">Slutmål (DKK, valgfrit)</label>
+          <input id="target" type="number" min="0" step="1000" placeholder="fx 1.000.000" autocomplete="off"/>
+          <span class="helper-text">
+            Udfyld kun hvis du vil se, hvor meget du skal investere hver måned for at nå dit mål.
+          </span>
+          <span id="monthly-helper" class="helper-text"></span>
+        </div>
+
+        <div class="row">
+          <label for="years">Antal år</label>
           <input id="years" type="number" min="1" max="60" step="1" placeholder="fx 10" autocomplete="off"/>
         </div>
 
         <div class="row two">
           <div class="cell tip">
-            <label for="expReturn"><span data-i18n="label_exp_return">Forventet årligt afkast (%)</span></label>
+            <label for="expReturn">Forventet årligt afkast (%)</label>
             <div class="with-tip">
               <input id="expReturn" type="number" step="0.1" min="-50" max="50"
                 placeholder="fx 7" autocomplete="off"/>
@@ -97,7 +110,7 @@
             </ul>
           </div>
           <div class="cell">
-            <label for="feePreset"><span data-i18n="label_fee_preset">Forvalg af omkostninger</span></label>
+            <label for="feePreset">Forvalg af omkostninger</label>
             <select id="feePreset">
               <option value="manual">Manuelt (jeg taster selv)</option>
               <option value="global_index">Global indeksfond (~0,20 %)</option>
@@ -111,7 +124,7 @@
         </div>
 
         <div class="row tip">
-          <label for="fees"><span data-i18n="label_fees">Årlige omkostninger (%)</span></label>
+          <label for="fees">Årlige omkostninger (%)</label>
           <div class="with-tip">
             <input id="fees" type="number" min="0" max="10" step="0.01"
               placeholder="fx 0,20" autocomplete="off"/>
@@ -125,16 +138,16 @@
           </ul>
         </div>
 
-        <button id="calc-btn" type="submit" class="btn btn-primary"><span data-i18n="btn_calculate">Beregn</span></button>
+        <button id="calc-btn" type="submit" class="btn btn-primary">Beregn</button>
       </form>
 
       <!-- ===== MONTE CARLO CARD ===== -->
       <section class="card sub">
-        <h3><span data-i18n="section_mc">Monte Carlo – usikkerhed</span></h3>
+        <h3>Monte Carlo – usikkerhed</h3>
 
         <div class="row two">
           <div class="cell tip">
-            <label for="volatility"><span data-i18n="label_volatility">Årlig volatilitet (%)</span></label>
+            <label for="volatility">Årlig volatilitet (%)</label>
             <div class="with-tip">
               <input id="volatility" type="number" min="0" max="200" step="1"
                 value="18"/>
@@ -148,7 +161,7 @@
           </div>
 
           <div class="cell tip">
-            <label for="simulations"><span data-i18n="label_simulations">Antal simuleringer</span></label>
+            <label for="simulations">Antal simuleringer</label>
             <div class="with-tip">
               <input id="simulations" type="number" min="50" max="3000"
                 step="50" value="1000"/>
@@ -177,47 +190,47 @@
 
     <!-- ===== RESULTS (RIGHT COLUMN) ===== -->
     <section class="card">
-      <h2><span data-i18n="section_results">Resultater</span></h2>
+      <h2>Resultater</h2>
 
       <div class="kpis">
-        <div class="kpi"><div class="label"><span data-i18n="kpi_contrib">Total indskud</span></div><div id="kpi-contrib" class="value">–</div></div>
-        <div class="kpi"><div class="label"><span data-i18n="kpi_interest">Rentegevinst</span></div><div id="kpi-interest" class="value">–</div></div>
-        <div class="kpi"><div class="label"><span data-i18n="kpi_final">Slutværdi</span></div><div id="kpi-final" class="value">–</div></div>
-        <div class="kpi"><div class="label"><span data-i18n="kpi_cagr">Årligt effektivt afkast</span></div><div id="kpi-cagr" class="value">–</div></div>
+        <div class="kpi"><div class="label">Total indskud</div><div id="kpi-contrib" class="value">–</div></div>
+        <div class="kpi"><div class="label">Rentegevinst</div><div id="kpi-interest" class="value">–</div></div>
+        <div class="kpi"><div class="label">Slutværdi</div><div id="kpi-final" class="value">–</div></div>
+        <div class="kpi"><div class="label">Årligt effektivt afkast</div><div id="kpi-cagr" class="value">–</div></div>
       </div>
 
       <div class="toolbar">
-        <button id="btn-save-png" class="chip"><span data-i18n="btn_png">PNG</span></button>
-        <button id="btn-export-year" class="chip"><span data-i18n="btn_csv_year">CSV (år)</span></button>
-        <button id="btn-export-mc" class="chip"><span data-i18n="btn_csv_mc">CSV (MC)</span></button>
-        <button id="btn-share" class="chip"><span data-i18n="btn_share">Del</span></button>
+        <button id="btn-save-png" class="chip">PNG</button>
+        <button id="btn-export-year" class="chip">CSV (år)</button>
+        <button id="btn-export-mc" class="chip">CSV (MC)</button>
+        <button id="btn-share" class="chip">Del</button>
 
-        <button id="btn-save-scenario-a" class="chip small-hidden"><span data-i18n="btn_save_a">Gem som A</span></button>
-        <button id="btn-compare-with-a" class="chip small-hidden"><span data-i18n="btn_compare_ab">Sammenlign A↔B</span></button>
+        <button id="btn-save-scenario-a" class="chip small-hidden">Gem som A</button>
+        <button id="btn-compare-with-a" class="chip small-hidden">Sammenlign A↔B</button>
         <button id="btn-clear-compare" class="chip small-hidden">Ryd</button>
       </div>
 
-      <h3 class="section-title"><span data-i18n="section_chart">Udvikling over tid</span></h3>
+      <h3 class="section-title">Udvikling over tid</h3>
 
       <div class="chart-wrap">
         <canvas id="area-chart"></canvas>
         <p class="note">Effektiv netto p.a.: <span id="chart-cagr">–</span></p>
       </div>
 
-      <p class="chart-explain" data-i18n="chart_explain">
+      <p class="chart-explain">
         Den blå linje viser din investerings udvikling.  
         Den grå linje viser dine samlede indskud.
       </p>
       <!-- ===== COMPARE ACTIONS ===== -->
       <div class="compare-actions">
-        <button id="btn-save-a-big" class="btn btn-line"><span data-i18n="btn_save_a">Gem som A</span></button>
-        <button id="btn-compare-big" class="btn btn-line"><span data-i18n="btn_compare_ab">Sammenlign A↔B</span></button>
-        <button id="btn-clear-cmp-big" class="btn btn-danger"><span data-i18n="btn_clear_compare">Ryd sammenligning</span></button>
+        <button id="btn-save-a-big" class="btn btn-line">Gem som A</button>
+        <button id="btn-compare-big" class="btn btn-line">Sammenlign A↔B</button>
+        <button id="btn-clear-cmp-big" class="btn btn-danger">Ryd sammenligning</button>
       </div>
 
       <!-- ===== COMPARISON SUMMARY ===== -->
       <div id="compare-summary" class="compare-summary" hidden>
-        <strong><span data-i18n="section_compare">Sammenligning</span></strong>
+        <strong>Sammenligning</strong>
         <div class="rows">
           <div><span class="dot dot-a"></span> A (gemt): <span id="cmp-a-final">–</span> • CAGR: <span id="cmp-a-cagr">–</span></div>
           <div><span class="dot dot-b"></span> B (nuv.): <span id="cmp-b-final">–</span> • CAGR: <span id="cmp-b-cagr">–</span></div>
@@ -228,12 +241,12 @@
       <div id="compare-kpis" class="compare-kpis" hidden>
         <table class="table tight">
           <thead>
-            <tr><th><span data-i18n="th_kpi">KPI</span></th><th>A (gemt)</th><th>B (nuv.)</th><th><span data-i18n="th_diff">Forskel</span></th></tr>
+            <tr><th>KPI</th><th>A (gemt)</th><th>B (nuv.)</th><th>Forskel</th></tr>
           </thead>
           <tbody>
-            <tr><td><span data-i18n="kpi_contrib">Total indskud</span></td><td id="cmp-a-contrib">–</td><td id="cmp-b-contrib">–</td><td id="cmp-d-contrib">–</td></tr>
-            <tr><td><span data-i18n="kpi_interest">Rentegevinst</span></td><td id="cmp-a-gain">–</td><td id="cmp-b-gain">–</td><td id="cmp-d-gain">–</td></tr>
-            <tr><td><span data-i18n="kpi_final">Slutværdi</span></td><td id="cmp-a-final-2">–</td><td id="cmp-b-final-2">–</td><td id="cmp-d-final">–</td></tr>
+            <tr><td>Total indskud</td><td id="cmp-a-contrib">–</td><td id="cmp-b-contrib">–</td><td id="cmp-d-contrib">–</td></tr>
+            <tr><td>Rentegevinst</td><td id="cmp-a-gain">–</td><td id="cmp-b-gain">–</td><td id="cmp-d-gain">–</td></tr>
+            <tr><td>Slutværdi</td><td id="cmp-a-final-2">–</td><td id="cmp-b-final-2">–</td><td id="cmp-d-final">–</td></tr>
             <tr><td>CAGR</td><td id="cmp-a-cagr-2">–</td><td id="cmp-b-cagr-2">–</td><td id="cmp-d-cagr">–</td></tr>
           </tbody>
         </table>
@@ -243,7 +256,7 @@
       <div class="table-wrap">
         <table id="year-table" class="table">
           <thead>
-            <tr><th>År</th><th><span data-i18n="th_total_contrib">Samlet indskud</span></th><th><span data-i18n="th_gain">Afkast</span></th><th><span data-i18n="th_balance">Saldo</span></th></tr>
+            <tr><th>År</th><th>Samlet indskud</th><th>Afkast</th><th>Saldo</th></tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -253,7 +266,7 @@
 
   <!-- ===== FOOTER ===== -->
   <footer class="container foot">
-    <span data-i18n="footer_copy">© 2025 Finlytics</span>
+    <span>© 2025 Finlytics</span>
   </footer>
 
   <script>

@@ -411,27 +411,3 @@ input:active{ transform: translateY(1px) }
     font-size: 14px;
   }
 }
-
-
-/* Language toggle */
-.lang-toggle{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-right:8px;
-}
-
-.lang-btn{
-  border:none;
-  background:transparent;
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:12px;
-  cursor:pointer;
-  color:var(--muted);
-}
-
-.lang-btn.lang-active{
-  background:rgba(99,230,190,0.12);
-  color:var(--mint);
-}

@@ -1,0 +1,55 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Finlytics – Tax Helper</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="tax-helper.css">
+</head><body>
+<header class="container site-header">
+  <div class="brand">Finlytics</div>
+  <nav class="actions">
+    <a href="index.html" class="btn btn-line">Investeringsberegner</a>
+    <a href="tax.html" class="btn btn-line">Skatteberegner</a>
+    <a href="tax-helper.html" class="btn btn-glow">Årsopgørelsesguide</a>
+    <a href="about.html" class="btn btn-line">Om</a>
+  </nav>
+</header>
+
+<main class="container taxhelper-wrap">
+<h2>Årsopgørelse & Forskudsopgørelse – Guide</h2>
+<p class="helper-text">Denne guide er vejledende og hjælper dig med at finde de rigtige rubrikker på skat.dk.</p>
+
+<div id="step1" class="th-step active">
+  <h3>1. Hvem er du?</h3>
+  <div class="th-select">
+    <label><input type="checkbox" value="lonmodtager"> Lønmodtager</label>
+    <label><input type="checkbox" value="investor"> Investor</label>
+    <label><input type="checkbox" value="udlejer"> Udlejer</label>
+    <label><input type="checkbox" value="studerende"> Studerende</label>
+  </div>
+  <button class="btn btn-glow" onclick="nextStep()">Næste</button>
+</div>
+
+<div id="step2" class="th-step">
+  <h3>2. Hvad har du haft i år?</h3>
+  <div class="th-select">
+    <label><input type="checkbox" value="aktie"> Aktiegevinst/tab</label>
+    <label><input type="checkbox" value="etf"> ETF / kapitalindkomst</label>
+    <label><input type="checkbox" value="udbytte"> Udbytte</label>
+    <label><input type="checkbox" value="koersel"> Kørselsfradrag</label>
+    <label><input type="checkbox" value="rente"> Renteudgifter</label>
+  </div>
+  <button class="btn btn-line" onclick="prevStep()">Tilbage</button>
+  <button class="btn btn-glow" onclick="nextStep()">Næste</button>
+</div>
+
+<div id="step3" class="th-step">
+  <h3>3. Rubrikker du skal bruge</h3>
+  <div id="rubrik-output" class="rubrik-box"></div>
+  <button class="btn btn-line" onclick="prevStep()">Tilbage</button>
+</div>
+
+<footer class="container footer">
+<p class="disclaimer">Finlytics yder ingen økonomisk rådgivning. Alt indhold er vejledende.</p>
+</footer>
+
+<script src="tax-helper.js"></script>
+</main></body></html>

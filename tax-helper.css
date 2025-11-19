@@ -1,0 +1,88 @@
+/* === Årsopgørelsesguide – layout === */
+
+.taxhelper-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 0 70px;
+}
+
+/* Hvert step i guiden */
+.th-step {
+  display: none;
+}
+
+.th-step.active {
+  display: block;
+}
+
+/* Knapper nederst i hvert step */
+.th-step .btn {
+  margin-top: 20px;
+  margin-right: 10px;
+}
+
+/* === Checkboks-lister (step 1 + 2) === */
+
+.th-select {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 0 32px;
+}
+
+.th-select label {
+  display: flex;
+  align-items: center;           /* ✔ centrerer tekst og checkbox lodret */
+  justify-content: space-between;/* ✔ tekst til venstre, checkbox til højre */
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.th-select label * {
+  cursor: pointer !important;
+  user-select: none;
+}
+
+.th-select input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: 16px;
+}
+
+/* === Step 3 – rubrik-boks === */
+
+.rubrik-box {
+  margin-top: 24px;
+  padding: 18px 18px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.25);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.rubrik-box h4 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.rubrik-box ul {
+  margin: 0 0 10px 18px;
+  padding: 0;
+}
+
+.rubrik-box li {
+  margin-bottom: 4px;
+}
+
+/* Lille note-tekst nederst i step 3 */
+.rubrik-note {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
