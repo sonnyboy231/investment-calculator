@@ -36,25 +36,25 @@
   </header>
 
   <!-- ===== SITE HEADER ===== -->
-  <header class="container site-header">
-    <div class="brand">
-      <div class="logo">F</div>
-      <div class="brand-text">
-        <h1>Finlytics</h1>
-        <p>Smarter investing. Minimal friction.</p>
-      </div>
+  
+<header class="container site-header">
+  <div class="brand">
+    <div class="logo">F</div>
+    <div class="brand-text">
+      <h1>Finlytics</h1>
+      <p>Smarter investing. Minimal friction.</p>
     </div>
+  </div>
 
-    
-    <nav class="actions">
-      <a href="index.html" class="btn btn-glow">Investeringsberegner</a>
-      <a href="tax.html" class="btn btn-line">Skatteberegner</a>
-      <a href="tax-helper.html" class="btn btn-line">Årsopgørelsesguide</a>
-      <a href="about.html" class="btn btn-line">Om Finlytics</a>
-      <button id="btn-report-pdf-big" class="btn btn-glow">Rapport (PDF)</button>
-      <button id="btn-clear-data-big" class="btn btn-danger">Ryd alt</button>
-    </nav>
-  </header>
+  <nav class="actions">
+    <a href="index.html" class="btn btn-line nav-link nav-active">Investeringsberegner</a>
+    <a href="tax.html" class="btn btn-line nav-link">Skatteberegner</a>
+    <a href="tax-helper.html" class="btn btn-line nav-link">Årsopgørelsesguide</a>
+    <a href="about.html" class="btn btn-line nav-link">Om Finlytics</a>
+    <button id="btn-report-pdf-big" class="btn btn-glow">Rapport (PDF)</button>
+    <button id="btn-clear-data-big" class="btn btn-danger">Ryd alt</button>
+  </nav>
+</header>
 
   <!-- ===== MAIN GRID ===== -->
   <main class="container grid">
@@ -62,10 +62,6 @@
     <!-- ===== INPUT CARD (LEFT COLUMN) ===== -->
     <section class="card" id="input-card">
       <h2>Indtast dine tal</h2>
-      <p class="helper-text">
-        Du kan enten taste et fast <strong>månedligt indskud</strong> eller et <strong>slutmål</strong>.
-        Hvis du udfylder slutmål, beregner Finlytics automatisk det nødvendige månedlige indskud for dig.
-      </p>
 
       <form id="calc-form" class="form" novalidate>
         <div class="row">
@@ -76,15 +72,6 @@
         <div class="row">
           <label for="monthly">Månedligt indskud (DKK)</label>
           <input id="monthly" type="number" min="0" step="50" placeholder="fx 1.000" autocomplete="off"/>
-        </div>
-
-        <div class="row">
-          <label for="target">Slutmål (DKK, valgfrit)</label>
-          <input id="target" type="number" min="0" step="1000" placeholder="fx 1.000.000" autocomplete="off"/>
-          <span class="helper-text">
-            Udfyld kun hvis du vil se, hvor meget du skal investere hver måned for at nå dit mål.
-          </span>
-          <span id="monthly-helper" class="helper-text"></span>
         </div>
 
         <div class="row">

@@ -47,6 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const kCagr = $("#kpi-cagr");
   const chartCagr = $("#chart-cagr");
 
+  // Premium output DOM hooks
+  const ipRiskEl = $("#ip-risk-score");
+  const ipSOptEl = $("#ip-s-opt");
+  const ipSRealEl = $("#ip-s-real");
+  const ipSPessEl = $("#ip-s-pess");
+  const ipSuccessEl = $("#ip-success");
+  const ipRecosEl = $("#ip-recos");
+
   const canvas = $("#area-chart");
 
   const volEl = $("#volatility");
@@ -390,6 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const ctx = canvas.getContext("2d");
       if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
+    try { clearPremiumOutput(); } catch {}
   }
   // ======================================
   // Base Calculation Runner
@@ -428,6 +437,100 @@ document.addEventListener("DOMContentLoaded", () => {
 
     drawChart(res.rows, currentBand, null);
     renderTable(res.rows);
+
+    try {
+      updatePremiumOutput(res, initial, monthly, years, expPct, currentBand);
+    } catch {}
+  }
+
+
+  function clearPremiumOutput() {
+    if (!ipRiskEl || !ipSOptEl || !ipSRealEl || !ipSPessEl || !ipSuccessEl || !ipRecosEl) return;
+    ipRiskEl.textContent = "—";
+    ipSOptEl.textContent = "—";
+    ipSRealEl.textContent = "—";
+    ipSPessEl.textContent = "—";
+    ipSuccessEl.textContent = "—";
+    ipRecosEl.innerHTML = "<li>Indtast dine tal og tryk beregn for at se en vurdering.</li>";
+  }
+
+  function updatePremiumOutput(res, initial, monthly, years, expPct, band) {
+    if (!ipRiskEl || !ipSOptEl || !ipSRealEl || !ipSPessEl || !ipSuccessEl || !ipRecosEl) return;
+
+    const hasValid =
+      Number.isFinite(res?.finalBalance) &&
+      res.finalBalance > 0 &&
+      Number.isFinite(monthly) &&
+      years > 0 &&
+      Number.isFinite(expPct);
+
+    if (!hasValid) {
+      clearPremiumOutput();
+      return;
+    }
+
+    // Risk score
+    try {
+      const r = ip_calcRisk(monthly, years, expPct / 100);
+      ipRiskEl.textContent = r + " / 100";
+    } catch {
+      ipRiskEl.textContent = "—";
+    }
+
+    // Scenarios based on final balance
+    try {
+      const scen = ip_calcScenarios(res.finalBalance);
+      ipSOptEl.textContent = fmtDKK.format(scen.optim);
+      ipSRealEl.textContent = fmtDKK.format(scen.real);
+      ipSPessEl.textContent = fmtDKK.format(scen.pess);
+    } catch {
+      ipSOptEl.textContent = "—";
+      ipSRealEl.textContent = "—";
+      ipSPessEl.textContent = "—";
+    }
+
+    // Success chance – v1 placeholder: shows dash unless Monte Carlo band is present
+    if (band && band.p50 && band.p50.length) {
+      // Simple placeholder using helper so modellen kan udskiftes senere:
+      const hits = Math.round((band.p50.length * 0.6));
+      const total = Math.max(1, band.p50.length);
+      try {
+        ipSuccessEl.textContent = ip_successChance(hits, total);
+      } catch {
+        ipSuccessEl.textContent = "—";
+      }
+    } else {
+      ipSuccessEl.textContent = "—";
+    }
+
+    // Recommendations – simple static v1 based on risk + tidshorisont
+    const recos = [];
+    const yearsSafe = Math.max(0, years);
+
+    try {
+      const rScore = parseInt(ipRiskEl.textContent, 10);
+      if (!Number.isNaN(rScore)) {
+        if (rScore < 30) {
+          recos.push("Din risiko ser lav ud – du prioriterer stabilitet frem for maksimal vækst.");
+        } else if (rScore < 70) {
+          recos.push("Din risiko er moderat – en fornuftig balance mellem vækst og udsving.");
+        } else {
+          recos.push("Du ligger højt i risiko – vær sikker på at din tidshorisont og nattesøvn kan følge med.");
+        }
+      }
+    } catch {}
+
+    if (yearsSafe < 5) {
+      recos.push("Kort tidshorisont – overvej at holde fokus på mere stabile investeringer.");
+    } else if (yearsSafe >= 10) {
+      recos.push("Lang tidshorisont – udsving undervejs er naturlige, men kan udjævnes over tid.");
+    }
+
+    if (!recos.length) {
+      recos.push("Juster dine inputs for at få personlige anbefalinger.");
+    }
+
+    ipRecosEl.innerHTML = recos.map(txt => `<li>${txt}</li>`).join("");
   }
 
   // ======================================

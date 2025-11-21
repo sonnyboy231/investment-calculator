@@ -3,13 +3,69 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="tax-helper.css">
 </head><body>
+
+
+  <!-- ===== HERO SECTION – ÅRSOPGØRELSESGUIDE ===== -->
+  <header class="hero hero-helper">
+    <div class="hero-inner hero-layout">
+      <!-- LEFT: TEXT + CTAS + BADGES -->
+      <div class="hero-main">
+        <h1 class="hero-title">Forstå din årsopgørelse – helt enkelt.</h1>
+        <p class="hero-subtitle">
+          En trin-for-trin guide til de vigtigste felter: indkomst, fradrag, investeringer og restskat – skrevet på almindeligt dansk.
+        </p>
+
+        <div class="hero-ctas">
+          <button class="btn btn-primary"
+            onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
+            Start guiden
+          </button>
+          <button class="btn btn-secondary"
+            onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
+            Se typiske fejl →
+          </button>
+        </div>
+
+        <ul class="hero-badges">
+          <li class="hero-badge">100% gratis</li>
+          <li class="hero-badge">Ingen login</li>
+          <li class="hero-badge">Simpel og forklarende</li>
+          <li class="hero-badge">Dansk vejledning</li>
+        </ul>
+
+        <p class="hero-disclaimer">
+          Guiden er vejledende og kan ikke erstatte officiel information på skat.dk eller personlig skatterådgivning.
+        </p>
+      </div>
+
+      <!-- RIGHT: ILLUSTRATION – 3 STEPS -->
+      <div class="hero-illu">
+        <div class="hero-illu-card shadow-soft helper-steps">
+          <p class="helper-text" style="margin-top:0;">Guiden tager dig igennem:</p>
+          <ol class="helper-list">
+            <li>Hvem er du – lønmodtager, investor, udlejer m.m.</li>
+            <li>Hvilke typer indkomst, fradrag og investeringer du har.</li>
+            <li>Hvilke rubrikker du skal bruge på skat.dk.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </header>
+
 <header class="container site-header">
-  <div class="brand">Finlytics</div>
+  <div class="brand">
+    <div class="logo">F</div>
+    <div class="brand-text">
+      <h1>Finlytics</h1>
+      <p>Smarter investing. Minimal friction.</p>
+    </div>
+  </div>
+
   <nav class="actions">
-    <a href="index.html" class="btn btn-line">Investeringsberegner</a>
-    <a href="tax.html" class="btn btn-line">Skatteberegner</a>
-    <a href="tax-helper.html" class="btn btn-glow">Årsopgørelsesguide</a>
-    <a href="about.html" class="btn btn-line">Om</a>
+    <a href="index.html" class="btn btn-line nav-link">Investeringsberegner</a>
+    <a href="tax.html" class="btn btn-line nav-link">Skatteberegner</a>
+    <a href="tax-helper.html" class="btn btn-line nav-link nav-active">Årsopgørelsesguide</a>
+    <a href="about.html" class="btn btn-line nav-link">Om Finlytics</a>
   </nav>
 </header>
 

@@ -174,3 +174,11 @@ document.addEventListener("DOMContentLoaded", () => {
   btnCalc?.addEventListener("click", calc);
   btnClear?.addEventListener("click", clearForm);
 });
+
+// ACCORDION TOGGLE
+document.querySelectorAll('.acc-header').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.parentElement;
+    item.classList.toggle('open');
+  });
+});
