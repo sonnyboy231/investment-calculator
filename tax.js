@@ -35,6 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const kpiStock    = $("#tax-kpi-stock");
   const kpiCap      = $("#tax-kpi-capital");
   const kpiCrypto   = $("#tax-kpi-crypto");
+  const taxPremRiskScoreEl = document.querySelector("#tax-prem-risk-score");
+  const taxPremRiskTextEl  = document.querySelector("#tax-prem-risk-text");
+  const taxPremSOptEl      = document.querySelector("#tax-prem-s-opt");
+  const taxPremSRealEl     = document.querySelector("#tax-prem-s-real");
+  const taxPremSPessEl     = document.querySelector("#tax-prem-s-pess");
+  const taxPremRestEl      = document.querySelector("#tax-prem-rest");
+  const taxPremRecosEl     = document.querySelector("#tax-prem-recos");
+
 
   const canvas      = document.getElementById("tax-chart");
   const ctx         = canvas?.getContext("2d") || null;
@@ -94,6 +102,93 @@ document.addEventListener("DOMContentLoaded", () => {
     kpiCrypto.textContent = taxCry > 0   ? fmtDKK.format(taxCry) : "0 kr";
 
     drawChart(gross, net, totalTax);
+
+    // Opdater premium-output
+    updateTaxPremium(net, taxStock, taxCap, taxCry);
+  }
+
+
+  function updateTaxPremium(net, taxStock, taxCap, taxCry) {
+    if (!taxPremRiskScoreEl || !taxPremRiskTextEl || !taxPremSOptEl || !taxPremSRealEl || !taxPremSPessEl || !taxPremRestEl || !taxPremRecosEl) {
+      return;
+    }
+
+    const totalTax = Math.max(0, (taxStock || 0) + (taxCap || 0) + (taxCry || 0));
+    const safeNet  = Math.max(0, net || 0);
+
+    if (!(safeNet > 0) && !(totalTax > 0)) {
+      taxPremRiskScoreEl.textContent = "–";
+      taxPremRiskTextEl.textContent  = "Indtast dine tal og beregn for at se en vurdering.";
+      taxPremSOptEl.textContent      = "–";
+      taxPremSRealEl.textContent     = "–";
+      taxPremSPessEl.textContent     = "–";
+      taxPremRestEl.textContent      = "–";
+      taxPremRecosEl.innerHTML       = "";
+      return;
+    }
+
+    // Enkel heuristik: mere crypto og høj skat = højere risiko for restskat
+    let risk = 20;
+    if (taxCry > 0) risk += 30;
+    if (taxCap > 0) risk += 15;
+    if (totalTax > 0 && taxCry / totalTax > 0.4) risk += 15;
+    if (totalTax > 0 && totalTax > safeNet * 0.35) risk += 10;
+
+    risk = Math.max(0, Math.min(100, Math.round(risk)));
+    taxPremRiskScoreEl.textContent = String(risk);
+
+    let riskText = "";
+    if (risk <= 30) {
+      riskText = "Lav til moderat risiko for restskat – men tjek stadig din forskudsopgørelse.";
+    } else if (risk <= 60) {
+      riskText = "Middel risiko for restskat – dine tal kan svinge en del, så vær ekstra opmærksom.";
+    } else {
+      riskText = "Forhøjet risiko for restskat – gennemgå din forskudsopgørelse nøje og overvej at justere dine tal.";
+    }
+    taxPremRiskTextEl.textContent = riskText;
+
+    const opt  = safeNet * 1.2;
+    const real = safeNet;
+    const pess = safeNet * 0.75;
+
+    const fmt = new Intl.NumberFormat("da-DK", {
+      style: "currency",
+      currency: "DKK",
+      maximumFractionDigits: 0
+    });
+
+    taxPremSOptEl.textContent  = fmt.format(Math.round(opt));
+    taxPremSRealEl.textContent = fmt.format(Math.round(real));
+    taxPremSPessEl.textContent = fmt.format(Math.round(pess));
+
+    const restRisk = Math.max(0, Math.min(98, 100 - risk + (taxCry > 0 ? 5 : 0)));
+    taxPremRestEl.textContent  = restRisk.toFixed(0) + " %";
+
+    // Byg anbefalinger
+    const recos = [];
+
+    if (taxCry > 0) {
+      recos.push("Dobbelttjek at dine crypto-gevinster og -tab er indberettet korrekt i din årsopgørelse.");
+    }
+    if (taxCap > 0) {
+      recos.push("Sørg for at dine ETF- og kapitalindkomsttal stemmer med dine årsopgørelser fra bank og mægler.");
+    }
+    if (taxStock > 0) {
+      recos.push("Gennemgå dine aktiehandler og udbytter, så de matcher dine indberettede beløb.");
+    }
+    if (totalTax > 0 && totalTax > safeNet * 0.35) {
+      recos.push("Din samlede skat er relativt høj ift. dine gevinster – overvej om din forskudsopgørelse skal justeres.");
+    }
+    if (!recos.length) {
+      recos.push("Din beregning ser relativt balanceret ud – husk stadig at sammenligne med din endelige årsopgørelse.");
+    }
+
+    taxPremRecosEl.innerHTML = "";
+    recos.forEach((txt) => {
+      const li = document.createElement("li");
+      li.textContent = txt;
+      taxPremRecosEl.appendChild(li);
+    });
   }
 
   function clearForm() {
@@ -170,6 +265,65 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.fillText(fmtDKK.format(gross), pad + barW * 0.5 + barW / 2, baseY - hGross - 4);
     ctx.fillText(fmtDKK.format(net),   pad + barW * 2.5 + barW / 2, baseY - hNet - 4);
   }
+
+
+  const btnReport = document.getElementById("btn-report-pdf-big");
+
+  function buildTaxPdfData() {
+    const graphCanvas = document.getElementById("tax-chart");
+    const graphImg = graphCanvas && graphCanvas.toDataURL ? graphCanvas.toDataURL("image/png") : null;
+
+    const kpis = [
+      { label: "Samlet skat", value: kpiTotal?.textContent || "" },
+      { label: "Netto efter skat", value: kpiNet?.textContent || "" },
+      { label: "Aktieskat", value: kpiStock?.textContent || "" },
+      { label: "Kapitalindkomstskat", value: kpiCap?.textContent || "" },
+      { label: "Skat af krypto", value: kpiCrypto?.textContent || "" }
+    ];
+
+    const recos = [];
+    if (taxPremRecosEl) {
+      taxPremRecosEl.querySelectorAll("li").forEach((li) => {
+        const txt = (li.textContent || "").trim();
+        if (txt) recos.push(txt);
+      });
+    }
+
+    return {
+      title: "Skatteberegning – investeringer",
+      subtitle: "Vejledende beregning baseret på dine indtastninger i Finlytics skatteberegner.",
+      kpis: kpis,
+      graph: graphImg,
+      table: [],
+      premium: {
+        riskScore: taxPremRiskScoreEl ? (taxPremRiskScoreEl.textContent || "–") : "–",
+        errorRisk: taxPremRestEl ? (taxPremRestEl.textContent || "–") : null,
+        successChance: "",
+        optimistic: taxPremSOptEl ? (taxPremSOptEl.textContent || "–") : "",
+        realistic: taxPremSRealEl ? (taxPremSRealEl.textContent || "–") : "",
+        pessimistic: taxPremSPessEl ? (taxPremSPessEl.textContent || "–") : "",
+        recommendations: recos
+      },
+      cta: "Brug altid din faktiske årsopgørelse og eventuel rådgiver som endeligt grundlag."
+    };
+  }
+
+  btnReport?.addEventListener("click", (e) => {
+    e.preventDefault();
+    try {
+      const data = buildTaxPdfData();
+      if (window.FinlyticsPDF && typeof window.FinlyticsPDF.generatePDF === "function") {
+        window.FinlyticsPDF.generatePDF("tax", data);
+      } else if (typeof window.generatePDF === "function") {
+        window.generatePDF("tax", data);
+      } else {
+        alert("PDF-funktionen er ikke tilgængelig endnu.");
+      }
+    } catch (err) {
+      console.error("PDF fejl (tax)", err);
+      alert("Kunne ikke generere PDF-rapport.");
+    }
+  });
 
   btnCalc?.addEventListener("click", calc);
   btnClear?.addEventListener("click", clearForm);

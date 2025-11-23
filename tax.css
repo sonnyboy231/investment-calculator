@@ -1,6 +1,6 @@
 
 .tax-grid{
-  margin-top:20px;
+  margin-top:32px;
   align-items:flex-start;
 }
 
@@ -118,4 +118,128 @@
   font-size:11px;
   line-height:1.4;
   color:var(--muted);
+}
+
+/* --- Skatteberegner Layout Polish --- */
+.tax-grid-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+  margin-top:48px;
+}
+
+@media(max-width:768px){
+  .tax-grid-layout{
+    grid-template-columns:1fr;
+  }
+}
+
+.tax-results-graph-card{
+  padding:24px;
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  background:var(--panel);
+}
+
+.tax-chart{
+  max-height:300px;
+}
+
+
+/* ===== TAX PREMIUM OUTPUT ===== */
+.tax-premium-output{
+  margin-top:48px;
+}
+
+.tax-prem-grid{
+  display:grid;
+  gap:24px;
+}
+
+.tax-prem-risk-card,
+.tax-prem-success,
+.tax-prem-recos,
+.tax-prem-scenarios{
+  padding:16px 18px;
+  border-radius:16px;
+  background:var(--panel);
+  box-shadow:var(--shadow-soft, 0 18px 45px rgba(15,23,42,0.45));
+}
+
+.tax-prem-scenarios-grid{
+  display:grid;
+  gap:16px;
+}
+
+.tax-prem-scenarios-grid .card.mini{
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(15,23,42,0.85);
+  box-shadow:none;
+}
+
+.tax-prem-cta{
+  margin-top:24px;
+  display:flex;
+  justify-content:center;
+}
+
+.tax-prem-cta .btn{
+  min-width:260px;
+}
+
+/* Desktop layout */
+@media (min-width: 900px){
+  .tax-prem-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    align-items:stretch;
+  }
+  .tax-prem-risk-card{
+    grid-column:1 / -1;
+  }
+  .tax-prem-recos{
+    grid-column:1 / -1;
+  }
+  .tax-prem-scenarios-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .tax-prem-scenarios-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* === Layout polish v2 – Skatteberegner === */
+
+.tax-results-graph-card{
+  display:flex;
+  align-items:stretch;
+}
+
+.tax-results-inner{
+  width:100%;
+}
+
+/* Desktop: gør højre kort mindre bredt og balancerer layoutet */
+@media (min-width: 900px){
+  .tax-grid-layout{
+    align-items:flex-start;
+  }
+
+  .tax-results-graph-card{
+    max-width:520px;
+    margin-left:auto;
+  }
+
+  .tax-grid-layout > .tax-card:first-child{
+    margin-bottom:32px;
+  }
+}
+
+/* Lidt strammere afstand mellem main og premium-blok */
+.tax-premium-output{
+  margin-top:40px;
 }

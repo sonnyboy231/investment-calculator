@@ -9,30 +9,59 @@
 </head>
 <body>
 
-<header class="container site-header">
-    <div class="brand">
-      <div class="logo">F</div>
-      <div class="brand-text">
-        <h1>Finlytics</h1>
-        <p>Smarter investing. Minimal friction.</p>
+
+  <!-- ===== HERO SECTION – SKATTEBEREGNER ===== -->
+  <header class="hero hero-tax">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1 class="hero-title">Få styr på skatten af dine investeringer – på få sekunder.</h1>
+        <p class="hero-subtitle">
+          Indtast dine gevinster, tab og udbytter, og få et samlet, vejledende overblik over, hvor meget skat du skal betale.
+        </p>
+
+        <ul class="hero-bullets">
+          <li>🔢 Dækker aktier, ETF'er og crypto.</li>
+          <li>📦 Viser både brutto-beløb og netto efter skat.</li>
+          <li>🧾 Ideel som forberedelse til din årsopgørelse.</li>
+        </ul>
+
+        <p class="hero-disclaimer">
+          Beregningen er forenklet og kan ikke erstatte personlig skatterådgivning eller din endelige årsopgørelse hos Skat.
+        </p>
+
+        <button class="hero-cta"
+          onclick="document.getElementById('tax-form').scrollIntoView({ behavior: 'smooth' });">
+          Åbn skatteberegner
+        </button>
       </div>
     </div>
-
-    
-    <nav class="actions">
-      <a href="index.html" class="btn btn-line">Investeringsberegner</a>
-      <a href="tax.html" class="btn btn-glow">Skatteberegner</a>
-      <a href="tax-helper.html" class="btn btn-line">Årsopgørelsesguide</a>
-      <a href="about.html" class="btn btn-line">Om Finlytics</a>
-      <button id="btn-report-pdf-big" class="btn btn-glow">Rapport (PDF)</button>
-      <button id="btn-clear-data-big" class="btn btn-danger">Ryd alt</button>
-    </nav>
   </header>
 
-  <main class="container grid tax-grid">
+<header class="container site-header">
+  <div class="brand">
+    <div class="logo">F</div>
+    <div class="brand-text">
+      <h1>Finlytics</h1>
+      <p>Smarter investing. Minimal friction.</p>
+    </div>
+  </div>
+
+  <nav class="actions">
+    <a href="index.html" class="btn btn-line nav-link">Investeringsberegner</a>
+    <a href="tax.html" class="btn btn-line nav-link nav-active">Skatteberegner</a>
+    <a href="tax-helper.html" class="btn btn-line nav-link">Årsopgørelsesguide</a>
+    <a href="about.html" class="btn btn-line nav-link">Om Finlytics</a>
+    <button id="btn-report-pdf-big" class="btn btn-glow">Rapport (PDF)</button>
+    <button id="btn-clear-data-big" class="btn btn-danger">Ryd alt</button>
+  </nav>
+</header>
+
+  <main class="container tax-main">
+
+  <div class="tax-grid-layout">
 
     <!-- INPUTS (LEFT) -->
-    <section class="card tax-card">
+<section class="card tax-card">
       <h2>Skatteberegner – investering</h2>
       <p class="helper-text">
         Indtast dine gevinster, tab og udbytter. Finlytics estimerer din skat på aktier, ETF'er og crypto.
@@ -171,47 +200,102 @@
     </section>
 
     <!-- RESULTS (RIGHT) -->
-    <section class="card tax-card">
-      <h2>Resultater</h2>
+<section class="card tax-card tax-results-graph-card">
+      <div class="tax-results-inner">
+        <h2>Resultater</h2>
 
-      <div class="kpis kpis-tax">
-        <div class="kpi">
-          <div class="label">Samlet skat</div>
-          <div id="tax-kpi-total" class="value">–</div>
+        <div class="kpis kpis-tax">
+          <div class="kpi">
+            <div class="label">Samlet skat</div>
+            <div id="tax-kpi-total" class="value">–</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Netto efter skat</div>
+            <div id="tax-kpi-net" class="value">–</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Aktier</div>
+            <div id="tax-kpi-stock" class="value">–</div>
+          </div>
+          <div class="kpi">
+            <div class="label">ETF / kapital</div>
+            <div id="tax-kpi-capital" class="value">–</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Crypto</div>
+            <div id="tax-kpi-crypto" class="value">–</div>
+          </div>
         </div>
-        <div class="kpi">
-          <div class="label">Netto efter skat</div>
-          <div id="tax-kpi-net" class="value">–</div>
+
+        <div class="chart-wrap tax-chart">
+          <canvas id="tax-chart" width="640" height="260"></canvas>
+          <p class="note">
+            Den blå søjle viser brutto-beløbet før skat. Den grønne søjle viser netto efter skat.
+          </p>
         </div>
-        <div class="kpi">
-          <div class="label">Aktier</div>
-          <div id="tax-kpi-stock" class="value">–</div>
-        </div>
-        <div class="kpi">
-          <div class="label">ETF / kapital</div>
-          <div id="tax-kpi-capital" class="value">–</div>
-        </div>
-        <div class="kpi">
-          <div class="label">Crypto</div>
-          <div id="tax-kpi-crypto" class="value">–</div>
-        </div>
+
+        <p class="helper-text">
+          Beregningen er forenklet og tager ikke højde for alle særlige regler, fradrag og individuelle forhold.
+          Brug altid din egen årsopgørelse og eventuel rådgiver som endeligt grundlag.
+        </p>
       </div>
+    </section>
+  </div>
 
-      <div class="chart-wrap tax-chart">
-        <canvas id="tax-chart" width="640" height="260"></canvas>
-        <p class="note">
-          Den blå søjle viser brutto-beløbet før skat. Den grønne søjle viser netto efter skat.
+
+  <!-- TAX PREMIUM OUTPUT -->
+  <section class="card tax-card tax-premium-output">
+    <h2>Premium overblik</h2>
+    <div class="tax-prem-grid">
+      <div class="tax-prem-risk-card">
+        <h3>Trygheds-score</h3>
+        <div id="tax-prem-risk-score" class="big-num">–</div>
+        <p id="tax-prem-risk-text" class="muted small">
+          Beregn for at se en vurdering af din risiko for restskat.
         </p>
       </div>
 
-      <p class="helper-text">
-        Beregningen er forenklet og tager ikke højde for alle særlige regler, fradrag og individuelle forhold.
-        Brug altid din egen årsopgørelse og eventuel rådgiver som endeligt grundlag.
-      </p>
+      <div class="tax-prem-scenarios">
+        <h3>Scenarier</h3>
+        <div class="tax-prem-scenarios-grid">
+          <div class="card mini">
+            <h4>Optimistisk</h4>
+            <div id="tax-prem-s-opt" class="big-num">–</div>
+          </div>
+          <div class="card mini">
+            <h4>Realistisk</h4>
+            <div id="tax-prem-s-real" class="big-num">–</div>
+          </div>
+          <div class="card mini">
+            <h4>Pessimistisk</h4>
+            <div id="tax-prem-s-pess" class="big-num">–</div>
+          </div>
+        </div>
+      </div>
 
-    </section>
+      <div class="tax-prem-success">
+        <h3>Risiko for restskat</h3>
+        <div id="tax-prem-rest" class="big-num">–</div>
+        <p class="muted small">
+          Vi estimerer en vejledende sandsynlighed baseret på dine indtastede tal.
+        </p>
+      </div>
 
-  </main>
+      <div class="tax-prem-recos">
+        <h3>Anbefalinger</h3>
+        <ul id="tax-prem-recos"></ul>
+      </div>
+    </div>
+
+    <div class="tax-prem-cta">
+      <button type="button" class="btn btn-line" disabled>
+        Premium skatrapport (kommer snart)
+      </button>
+    </div>
+  </section>
+
+
+</main>
 
   <!-- ===== FOOTER ===== -->
   <footer class="container foot">

@@ -47,14 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const kCagr = $("#kpi-cagr");
   const chartCagr = $("#chart-cagr");
 
-  // Premium output DOM hooks
-  const ipRiskEl = $("#ip-risk-score");
-  const ipSOptEl = $("#ip-s-opt");
-  const ipSRealEl = $("#ip-s-real");
-  const ipSPessEl = $("#ip-s-pess");
-  const ipSuccessEl = $("#ip-success");
-  const ipRecosEl = $("#ip-recos");
-
   const canvas = $("#area-chart");
 
   const volEl = $("#volatility");
@@ -94,6 +86,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const cmpBFinal2 = $("#cmp-b-final-2");
   const cmpDFinal = $("#cmp-d-final");
   const cmpACagr2 = $("#cmp-a-cagr-2");
+  const ipRiskScoreEl = document.querySelector("#ip-risk-score");
+  const ipRiskTextEl = document.querySelector("#ip-risk-text");
+  const ipSOptEl = document.querySelector("#ip-s-opt");
+  const ipSRealEl = document.querySelector("#ip-s-real");
+  const ipSPessEl = document.querySelector("#ip-s-pess");
+  const ipSuccessEl = document.querySelector("#ip-success");
+  const ipRecosEl = document.querySelector("#ip-recos");
+
   const cmpBCagr2 = $("#cmp-b-cagr-2");
   const cmpDCagr = $("#cmp-d-cagr");
 
@@ -398,7 +398,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const ctx = canvas.getContext("2d");
       if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-    try { clearPremiumOutput(); } catch {}
   }
   // ======================================
   // Base Calculation Runner
@@ -435,105 +434,122 @@ document.addEventListener("DOMContentLoaded", () => {
       chartCagr.textContent = s;
     }
 
+        updateIpPremiumOutput(res, monthly, years, expPct);
+
     drawChart(res.rows, currentBand, null);
     renderTable(res.rows);
-
-    try {
-      updatePremiumOutput(res, initial, monthly, years, expPct, currentBand);
-    } catch {}
   }
 
+  
+  // ======================================
+  // Premium Output – Investment Planner
+  // ======================================
 
-  function clearPremiumOutput() {
-    if (!ipRiskEl || !ipSOptEl || !ipSRealEl || !ipSPessEl || !ipSuccessEl || !ipRecosEl) return;
-    ipRiskEl.textContent = "—";
-    ipSOptEl.textContent = "—";
-    ipSRealEl.textContent = "—";
-    ipSPessEl.textContent = "—";
-    ipSuccessEl.textContent = "—";
-    ipRecosEl.innerHTML = "<li>Indtast dine tal og tryk beregn for at se en vurdering.</li>";
+  function ipCalcRisk(monthly, years, expPct){
+    const m = Math.max(0, monthly);
+    const y = Math.max(1, years);
+    const r = Math.max(0, expPct);
+
+    // Simpel heuristik: mere tid og højere månedlig indbetaling dæmper risiko
+    let risk = r * 1.8 - y * 0.9 - (m / 1200);
+    if (!Number.isFinite(risk)) risk = 0;
+    risk = Math.max(0, Math.min(100, risk));
+    return risk;
   }
 
-  function updatePremiumOutput(res, initial, monthly, years, expPct, band) {
-    if (!ipRiskEl || !ipSOptEl || !ipSRealEl || !ipSPessEl || !ipSuccessEl || !ipRecosEl) return;
+  function ipCalcScenarios(finalBalance){
+    const base = Math.max(0, finalBalance || 0);
+    return {
+      pessimistic: base * 0.7,
+      realistic: base,
+      optimistic: base * 1.3
+    };
+  }
 
-    const hasValid =
-      Number.isFinite(res?.finalBalance) &&
-      res.finalBalance > 0 &&
-      Number.isFinite(monthly) &&
-      years > 0 &&
-      Number.isFinite(expPct);
+  function ipCalcSuccessChance(years, expPct){
+    const y = Math.max(1, years);
+    const r = Math.max(0, expPct);
+    // Simpel model: længere tid og moderat afkast giver højere "success"
+    let score = 40 + (y * 2) + (r * 1.5);
+    score = Math.max(0, Math.min(98, score));
+    return score;
+  }
 
-    if (!hasValid) {
-      clearPremiumOutput();
+  function ipBuildRecommendations(riskScore, years, monthly){
+    const recos = [];
+    const y = Math.max(1, years);
+    const m = Math.max(0, monthly);
+
+    if (riskScore <= 30){
+      recos.push("Din risiko ser fornuftig ud – fokusér på at holde din plan stabil.");
+    } else if (riskScore <= 60){
+      recos.push("Din risiko er moderat – overvej om løbetid eller månedligt beløb passer til din mavefornemmelse.");
+    } else {
+      recos.push("Din risiko er høj – overvej lavere forventet afkast eller længere tidshorisont.");
+    }
+
+    if (m < 1000){
+      recos.push("Et lidt højere månedligt indskud kan gøre en stor forskel på lang sigt.");
+    } else if (m > 5000){
+      recos.push("Du indbetaler allerede et relativt højt beløb hver måned – sørg for at din øvrige økonomi også hænger sammen.");
+    }
+
+    if (y < 10){
+      recos.push("En længere tidshorisont kan gøre din plan mere robust mod udsving.");
+    } else if (y > 25){
+      recos.push("Din tidshorisont er lang – sørg for løbende at justere planen, når din situation ændrer sig.");
+    }
+
+    if (!recos.length){
+      recos.push("Din plan ser balanceret ud – husk at gennemgå den jævnligt.");
+    }
+    return recos;
+  }
+
+  function updateIpPremiumOutput(res, monthly, years, expPct){
+    if (!ipRiskScoreEl || !ipRiskTextEl || !ipSOptEl || !ipSRealEl || !ipSPessEl || !ipSuccessEl || !ipRecosEl){
       return;
     }
 
-    // Risk score
-    try {
-      const r = ip_calcRisk(monthly, years, expPct / 100);
-      ipRiskEl.textContent = r + " / 100";
-    } catch {
-      ipRiskEl.textContent = "—";
-    }
-
-    // Scenarios based on final balance
-    try {
-      const scen = ip_calcScenarios(res.finalBalance);
-      ipSOptEl.textContent = fmtDKK.format(scen.optim);
-      ipSRealEl.textContent = fmtDKK.format(scen.real);
-      ipSPessEl.textContent = fmtDKK.format(scen.pess);
-    } catch {
+    const finalBalance = res && res.finalBalance ? res.finalBalance : 0;
+    if (!Number.isFinite(finalBalance) || finalBalance <= 0){
+      ipRiskScoreEl.textContent = "—";
+      ipRiskTextEl.textContent = "Indtast dine tal og beregn for at se en samlet vurdering.";
       ipSOptEl.textContent = "—";
       ipSRealEl.textContent = "—";
       ipSPessEl.textContent = "—";
-    }
-
-    // Success chance – v1 placeholder: shows dash unless Monte Carlo band is present
-    if (band && band.p50 && band.p50.length) {
-      // Simple placeholder using helper so modellen kan udskiftes senere:
-      const hits = Math.round((band.p50.length * 0.6));
-      const total = Math.max(1, band.p50.length);
-      try {
-        ipSuccessEl.textContent = ip_successChance(hits, total);
-      } catch {
-        ipSuccessEl.textContent = "—";
-      }
-    } else {
       ipSuccessEl.textContent = "—";
+      ipRecosEl.innerHTML = "";
+      return;
     }
 
-    // Recommendations – simple static v1 based on risk + tidshorisont
-    const recos = [];
-    const yearsSafe = Math.max(0, years);
+    const risk = Math.round(ipCalcRisk(monthly, years, expPct));
+    ipRiskScoreEl.textContent = risk;
 
-    try {
-      const rScore = parseInt(ipRiskEl.textContent, 10);
-      if (!Number.isNaN(rScore)) {
-        if (rScore < 30) {
-          recos.push("Din risiko ser lav ud – du prioriterer stabilitet frem for maksimal vækst.");
-        } else if (rScore < 70) {
-          recos.push("Din risiko er moderat – en fornuftig balance mellem vækst og udsving.");
-        } else {
-          recos.push("Du ligger højt i risiko – vær sikker på at din tidshorisont og nattesøvn kan følge med.");
-        }
-      }
-    } catch {}
+    let riskLabel = "";
+    if (risk <= 30) riskLabel = "Lav til moderat risiko baseret på din tidshorisont og forventede afkast.";
+    else if (risk <= 60) riskLabel = "Middel risiko – typisk for en balanceret langsigtet investeringsplan.";
+    else riskLabel = "Høj risiko – vær opmærksom på udsving og justér ved behov.";
+    ipRiskTextEl.textContent = riskLabel;
 
-    if (yearsSafe < 5) {
-      recos.push("Kort tidshorisont – overvej at holde fokus på mere stabile investeringer.");
-    } else if (yearsSafe >= 10) {
-      recos.push("Lang tidshorisont – udsving undervejs er naturlige, men kan udjævnes over tid.");
-    }
+    const scen = ipCalcScenarios(finalBalance);
+    ipSOptEl.textContent = fmtDKK.format(Math.round(scen.optimistic));
+    ipSRealEl.textContent = fmtDKK.format(Math.round(scen.realistic));
+    ipSPessEl.textContent = fmtDKK.format(Math.round(scen.pessimistic));
 
-    if (!recos.length) {
-      recos.push("Juster dine inputs for at få personlige anbefalinger.");
-    }
+    const success = Math.round(ipCalcSuccessChance(years, expPct));
+    ipSuccessEl.textContent = success + " %";
 
-    ipRecosEl.innerHTML = recos.map(txt => `<li>${txt}</li>`).join("");
+    const recos = ipBuildRecommendations(risk, years, monthly);
+    ipRecosEl.innerHTML = "";
+    recos.forEach(txt => {
+      const li = document.createElement("li");
+      li.textContent = txt;
+      ipRecosEl.appendChild(li);
+    });
   }
 
-  // ======================================
+// ======================================
   // Tips
   // ======================================
 
@@ -884,217 +900,74 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cmpBox) cmpBox.hidden = true;
     if (cmpKPIsBox) cmpKPIsBox.hidden = true;
   }
+  
   // ======================================
-  // PDF PRO GENERATOR (2-SIDED)
+  // PDF v2 – Investment Planner Rapport
   // ======================================
+
+  function buildInvestmentPdfData() {
+    const graphCanvas = document.getElementById("area-chart");
+    const graphImg = graphCanvas && graphCanvas.toDataURL ? graphCanvas.toDataURL("image/png") : null;
+
+    const yearBody = document.querySelector("#year-table tbody");
+    const table = [];
+    if (yearBody) {
+      yearBody.querySelectorAll("tr").forEach((tr) => {
+        const cells = Array.from(tr.children).map((td) => (td.textContent || "").trim());
+        table.push(cells);
+      });
+    }
+
+    const kpis = [
+      { label: "Samlet indskud", value: kContrib?.textContent || "" },
+      { label: "Rentegevinst", value: kInterest?.textContent || "" },
+      { label: "Slutværdi", value: kFinal?.textContent || "" },
+      { label: "Anslået årligt afkast (vejledende)", value: kCagr?.textContent || "" }
+    ];
+
+    const recos = [];
+    if (ipRecosEl) {
+      ipRecosEl.querySelectorAll("li").forEach((li) => {
+        const txt = (li.textContent || "").trim();
+        if (txt) recos.push(txt);
+      });
+    }
+
+    return {
+      title: "Investeringsrapport",
+      subtitle: "Vejledende rapport baseret på dine nuværende input og beregninger i Finlytics Investment Planner.",
+      kpis: kpis,
+      graph: graphImg,
+      table: table,
+      premium: {
+        riskScore: ipRiskScoreEl ? (ipRiskScoreEl.textContent || "–") : "–",
+        errorRisk: null,
+        successChance: ipSuccessEl ? (ipSuccessEl.textContent || "–") : "",
+        optimistic: ipSOptEl ? (ipSOptEl.textContent || "–") : "",
+        realistic: ipSRealEl ? (ipSRealEl.textContent || "–") : "",
+        pessimistic: ipSPessEl ? (ipSPessEl.textContent || "–") : "",
+        recommendations: recos
+      },
+      cta: "Brug denne rapport som udgangspunkt for dine egne vurderinger, og justér dine tal løbende, når din økonomi ændrer sig."
+    };
+  }
 
   function makePDFReport() {
     try {
-      const chart = $("#area-chart");
-      const chartImg = chart ? chart.toDataURL("image/png") : null;
-
-      const now = new Date().toLocaleString("da-DK");
-
-      const kpiContrib = kContrib.textContent;
-      const kpiInterest = kInterest.textContent;
-      const kpiFinal = kFinal.textContent;
-      const kpiCagrTxt = kCagr.textContent;
-
-      const years = $("#year-table tbody");
-      const yearRows = years ? Array.from(years.children) : [];
-
-      const win = window.open("", "_blank");
-      if (!win) return;
-
-      win.document.write(`
-      <html>
-      <head>
-        <meta charset="utf-8" />
-        <title>Finlytics – PRO Rapport</title>
-        <style>
-
-        body {
-          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-          padding: 28px;
-          color: #111;
-          margin: 0;
-        }
-
-        h1 {
-          font-size: 26px;
-          margin: 0 0 6px;
-        }
-        h2 {
-          margin: 20px 0 10px;
-          font-size: 20px;
-        }
-        h3 {
-          margin: 16px 0 6px;
-          font-size: 16px;
-          color: #444;
-        }
-
-        .grid2 {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 20px;
-          margin-top: 12px;
-        }
-
-        .card {
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          padding: 14px;
-          background: #fafafa;
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-          font-size: 14px;
-        }
-
-        th, td {
-          padding: 6px 4px;
-          border-bottom: 1px solid #e4e4e4;
-          text-align: left;
-        }
-
-        th {
-          font-weight: 600;
-          color: #444;
-        }
-
-        .kpis {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(140px, 1fr));
-          gap: 10px;
-          margin-top: 10px;
-        }
-
-        .kpi {
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          padding: 10px;
-          background: white;
-        }
-        .kpi b {
-          font-size: 12px;
-          color: #666;
-        }
-        .kpi div {
-          font-size: 17px;
-          font-weight: 700;
-          margin-top: 4px;
-        }
-
-        .chart-box {
-          border: 1px solid #ddd;
-          border-radius: 10px;
-          padding: 12px;
-          margin-top: 10px;
-        }
-
-        .page-break {
-          page-break-before: always;
-          margin-top: 40px;
-        }
-
-        .foot {
-          margin-top: 25px;
-          font-size: 12px;
-          color: #777;
-          text-align: left;
-        }
-
-        </style>
-      </head>
-
-      <body>
-
-      <!-- PAGE 1 -->
-      <h1>Finlytics — Investeringsrapport</h1>
-      <div style="font-size:14px;color:#555;margin-bottom:6px;">
-        Genereret: ${now}
-      </div>
-
-      <div class="grid2">
-        <div class="card">
-          <h2>Inputs</h2>
-          <table>
-            <tr><th>Startbeløb</th><td>${initialEl.value || ""} kr</td></tr>
-            <tr><th>Månedligt indskud</th><td>${monthlyEl.value || ""} kr</td></tr>
-            <tr><th>Antal år</th><td>${yearsEl.value || ""}</td></tr>
-            <tr><th>Forventet afkast</th><td>${expEl.value || ""} %</td></tr>
-            <tr><th>Årlige omkostninger</th><td>${feesEl.value || ""} %</td></tr>
-            <tr><th>Preset</th><td>${feePresetEl.value || "–"}</td></tr>
-          </table>
-        </div>
-
-        <div class="card">
-          <h2>KPI’er</h2>
-          <div class="kpis">
-            <div class="kpi"><b>Total indskud</b><div>${kpiContrib}</div></div>
-            <div class="kpi"><b>Rentegevinst</b><div>${kpiInterest}</div></div>
-            <div class="kpi"><b>Slutværdi</b><div>${kpiFinal}</div></div>
-            <div class="kpi"><b>Effektiv årlig afkast</b><div>${kpiCagrTxt}</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="chart-box">
-        <h2>Udviklingsgraf</h2>
-        ${chartImg ? `<img src="${chartImg}" style="max-width:100%;height:auto;">` : "<i>Ingen graf</i>"}
-      </div>
-
-      <div class="foot">
-        Side 1 / 2 — Finlytics (www.finlytics.dk)
-      </div>
-
-      <!-- PAGE 2 -->
-      <div class="page-break"></div>
-      <h2>År-for-år udvikling</h2>
-
-      <table>
-        <thead>
-          <tr><th>År</th><th>Indskud</th><th>Afkast</th><th>Saldo</th></tr>
-        </thead>
-        <tbody>
-          ${
-            yearRows.length
-              ? yearRows.map(r => "<tr>" + r.innerHTML + "</tr>").join("")
-              : "<tr><td colspan='4'>Ingen data</td></tr>"
-          }
-        </tbody>
-      </table>
-
-      <h3>Noter</h3>
-      <p style="font-size:14px;line-height:1.6;color:#555;">
-        Denne rapport er baseret på simple fremskrivninger, renters rente og valgte afkast/risiko.
-        Faktiske markedsafkast kan variere betydeligt.
-      </p>
-
-      <div class="foot">
-        Side 2 / 2 — Finlytics (www.finlytics.dk)
-      </div>
-
-      <script>
-        window.addEventListener('load', () => setTimeout(() => window.print(), 250));
-      </script>
-
-      </body>
-      </html>
-      `);
-
-      win.document.close();
-
-    } catch (e) {
-      console.error(e);
+      const data = buildInvestmentPdfData();
+      if (window.FinlyticsPDF && typeof window.FinlyticsPDF.generatePDF === "function") {
+        window.FinlyticsPDF.generatePDF("investment", data);
+      } else if (typeof window.generatePDF === "function") {
+        window.generatePDF("investment", data);
+      } else {
+        alert("PDF-funktionen er ikke tilgængelig endnu.");
+      }
+    } catch (err) {
+      console.error("PDF fejl (investment)", err);
       alert("Kunne ikke generere PDF-rapport.");
     }
   }
-
-  // ======================================
+// ======================================
   // EVENT LISTENERS
   // ======================================
 

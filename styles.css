@@ -1,4 +1,3 @@
-
 :root{
   --bg:#0d1220;
   --panel:#121a2e;
@@ -476,23 +475,241 @@ input:active{ transform: translateY(1px) }
 }
 
 /* ============================================
-   ÅRSOPGØRELSESGUIDE HERO – TOOL 3
+   RESPONSIVE TWEAKS – NAV & CHART (Tool #1)
    ============================================ */
 
-.hero-helper{
-  background:
-    radial-gradient(circle at top left, rgba(248,250,252,0.08), transparent 55%),
-    radial-gradient(circle at bottom right, rgba(234,179,8,0.20), transparent 55%);
+@media (max-width: 768px){
+  .site-header{
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 24px;
+    padding: 8px 12px;
+  }
+
+  .actions{
+    justify-content: flex-start;
+  }
+
+  #area-chart{
+    height: 320px;
+  }
 }
 
-.helper-steps{
-  background: rgba(15,23,42,0.96);
+@media (max-width: 480px){
+  .site-header{
+    gap: 10px;
+  }
+
+  .site-header .btn{
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  #area-chart{
+    height: 260px;
+  }
 }
 
-/* Premium Output Cards */
-.premium-output{display:flex;flex-direction:column;gap:32px;margin-top:48px;}
-.scenario-cards{display:grid;gap:16px;grid-template-columns:1fr;}
-@media(min-width:768px){
-  .scenario-cards{grid-template-columns:repeat(3,1fr);}
+
+/* ============================================
+   GLOBAL DESIGN SYSTEM v1 – Finlytics
+   ============================================ */
+
+/* Inter font import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Design tokens */
+:root{
+  /* Brand colors */
+  --color-primary: #4F46E5;
+  --color-primary-soft: #6366F1;
+  --color-primary-subtle: #EEF2FF;
+
+  --color-accent: #22C55E;
+  --color-accent-soft: #BBF7D0;
+
+  /* Neutrals */
+  --color-surface: #0B1220;
+  --color-surface-soft: #111827;
+  --color-border-soft: rgba(148,163,184,0.35);
+
+  /* Status */
+  --color-success: #10B981;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+
+  /* Typography scale */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  --fs-hero: 48px;
+  --fs-h1: 32px;
+  --fs-h2: 24px;
+  --fs-h3: 20px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+
+  /* Spacing scale */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-96: 96px;
+
+  /* Radius */
+  --radius-card: 16px;
+  --radius-button: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.45);
 }
-.scenario-card{padding:24px;border-radius:var(--radius-card);background:var(--color-surface-soft);}
+
+/* Global font override */
+body{
+  font-family: var(--font-sans);
+}
+
+/* Section padding helper */
+.section-padding{
+  padding-top: var(--space-48);
+  padding-bottom: var(--space-48);
+}
+
+/* Shared card styling (Design System) */
+.card{
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+  padding: var(--space-24);
+}
+
+/* Input field helper */
+.input-field,
+input[type="text"],
+input[type="number"],
+select{
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: var(--fs-body);
+}
+
+/* Button system – overrides */
+.btn{
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* Primary button */
+.btn-primary{
+  width: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-soft));
+  color: var(--color-primary-subtle);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Secondary button */
+.btn-secondary{
+  background: #FFFFFF;
+  color: #111827;
+  border: 1px solid rgba(148,163,184,0.4);
+}
+
+/* Soft shadow utility */
+.shadow-soft{
+  box-shadow: var(--shadow-soft);
+}
+
+/* ============================================
+   INVESTMENT PLANNER POLISH – HERO & SPACING
+   ============================================ */
+
+/* Make hero more airy on all tools using .hero */
+.hero{
+  padding-top: var(--space-48);
+  padding-bottom: var(--space-32);
+}
+
+/* Slightly larger hero title on desktop */
+@media (min-width: 900px){
+  .hero-title{
+    font-size: var(--fs-h1);
+  }
+}
+
+/* Extra bottom spacing under main grids */
+.container.grid{
+  margin-bottom: var(--space-64);
+}
+
+
+/* =====================================
+   PREMIUM OUTPUT – Investment Planner
+   ===================================== */
+.premium-output{
+  display:grid;
+  gap:24px;
+  margin-top: var(--space-48);
+}
+
+.ip-premium{
+  max-width:1100px;
+  margin:0 auto;
+}
+
+.ip-grid{
+  display:grid;
+  gap:24px;
+}
+
+.big-num{
+  font-size:24px;
+  font-weight:600;
+}
+
+.scenario-cards{
+  display:grid;
+  gap:16px;
+}
+
+.premium-cta{
+  display:flex;
+  justify-content:center;
+  margin-top:16px;
+}
+
+.premium-cta .btn-line{
+  min-width:260px;
+}
+
+/* Desktop layout */
+@media (min-width: 900px){
+  .ip-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    align-items:stretch;
+  }
+  .risk-card{
+    grid-column:1 / -1;
+  }
+  .scenario-wrapper{
+    grid-column:1 / -1;
+  }
+  .success-meter{
+    grid-column:1 / -1;
+  }
+  .recommendations{
+    grid-column:1 / -1;
+  }
+  .scenario-cards{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 768px){
+  .scenario-cards{
+    grid-template-columns: 1fr;
+  }
+}
+
