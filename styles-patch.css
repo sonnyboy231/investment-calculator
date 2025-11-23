@@ -1,3 +1,13 @@
+/* ===========================
+   styles-patch.css
+   Midlertidig legacy-styling.
+   TODO: Her skal eksisterende custom CSS fra projektet indsættes,
+   indtil det er fuldt migreret til DS v1.0.
+   =========================== */
+
+/* Denne fil er bevidst tom i denne eksport.
+   Behold eksisterende styles.css / tax.css / tax-helper.css indhold
+   lokalt i din egen styles-patch.css, hvis det allerede findes. */
 :root{
   --bg:#0d1220;
   --panel:#121a2e;
@@ -897,3 +907,406 @@ select{
   padding: 12px 14px;
 }
 
+
+.tax-grid{
+  margin-top:32px;
+  align-items:flex-start;
+}
+
+.tax-card h2{
+  margin-bottom:8px;
+}
+
+.tax-section{
+  margin-top:18px;
+  padding-top:12px;
+  border-top:1px dashed rgba(148,163,184,0.35);
+}
+
+.tax-section:first-of-type{
+  margin-top:6px;
+  border-top:none;
+  padding-top:0;
+}
+
+.tax-section h3{
+  margin:0 0 6px 0;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+  color:var(--muted);
+}
+
+.tax-actions{
+  margin-top:18px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.kpis-tax{
+  margin-top:10px;
+  display:grid;
+  gap:10px;
+  grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+}
+
+.tax-chart{
+  margin-top:16px;
+}
+
+@media (max-width: 880px){
+  .tax-grid{
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.tax-info{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:12px;
+  background:rgba(15,23,42,0.85);
+  border:1px solid rgba(148,163,184,0.5);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.tax-info h3{
+  margin:0 0 6px 0;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--muted);
+}
+
+.tax-info p{
+  margin:0 0 6px 0;
+}
+
+.tax-faq{
+  margin-top:6px;
+}
+
+.tax-faq summary{
+  cursor:pointer;
+  list-style:none;
+  font-weight:500;
+}
+
+.tax-faq summary::marker{
+  display:none;
+}
+
+.tax-faq summary::-webkit-details-marker{
+  display:none;
+}
+
+.tax-faq summary::before{
+  content:"›";
+  display:inline-block;
+  transform:rotate(90deg);
+  margin-right:6px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.tax-faq[open] summary::before{
+  transform:rotate(270deg);
+}
+
+.tax-faq ul{
+  margin:6px 0 0 0;
+  padding-left:16px;
+  font-size:13px;
+}
+
+
+.field-note{
+  margin:4px 0 0 0;
+  font-size:11px;
+  line-height:1.4;
+  color:var(--muted);
+}
+
+/* --- Skatteberegner Layout Polish --- */
+.tax-grid-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+  margin-top:48px;
+}
+
+@media(max-width:768px){
+  .tax-grid-layout{
+    grid-template-columns:1fr;
+  }
+}
+
+.tax-results-graph-card{
+  padding:24px;
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  background:var(--panel);
+}
+
+.tax-chart{
+  max-height:300px;
+}
+
+
+/* ===== TAX PREMIUM OUTPUT ===== */
+.tax-premium-output{
+  margin-top:48px;
+}
+
+.tax-prem-grid{
+  display:grid;
+  gap:24px;
+}
+
+.tax-prem-risk-card,
+.tax-prem-success,
+.tax-prem-recos,
+.tax-prem-scenarios{
+  padding:16px 18px;
+  border-radius:16px;
+  background:var(--panel);
+  box-shadow:var(--shadow-soft, 0 18px 45px rgba(15,23,42,0.45));
+}
+
+.tax-prem-scenarios-grid{
+  display:grid;
+  gap:16px;
+}
+
+.tax-prem-scenarios-grid .card.mini{
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(15,23,42,0.85);
+  box-shadow:none;
+}
+
+.tax-prem-cta{
+  margin-top:24px;
+  display:flex;
+  justify-content:center;
+}
+
+.tax-prem-cta .btn{
+  min-width:260px;
+}
+
+/* Desktop layout */
+@media (min-width: 900px){
+  .tax-prem-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    align-items:stretch;
+  }
+  .tax-prem-risk-card{
+    grid-column:1 / -1;
+  }
+  .tax-prem-recos{
+    grid-column:1 / -1;
+  }
+  .tax-prem-scenarios-grid{
+    grid-template-columns: repeat(3, minmax(0,1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px){
+  .tax-prem-scenarios-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* === Layout polish v2 – Skatteberegner === */
+
+.tax-results-graph-card{
+  display:flex;
+  align-items:stretch;
+}
+
+.tax-results-inner{
+  width:100%;
+}
+
+/* Desktop: gør højre kort mindre bredt og balancerer layoutet */
+@media (min-width: 900px){
+  .tax-grid-layout{
+    align-items:flex-start;
+  }
+
+  .tax-results-graph-card{
+    max-width:520px;
+    margin-left:auto;
+  }
+
+  .tax-grid-layout > .tax-card:first-child{
+    margin-bottom:32px;
+  }
+}
+
+/* Lidt strammere afstand mellem main og premium-blok */
+.tax-premium-output{
+  margin-top:40px;
+}
+
+
+/* === Årsopgørelsesguide – layout === */
+
+.taxhelper-wrap {
+  max-width: 900px;
+  margin: 32px auto 96px;
+}
+
+/* Hvert step i guiden */
+.th-step {
+  display: none;
+  margin-top: 20px;
+}
+
+.th-step.active {
+  display: block;
+}
+
+/* === Checkboks-lister (step 1 + 2) === */
+
+.th-select {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 24px 0 32px;
+}
+
+.th-select label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.02);
+  font-size: 0.95rem;
+}
+
+/* Sørg for at musen altid er "klik" og tekst ikke kan markeres */
+.th-select label * {
+  cursor: pointer !important;
+  user-select: none;
+}
+
+.th-select input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: 16px;
+}
+
+/* === Step 3 – rubrik-boks === */
+
+.rubrik-box {
+  margin-top: 24px;
+  padding: 18px 18px 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.25);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.rubrik-box h4 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.rubrik-box ul {
+  margin: 0 0 10px 18px;
+  padding: 0;
+}
+
+.rubrik-box li {
+  margin-bottom: 4px;
+}
+
+/* Lille note-tekst nederst i step 3 */
+.rubrik-note {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Disclaimer nederst på siden */
+.disclaimer {
+  opacity: 0.6;
+  font-size: 12px;
+  margin-top: 40px;
+}
+
+/* === Premium Output – Årsopgørelsesguide === */
+
+.th-premium{
+  margin-top: 48px;
+}
+
+.th-prem-grid{
+  display: grid;
+  gap: 24px;
+}
+
+.th-prem-card{
+  border-radius: var(--radius-card, 16px);
+  padding: var(--space-24, 24px);
+  background: var(--panel, #121a2e);
+  box-shadow: var(--shadow-soft, 0 10px 30px rgba(15,23,42,0.45));
+  border: 1px solid var(--border, rgba(148,163,184,0.35));
+}
+
+.th-prem-card h3{
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.th-prem-scenarios-grid{
+  display: grid;
+  gap: 16px;
+}
+
+.th-prem-scenario h4{
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.th-prem-scenario p{
+  margin: 0;
+}
+
+.th-prem-recos ul,
+#th-prem-recos{
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.th-prem-cta{
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.th-prem-cta .btn{
+  min-width: 260px;
+}
+
+/* Desktop: 2 kolonner */
+@media (min-width: 900px){
+  .th-prem-grid{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+/* Mobil: 1 kolonne (default) */

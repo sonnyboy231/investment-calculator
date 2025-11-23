@@ -4,14 +4,44 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Finlytics – Skatteberegner for investeringer</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="tax.css" />
+
+  <link rel="stylesheet" href="styles-base.css">
+  <link rel="stylesheet" href="styles-components.css">
+  <link rel="stylesheet" href="styles-hero.css">
+  <link rel="stylesheet" href="styles-tools.css">
+  <link rel="stylesheet" href="styles-patch.css">
 </head>
 <body>
 
 
   <!-- ===== HERO SECTION – SKATTEBEREGNER ===== -->
-  <header class="container site-header">
+  <header class="hero hero-tax">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <h1 class="hero-title">Få styr på skatten af dine investeringer – på få sekunder.</h1>
+        <p class="hero-subtitle">
+          Indtast dine gevinster, tab og udbytter, og få et samlet, vejledende overblik over, hvor meget skat du skal betale.
+        </p>
+
+        <ul class="hero-bullets">
+          <li>🔢 Dækker aktier, ETF'er og crypto.</li>
+          <li>📦 Viser både brutto-beløb og netto efter skat.</li>
+          <li>🧾 Ideel som forberedelse til din årsopgørelse.</li>
+        </ul>
+
+        <p class="hero-disclaimer">
+          Beregningen er forenklet og kan ikke erstatte personlig skatterådgivning eller din endelige årsopgørelse hos Skat.
+        </p>
+
+        <button class="hero-cta"
+          onclick="document.getElementById('tax-form').scrollIntoView({ behavior: 'smooth' });">
+          Åbn skatteberegner
+        </button>
+      </div>
+    </div>
+  </header>
+
+<header class="container site-header">
   <nav class="nav-bar">
     <a href="index.html" class="nav-logo">Finlytics</a>
     <div class="nav-links">
@@ -24,28 +54,6 @@
       <a href="rental.html">Udlejningsberegner</a>
     </div>
   </nav>
-</header>
-
-<header class="hero hero-standard">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <h1 class="hero-title">Beregn din skat hurtigt</h1>
-      <p class="hero-subtitle">Få et vejledende estimat af skat, fradrag og månedlig udbetaling.</p>
-      <ul class="hero-bullets">
-          <li>Indkomst- og fradragsberegning</li>
-          <li>Se netto vs. brutto</li>
-          <li>Test ændringer i skat og fradrag</li>
-      </ul>
-      <p class="hero-disclaimer">Resultaterne er vejledende og kan afvige fra SKATs beregninger.</p>
-      <div class="hero-ctas">
-        <button class="btn btn-primary" onclick="document.getElementById('tax-form').scrollIntoView({ behavior: 'smooth' });">Start beregning</button>
-        <button class="btn btn-secondary">Sådan virker det</button>
-      </div>
-    </div>
-    <div class="hero-illustration">
-      <img src="img/hero-tax.svg" class="hero-illu-img">
-    </div>
-  </div>
 </header>
 
   <main class="container tax-main">

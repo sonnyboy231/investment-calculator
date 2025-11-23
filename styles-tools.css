@@ -1,0 +1,121 @@
+/* ===========================
+   Tools – navigation, layout, charts, etc.
+   =========================== */
+
+/* Nav */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(18px);
+  background: linear-gradient(to bottom, rgba(2, 6, 23, 0.96), rgba(2, 6, 23, 0.85), transparent);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.9);
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  padding-block: var(--space-sm);
+}
+
+.nav-logo {
+  font-weight: 700;
+  font-size: var(--text-md);
+  letter-spacing: 0.04em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.nav-links a {
+  padding-block: var(--space-xs);
+  border-bottom: 1px solid transparent;
+  transition: color 0.12s ease-out, border-color 0.12s ease-out;
+}
+
+.nav-links a:hover {
+  color: var(--color-text-main);
+  border-color: rgba(148, 163, 184, 0.6);
+}
+
+.nav-links a.active {
+  color: var(--color-text-main);
+  border-color: var(--color-accent-strong);
+}
+
+/* Tool layouts */
+
+.tool-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.05fr);
+  gap: var(--space-xl);
+  margin-top: var(--space-2xl);
+}
+
+.tool-layout .card:first-child {
+  align-self: flex-start;
+}
+
+/* Charts / canvas wrappers */
+
+.chart-wrap {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  border: 1px dashed rgba(148, 163, 184, 0.35);
+  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+}
+
+.chart-wrap canvas {
+  width: 100%;
+}
+
+.chart-wrap .note {
+  margin-top: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* Small helper layouts */
+
+.row.with-helper,
+.with-tip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--color-text-soft);
+}
+
+/* Tax & misc. */
+
+.tax-card {
+  margin-bottom: var(--space-xl);
+}
+
+.tax-results {
+  margin-top: var(--space-lg);
+}
+
+/* Debt / mortgage / rental can reuse generic classes via cards, grids, etc. */
+
+@media (max-width: 900px) {
+  .tool-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
