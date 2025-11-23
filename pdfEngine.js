@@ -246,8 +246,157 @@
     }
   }
 
+
+  async function generateDebtPDFEngine(result, graphImage){
+    try{
+      var JsPDF = await loadJsPDF();
+      var doc = new JsPDF({ unit: 'pt', format: 'a4' });
+      var left = 40;
+      var y = 60;
+
+      function formatDKKLocal(v){
+        if (typeof v === 'number'){
+          return v.toLocaleString('da-DK', { maximumFractionDigits: 0 });
+        }
+        return String(v);
+      }
+
+      // Header
+      doc.setFontSize(20);
+      doc.text('Finlytics – Gældsrapport', left, y);
+      y += 26;
+      doc.setFontSize(13);
+      doc.text('Overblik & afviklingsplan', left, y);
+      y += 30;
+
+      // Intro
+      doc.setFontSize(11);
+      var intro = 'Denne rapport giver et vejledende overblik over din gældssituation. ' +
+                  'Den estimerer gældfri dato, samlede renteudgifter og månedlig betaling baseret på dine input.';
+      var introLines = doc.splitTextToSize(intro, 520);
+      doc.text(introLines, left, y);
+      y += introLines.length * 14 + 24;
+
+      // KPI grid
+      doc.setFontSize(15);
+      doc.text('Nøgleresultater', left, y);
+      y += 22;
+
+      var kpiWidth = 170;
+      var kpiHeight = 80;
+      var gap = 18;
+      var kpis = [
+        {
+          title: 'Gældfri dato',
+          value: result.summary.debtFreeDate,
+          copy: 'Datoen hvor al gæld forventes afviklet.'
+        },
+        {
+          title: 'Samlede renteudgifter',
+          value: formatDKKLocal(result.summary.totalInterest) + ' kr',
+          copy: 'Total rente betalt over hele perioden.'
+        },
+        {
+          title: 'Månedlig betaling',
+          value: formatDKKLocal(result.summary.monthlyPayment) + ' kr',
+          copy: 'Samlet månedlig betaling på tværs af lån.'
+        }
+      ];
+
+      var x = left;
+      doc.setFontSize(12);
+      kpis.forEach(function(kpi){
+        doc.setDrawColor(220,220,220);
+        doc.setLineWidth(1);
+        doc.rect(x, y, kpiWidth, kpiHeight);
+
+        doc.setFontSize(12);
+        doc.text(kpi.title, x + 10, y + 18);
+
+        doc.setFontSize(16);
+        doc.text(kpi.value, x + 10, y + 40);
+
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(doc.splitTextToSize(kpi.copy, kpiWidth - 20), x + 10, y + 56);
+        doc.setTextColor(0);
+
+        x += kpiWidth + gap;
+      });
+
+      y += kpiHeight + 36;
+
+      // Graph
+      doc.setFontSize(15);
+      doc.text('Udvikling i restgæld', left, y);
+      y += 18;
+
+      if (graphImage){
+        doc.addImage(graphImage, 'PNG', left, y, 500, 200);
+        y += 220;
+      } else {
+        doc.setFontSize(11);
+        doc.text('Ingen graf tilgængelig.', left, y + 14);
+        y += 40;
+      }
+
+      // Year-by-year table
+      doc.setFontSize(15);
+      doc.text('År-for-år oversigt', left, y);
+      y += 20;
+
+      doc.setFontSize(11);
+      doc.text('År', left, y);
+      doc.text('Restgæld', left + 80, y);
+      doc.text('Betalt rente', left + 180, y);
+      y += 14;
+
+      (result.table || []).forEach(function(row){
+        doc.text(String(row.year), left, y);
+        doc.text(formatDKKLocal(row.balance), left + 80, y);
+        doc.text(formatDKKLocal(row.interest), left + 180, y);
+        y += 14;
+      });
+
+      y += 24;
+
+      // Scenarios
+      doc.setFontSize(15);
+      doc.text('Scenarier', left, y);
+      y += 18;
+
+      doc.setFontSize(11);
+      var scenarier = [
+        'Baseline: Standardforløb baseret på minimumsbetalinger.',
+        '+500 kr/md: Et mindre ekstra afdrag forkorter perioden og reducerer renter.',
+        '+1.500 kr/md: Større ekstra afdrag skubber gældfri dato væsentligt frem og minimerer renter.'
+      ];
+      scenarier.forEach(function(line){
+        var wrapped = doc.splitTextToSize(line, 520);
+        doc.text(wrapped, left, y);
+        y += wrapped.length * 14 + 4;
+      });
+
+      // Legal footer
+      doc.setFontSize(9);
+      var legal = 'Finlytics\\' gældsværktøjer giver kun vejledende og generelle beregninger baseret på dine input. ' +
+                  'Modellerne udgør ikke kreditvurdering, finansiel rådgivning eller anbefalinger om lån, refinansiering eller lånetyper.';
+      var legalLines = doc.splitTextToSize(legal, 520);
+      doc.text(legalLines, left, 800);
+
+      doc.save('finlytics_debt_report.pdf');
+    } catch (err){
+      console.error('Debt PDF generation failed', err);
+      if (global.alert){
+        global.alert('Kunne ikke generere gældsrapport. Prøv igen.');
+      }
+    }
+  }
+
   global.FinlyticsPDF = global.FinlyticsPDF || {};
   global.FinlyticsPDF.generatePDF = generatePDF;
   global.generatePDF = generatePDF;
+  global.FinlyticsPDF.generateDebtPDFEngine = generateDebtPDFEngine;
+  global.generateDebtPDFEngine = generateDebtPDFEngine;
 
 })(window);

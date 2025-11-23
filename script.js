@@ -900,74 +900,217 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cmpBox) cmpBox.hidden = true;
     if (cmpKPIsBox) cmpKPIsBox.hidden = true;
   }
-  
   // ======================================
-  // PDF v2 – Investment Planner Rapport
+  // PDF PRO GENERATOR (2-SIDED)
   // ======================================
-
-  function buildInvestmentPdfData() {
-    const graphCanvas = document.getElementById("area-chart");
-    const graphImg = graphCanvas && graphCanvas.toDataURL ? graphCanvas.toDataURL("image/png") : null;
-
-    const yearBody = document.querySelector("#year-table tbody");
-    const table = [];
-    if (yearBody) {
-      yearBody.querySelectorAll("tr").forEach((tr) => {
-        const cells = Array.from(tr.children).map((td) => (td.textContent || "").trim());
-        table.push(cells);
-      });
-    }
-
-    const kpis = [
-      { label: "Samlet indskud", value: kContrib?.textContent || "" },
-      { label: "Rentegevinst", value: kInterest?.textContent || "" },
-      { label: "Slutværdi", value: kFinal?.textContent || "" },
-      { label: "Anslået årligt afkast (vejledende)", value: kCagr?.textContent || "" }
-    ];
-
-    const recos = [];
-    if (ipRecosEl) {
-      ipRecosEl.querySelectorAll("li").forEach((li) => {
-        const txt = (li.textContent || "").trim();
-        if (txt) recos.push(txt);
-      });
-    }
-
-    return {
-      title: "Investeringsrapport",
-      subtitle: "Vejledende rapport baseret på dine nuværende input og beregninger i Finlytics Investment Planner.",
-      kpis: kpis,
-      graph: graphImg,
-      table: table,
-      premium: {
-        riskScore: ipRiskScoreEl ? (ipRiskScoreEl.textContent || "–") : "–",
-        errorRisk: null,
-        successChance: ipSuccessEl ? (ipSuccessEl.textContent || "–") : "",
-        optimistic: ipSOptEl ? (ipSOptEl.textContent || "–") : "",
-        realistic: ipSRealEl ? (ipSRealEl.textContent || "–") : "",
-        pessimistic: ipSPessEl ? (ipSPessEl.textContent || "–") : "",
-        recommendations: recos
-      },
-      cta: "Brug denne rapport som udgangspunkt for dine egne vurderinger, og justér dine tal løbende, når din økonomi ændrer sig."
-    };
-  }
 
   function makePDFReport() {
     try {
-      const data = buildInvestmentPdfData();
-      if (window.FinlyticsPDF && typeof window.FinlyticsPDF.generatePDF === "function") {
-        window.FinlyticsPDF.generatePDF("investment", data);
-      } else if (typeof window.generatePDF === "function") {
-        window.generatePDF("investment", data);
-      } else {
-        alert("PDF-funktionen er ikke tilgængelig endnu.");
-      }
-    } catch (err) {
-      console.error("PDF fejl (investment)", err);
+      const chart = $("#area-chart");
+      const chartImg = chart ? chart.toDataURL("image/png") : null;
+
+      const now = new Date().toLocaleString("da-DK");
+
+      const kpiContrib = kContrib.textContent;
+      const kpiInterest = kInterest.textContent;
+      const kpiFinal = kFinal.textContent;
+      const kpiCagrTxt = kCagr.textContent;
+
+      const years = $("#year-table tbody");
+      const yearRows = years ? Array.from(years.children) : [];
+
+      const win = window.open("", "_blank");
+      if (!win) return;
+
+      win.document.write(`
+      <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Finlytics – PRO Rapport</title>
+        <style>
+
+        body {
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+          padding: 28px;
+          color: #111;
+          margin: 0;
+        }
+
+        h1 {
+          font-size: 26px;
+          margin: 0 0 6px;
+        }
+        h2 {
+          margin: 20px 0 10px;
+          font-size: 20px;
+        }
+        h3 {
+          margin: 16px 0 6px;
+          font-size: 16px;
+          color: #444;
+        }
+
+        .grid2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 20px;
+          margin-top: 12px;
+        }
+
+        .card {
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          padding: 14px;
+          background: #fafafa;
+        }
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 14px;
+        }
+
+        th, td {
+          padding: 6px 4px;
+          border-bottom: 1px solid #e4e4e4;
+          text-align: left;
+        }
+
+        th {
+          font-weight: 600;
+          color: #444;
+        }
+
+        .kpis {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(140px, 1fr));
+          gap: 10px;
+          margin-top: 10px;
+        }
+
+        .kpi {
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          padding: 10px;
+          background: white;
+        }
+        .kpi b {
+          font-size: 12px;
+          color: #666;
+        }
+        .kpi div {
+          font-size: 17px;
+          font-weight: 700;
+          margin-top: 4px;
+        }
+
+        .chart-box {
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          padding: 12px;
+          margin-top: 10px;
+        }
+
+        .page-break {
+          page-break-before: always;
+          margin-top: 40px;
+        }
+
+        .foot {
+          margin-top: 25px;
+          font-size: 12px;
+          color: #777;
+          text-align: left;
+        }
+
+        </style>
+      </head>
+
+      <body>
+
+      <!-- PAGE 1 -->
+      <h1>Finlytics — Investeringsrapport</h1>
+      <div style="font-size:14px;color:#555;margin-bottom:6px;">
+        Genereret: ${now}
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Inputs</h2>
+          <table>
+            <tr><th>Startbeløb</th><td>${initialEl.value || ""} kr</td></tr>
+            <tr><th>Månedligt indskud</th><td>${monthlyEl.value || ""} kr</td></tr>
+            <tr><th>Antal år</th><td>${yearsEl.value || ""}</td></tr>
+            <tr><th>Forventet afkast</th><td>${expEl.value || ""} %</td></tr>
+            <tr><th>Årlige omkostninger</th><td>${feesEl.value || ""} %</td></tr>
+            <tr><th>Preset</th><td>${feePresetEl.value || "–"}</td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>KPI’er</h2>
+          <div class="kpis">
+            <div class="kpi"><b>Total indskud</b><div>${kpiContrib}</div></div>
+            <div class="kpi"><b>Rentegevinst</b><div>${kpiInterest}</div></div>
+            <div class="kpi"><b>Slutværdi</b><div>${kpiFinal}</div></div>
+            <div class="kpi"><b>Effektiv årlig afkast</b><div>${kpiCagrTxt}</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <h2>Udviklingsgraf</h2>
+        ${chartImg ? `<img src="${chartImg}" style="max-width:100%;height:auto;">` : "<i>Ingen graf</i>"}
+      </div>
+
+      <div class="foot">
+        Side 1 / 2 — Finlytics (www.finlytics.dk)
+      </div>
+
+      <!-- PAGE 2 -->
+      <div class="page-break"></div>
+      <h2>År-for-år udvikling</h2>
+
+      <table>
+        <thead>
+          <tr><th>År</th><th>Indskud</th><th>Afkast</th><th>Saldo</th></tr>
+        </thead>
+        <tbody>
+          ${
+            yearRows.length
+              ? yearRows.map(r => "<tr>" + r.innerHTML + "</tr>").join("")
+              : "<tr><td colspan='4'>Ingen data</td></tr>"
+          }
+        </tbody>
+      </table>
+
+      <h3>Noter</h3>
+      <p style="font-size:14px;line-height:1.6;color:#555;">
+        Denne rapport er baseret på simple fremskrivninger, renters rente og valgte afkast/risiko.
+        Faktiske markedsafkast kan variere betydeligt.
+      </p>
+
+      <div class="foot">
+        Side 2 / 2 — Finlytics (www.finlytics.dk)
+      </div>
+
+      <script>
+        window.addEventListener('load', () => setTimeout(() => window.print(), 250));
+      </script>
+
+      </body>
+      </html>
+      `);
+
+      win.document.close();
+
+    } catch (e) {
+      console.error(e);
       alert("Kunne ikke generere PDF-rapport.");
     }
   }
-// ======================================
+
+  // ======================================
   // EVENT LISTENERS
   // ======================================
 

@@ -266,65 +266,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.fillText(fmtDKK.format(net),   pad + barW * 2.5 + barW / 2, baseY - hNet - 4);
   }
 
-
-  const btnReport = document.getElementById("btn-report-pdf-big");
-
-  function buildTaxPdfData() {
-    const graphCanvas = document.getElementById("tax-chart");
-    const graphImg = graphCanvas && graphCanvas.toDataURL ? graphCanvas.toDataURL("image/png") : null;
-
-    const kpis = [
-      { label: "Samlet skat", value: kpiTotal?.textContent || "" },
-      { label: "Netto efter skat", value: kpiNet?.textContent || "" },
-      { label: "Aktieskat", value: kpiStock?.textContent || "" },
-      { label: "Kapitalindkomstskat", value: kpiCap?.textContent || "" },
-      { label: "Skat af krypto", value: kpiCrypto?.textContent || "" }
-    ];
-
-    const recos = [];
-    if (taxPremRecosEl) {
-      taxPremRecosEl.querySelectorAll("li").forEach((li) => {
-        const txt = (li.textContent || "").trim();
-        if (txt) recos.push(txt);
-      });
-    }
-
-    return {
-      title: "Skatteberegning – investeringer",
-      subtitle: "Vejledende beregning baseret på dine indtastninger i Finlytics skatteberegner.",
-      kpis: kpis,
-      graph: graphImg,
-      table: [],
-      premium: {
-        riskScore: taxPremRiskScoreEl ? (taxPremRiskScoreEl.textContent || "–") : "–",
-        errorRisk: taxPremRestEl ? (taxPremRestEl.textContent || "–") : null,
-        successChance: "",
-        optimistic: taxPremSOptEl ? (taxPremSOptEl.textContent || "–") : "",
-        realistic: taxPremSRealEl ? (taxPremSRealEl.textContent || "–") : "",
-        pessimistic: taxPremSPessEl ? (taxPremSPessEl.textContent || "–") : "",
-        recommendations: recos
-      },
-      cta: "Brug altid din faktiske årsopgørelse og eventuel rådgiver som endeligt grundlag."
-    };
-  }
-
-  btnReport?.addEventListener("click", (e) => {
-    e.preventDefault();
-    try {
-      const data = buildTaxPdfData();
-      if (window.FinlyticsPDF && typeof window.FinlyticsPDF.generatePDF === "function") {
-        window.FinlyticsPDF.generatePDF("tax", data);
-      } else if (typeof window.generatePDF === "function") {
-        window.generatePDF("tax", data);
-      } else {
-        alert("PDF-funktionen er ikke tilgængelig endnu.");
-      }
-    } catch (err) {
-      console.error("PDF fejl (tax)", err);
-      alert("Kunne ikke generere PDF-rapport.");
-    }
-  });
-
   btnCalc?.addEventListener("click", calc);
   btnClear?.addEventListener("click", clearForm);
 });

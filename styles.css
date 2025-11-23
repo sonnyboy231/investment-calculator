@@ -279,19 +279,19 @@ input:active{ transform: translateY(1px) }
 .hero-title{
   font-size: 32px;
   line-height: 1.2;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   color: #e5ecff;
 }
 .hero-subtitle{
   font-size: 15px;
   line-height: 1.5;
   color: var(--muted);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .hero-bullets{
   list-style: none;
   padding: 0;
-  margin: 0 0 18px 0;
+  margin: 0 0 16px 0;
   font-size: 14px;
   color: var(--muted);
 }
@@ -324,18 +324,22 @@ input:active{ transform: translateY(1px) }
     padding: 20px 16px 10px;
   }
   .hero-title{
+  margin-bottom: 12px;
     font-size: 24px;
   }
   .hero-subtitle{
+  margin-bottom: 14px;
     font-size: 14px;
   }
   .hero-bullets{
+  margin: 0 0 16px 0;
     font-size: 13px;
   }
 }
 
 
 .hero-disclaimer{
+  margin-bottom: 20px;
   font-size: 11px;
   line-height: 1.5;
   color: var(--muted);
@@ -345,7 +349,7 @@ input:active{ transform: translateY(1px) }
 @media (max-width: 768px){
   .hero-disclaimer{
     font-size: 11px;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
   }
 }
 
@@ -634,6 +638,7 @@ select{
 /* Slightly larger hero title on desktop */
 @media (min-width: 900px){
   .hero-title{
+  margin-bottom: 12px;
     font-size: var(--fs-h1);
   }
 }
@@ -711,5 +716,184 @@ select{
   .scenario-cards{
     grid-template-columns: 1fr;
   }
+}
+
+
+/* === TOOL ACTION BAR === */
+.tool-action-bar {
+  max-width: 1080px;
+  margin: 24px auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+}
+.btn-tool-pdf {
+  padding: 8px 18px;
+  height: 36px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #E5F0FF;
+  color: #0C1A2B;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-tool-reset {
+  padding: 8px 18px;
+  height: 36px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
+  background: #FF6B6B;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-tool-pdf:hover,
+.btn-tool-reset:hover {
+  opacity: 0.92;
+}
+.btn-tool-pdf:active,
+.btn-tool-reset:active {
+  opacity: 0.85;
+}
+@media (max-width: 768px) {
+  .tool-action-bar {
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 12px;
+    padding: 0 16px;
+  }
+  .btn-tool-pdf,
+  .btn-tool-reset {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+
+/* ===========================
+   PATCH – NAV + TOOL-NAV + SPACING
+   =========================== */
+
+/* 1) Nav-link farver (topnav + værktøjsnav)
+   – ingen lilla, samme farve for default/visited
+   – subtil hover (lysning/underline) */
+.site-header a,
+.main-nav a,
+.tool-nav a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+/* Visited links i nav må ikke blive lilla */
+.site-header a:visited,
+.main-nav a:visited,
+.tool-nav a:visited {
+  color: var(--text);
+}
+
+/* Subtil hover: ingen farveskift til lilla, kun let underline + lysning */
+.site-header a:hover,
+.main-nav a:hover,
+.tool-nav a:hover {
+  color: var(--text);
+  opacity: 1;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+/* 2) Værktøjs-navigation (tabs) – pill-style + aktiv tab som hero-nav */
+.tool-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.92;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  transition:
+    opacity 0.15s ease,
+    background 0.15s ease,
+    text-decoration-color 0.15s ease;
+}
+
+.tool-nav a:hover {
+  background: rgba(30, 64, 175, 0.35);
+}
+
+/* Aktivt værktøjs-tab matcher pill/active-styling fra topnav */
+.tool-nav .nav-link.nav-active {
+  background: linear-gradient(135deg, #3b82f6, #22c1c3);
+  color: #020617;
+  border-color: transparent;
+  font-weight: 600;
+  padding: 6px 14px;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+}
+
+/* 3) Vertikal spacing: HERO → Tool Action Bar → værktøjsnav */
+.hero {
+  margin-bottom: 32px;
+}
+
+.tool-action-bar {
+  margin: 0 auto 16px;
+}
+
+.tool-nav {
+  max-width: 1080px;
+  margin: 0 auto 32px;
+  padding: 0 20px 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+@media (max-width: 768px) {
+  .tool-nav {
+    padding: 0 16px 4px;
+    gap: 6px;
+  }
+  .tool-nav a {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
+
+
+/* === TASK #2 additions === */
+.section {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.card {
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.table-wrap {
+  margin-top: 24px;
+  padding: 12px;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.table th, .table td {
+  padding: 12px 14px;
 }
 
