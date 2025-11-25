@@ -1,3 +1,39 @@
+
+function runMonteCarlo(params){
+  const {initial, monthly, years, meanReturn, volatility, simulations} = params;
+  const paths = [];
+  for(let s=0;s<simulations;s++){
+    let bal=initial;
+    const arr=[];
+    for(let y=1;y<=years;y++){
+      for(let m=0;m<12;m++){
+        bal += monthly;
+        const r = (meanReturn + volatility*randn());
+        const rm = Math.pow(1+r,1/12)-1;
+        bal *= (1+rm);
+      }
+      arr.push(bal);
+    }
+    paths.push(arr);
+  }
+  const p10=[],p50=[],p90=[];
+  for(let y=0;y<years;y++){
+    const vals=paths.map(p=>p[y]).sort((a,b)=>a-b);
+    const pct=(p)=> vals[Math.floor((p/100)*vals.length)];
+    p10.push(pct(10));
+    p50.push(pct(50));
+    p90.push(pct(90));
+  }
+  return {p10,p50,p90};
+}
+
+function randn(){
+  let u=0,v=0;
+  while(u===0)u=Math.random();
+  while(v===0)v=Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
 // =============================================
 // Finlytics — Script (PRO Mode Enabled)
 // Version: 2025-Q1
@@ -224,28 +260,33 @@ document.addEventListener("DOMContentLoaded", () => {
   // HiDPI Canvas Setup
   // ======================================
 
-  function setupHiDPICanvas(cv) {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = cv.getBoundingClientRect();
-    cv.width = Math.max(1, Math.round(rect.width * dpr));
-    cv.height = Math.max(1, Math.round(rect.height * dpr));
+ function setupHiDPICanvas(cv) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = cv.getBoundingClientRect();
 
-    const ctx = cv.getContext("2d");
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  // Fallback hvis layout rapporterer 0x0, så grafen stadig bliver synlig
+  const cssW = rect.width && rect.width > 0 ? rect.width : 640;
+  const cssH = rect.height && rect.height > 0 ? rect.height : 320;
 
-    return { ctx, W: rect.width, H: rect.height };
-  }
+  cv.width  = Math.max(1, Math.round(cssW * dpr));
+  cv.height = Math.max(1, Math.round(cssH * dpr));
+
+  const ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  return { ctx, W: cssW, H: cssH };
+}
 
   // ======================================
   // Drawing the Chart
   // ======================================
 
-  function drawChart(rowsB, band = null, rowsA = null) {
-    if (!canvas) return;
+  
+  function drawChart(rowsB, band, rowsA) {
+    if (!canvas || !rowsB || !rowsB.length) return;
+
     const { ctx, W, H } = setupHiDPICanvas(canvas);
     ctx.clearRect(0, 0, W, H);
-
-    if (!rowsB || !rowsB.length) return;
 
     const padL = 56, padR = 10, padT = 14, padB = 40;
     const innerW = W - padL - padR;
@@ -253,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const xs = rowsB.map(r => r.year);
     const ysB = rowsB.map(r => r.balance);
-    const ysA = rowsA ? rowsA.map(r => r.balance) : [];
+    const ysA = rowsA && rowsA.length ? rowsA.map(r => r.balance) : [];
 
     const minY = 0;
     const maxY = Math.max(1, ...ysB, ...(ysA.length ? ysA : [1])) * 1.02;
@@ -274,55 +315,59 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.lineTo(padL, H - padB);
     ctx.stroke();
 
-    // Monte Carlo band
+    // Monte Carlo band (p10–p90)
     if (band && band.p10 && band.p90) {
       ctx.beginPath();
       ctx.moveTo(x(1), y(band.p10[0]));
-      for (let i = 1; i < band.p10.length; i++)
+      for (let i = 1; i < band.p10.length; i++) {
         ctx.lineTo(x(i + 1), y(band.p10[i]));
-
-      for (let i = band.p90.length - 1; i >= 0; i--)
+      }
+      for (let i = band.p90.length - 1; i >= 0; i--) {
         ctx.lineTo(x(i + 1), y(band.p90[i]));
-
+      }
       ctx.closePath();
       ctx.fillStyle = "rgba(255,165,0,0.22)";
       ctx.fill();
     }
 
-    // Median line (Monte Carlo)
+    // Monte Carlo median (p50)
     if (band && band.p50) {
       ctx.beginPath();
       ctx.strokeStyle = "rgba(255,165,0,0.95)";
       ctx.lineWidth = 2;
       ctx.moveTo(x(1), y(band.p50[0]));
-      for (let i = 1; i < band.p50.length; i++)
+      for (let i = 1; i < band.p50.length; i++) {
         ctx.lineTo(x(i + 1), y(band.p50[i]));
+      }
       ctx.stroke();
     }
 
-    // Line B (current)
+    // Hovedlinje – nuværende scenarie (B)
     ctx.beginPath();
     ctx.strokeStyle = "rgba(108,168,255,1)";
     ctx.lineWidth = 2;
     ctx.moveTo(x(1), y(rowsB[0].balance));
-    for (let i = 1; i < rowsB.length; i++)
+    for (let i = 1; i < rowsB.length; i++) {
       ctx.lineTo(x(i + 1), y(rowsB[i].balance));
+    }
     ctx.stroke();
 
+    // Fyld under B-linjen
     ctx.lineTo(x(rowsB.length), y(0));
     ctx.lineTo(x(1), y(0));
     ctx.closePath();
     ctx.fillStyle = "rgba(108,168,255,0.22)";
     ctx.fill();
 
-    // Line A (saved scenario)
+    // Sammenligningslinje – gemt scenarie (A)
     if (rowsA && rowsA.length) {
       ctx.beginPath();
       ctx.strokeStyle = "rgba(99,230,190,1)";
       ctx.lineWidth = 2;
       ctx.moveTo(x(1), y(rowsA[0].balance));
-      for (let i = 1; i < rowsA.length; i++)
+      for (let i = 1; i < rowsA.length; i++) {
         ctx.lineTo(x(i + 1), y(rowsA[i].balance));
+      }
       ctx.stroke();
 
       ctx.lineTo(x(rowsA.length), y(0));
@@ -332,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx.fill();
     }
 
-    // Contribution line
+    // Indbetalingslinje (dine egne indskud)
     const initial = toNum(initialEl.value);
     const monthly = toNum(monthlyEl.value);
     ctx.beginPath();
@@ -348,11 +393,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     ctx.stroke();
 
-    // Axis labels (min / max)
+    // X-akse labels (år)
     ctx.fillStyle = "#9fb0d1";
     ctx.font = "12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial";
-    ctx.textAlign = "left";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
 
+    for (let i = 0; i < xs.length; i++) {
+      const xx = x(i + 1);
+      const yy = H - padB + 6;
+      const label = xs[i].toString();
+      ctx.fillText(label, xx, yy);
+    }
+
+    // Y-akse labels (0 og slutværdi)
+    ctx.textAlign = "left";
     ctx.textBaseline = "bottom";
     ctx.fillText(fmtDKK.format(0), padL + 6, H - padB - 2);
 
@@ -360,7 +415,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.fillText(fmtDKK.format(rowsB[rowsB.length - 1].balance), padL + 6, padT + 2);
   }
 
-  // ======================================
+// ======================================
   // Table Rendering
   // ======================================
 

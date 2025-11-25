@@ -1,157 +1,70 @@
+@import url("../shared/styles.css");
+/* ===== Tax Helper – step wizard ===== */
 
-/* === Årsopgørelsesguide – layout === */
-
-.taxhelper-wrap {
-  max-width: 900px;
-  margin: 32px auto 96px;
-}
-
-/* Hvert step i guiden */
 .th-step {
-  display: none;
-  margin-top: 20px;
+  display: none;                 /* alle steps skjules som udgangspunkt */
+  margin-top: 2.5rem;
+  padding: 2rem 1.5rem;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, rgba(90, 120, 255, 0.12), transparent 55%),
+              rgba(4, 10, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .th-step.active {
-  display: block;
+  display: block;                /* kun det aktive step vises */
 }
 
-/* === Checkboks-lister (step 1 + 2) === */
+/* ===== Layout for selve guiden ===== */
+
+.taxhelper-wrap {
+  max-width: 900px;
+  margin: 0 auto 4rem;
+  padding: 0 1.5rem 4rem;
+}
+
+.taxhelper-wrap h2 {
+  font-size: 1.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.taxhelper-wrap h3 {
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.taxhelper-wrap p,
+.taxhelper-wrap li,
+.taxhelper-wrap label,
+.taxhelper-wrap button {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ===== Valglister (Lønmodtager / Investor / osv.) ===== */
 
 .th-select {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 24px 0 32px;
+  gap: 0.6rem;
+  margin: 1rem 0 2rem;
 }
 
 .th-select label {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.02);
-  font-size: 0.95rem;
-}
-
-/* Sørg for at musen altid er "klik" og tekst ikke kan markeres */
-.th-select label * {
-  cursor: pointer !important;
-  user-select: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  background: rgba(6, 18, 46, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  cursor: pointer;
 }
 
 .th-select input[type="checkbox"] {
-  flex-shrink: 0;
+  margin-left: 1.2rem;
   width: 18px;
   height: 18px;
-  margin-left: 16px;
+  flex-shrink: 0;
 }
-
-/* === Step 3 – rubrik-boks === */
-
-.rubrik-box {
-  margin-top: 24px;
-  padding: 18px 18px 22px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.25);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.rubrik-box h4 {
-  margin: 0 0 8px;
-  font-size: 1.05rem;
-}
-
-.rubrik-box ul {
-  margin: 0 0 10px 18px;
-  padding: 0;
-}
-
-.rubrik-box li {
-  margin-bottom: 4px;
-}
-
-/* Lille note-tekst nederst i step 3 */
-.rubrik-note {
-  margin-top: 12px;
-  font-size: 0.8rem;
-  opacity: 0.8;
-}
-
-/* Disclaimer nederst på siden */
-.disclaimer {
-  opacity: 0.6;
-  font-size: 12px;
-  margin-top: 40px;
-}
-
-/* === Premium Output – Årsopgørelsesguide === */
-
-.th-premium{
-  margin-top: 48px;
-}
-
-.th-prem-grid{
-  display: grid;
-  gap: 24px;
-}
-
-.th-prem-card{
-  border-radius: var(--radius-card, 16px);
-  padding: var(--space-24, 24px);
-  background: var(--panel, #121a2e);
-  box-shadow: var(--shadow-soft, 0 10px 30px rgba(15,23,42,0.45));
-  border: 1px solid var(--border, rgba(148,163,184,0.35));
-}
-
-.th-prem-card h3{
-  margin-top: 0;
-  margin-bottom: 8px;
-  font-size: 16px;
-}
-
-.th-prem-scenarios-grid{
-  display: grid;
-  gap: 16px;
-}
-
-.th-prem-scenario h4{
-  margin: 0 0 4px;
-  font-size: 14px;
-}
-
-.th-prem-scenario p{
-  margin: 0;
-}
-
-.th-prem-recos ul,
-#th-prem-recos{
-  margin: 8px 0 0;
-  padding-left: 18px;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.th-prem-cta{
-  margin-top: 24px;
-  display: flex;
-  justify-content: center;
-}
-
-.th-prem-cta .btn{
-  min-width: 260px;
-}
-
-/* Desktop: 2 kolonner */
-@media (min-width: 900px){
-  .th-prem-grid{
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: stretch;
-  }
-}
-
-/* Mobil: 1 kolonne (default) */

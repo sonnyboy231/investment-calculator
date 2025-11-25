@@ -12,6 +12,9 @@ function formatDebtFree(monthsTotal){
     return `${years} år og ${months} måneder`;
 }
 
+
+let debtChartInstance = null;
+
 function validateLoans(loans){
     let errors=[];
     if(loans.every(l=>!l.name && !l.principal)){
@@ -186,19 +189,115 @@ function renderTable(result){
     });
 }
 
+
 function renderGraph(result){
-    const el=document.querySelector(".chart-placeholder");
-    el.innerHTML="<p>Graf kommer i næste sprint ("+result.graph.length+" punkter)</p>";
+    const canvas = document.getElementById("debtChart");
+    if (!canvas || typeof Chart === "undefined") {
+        // Fallback tekst hvis Chart.js ikke er tilgængelig
+        const el = document.querySelector(".chart-placeholder");
+        if (el) {
+            el.innerHTML = "<p>Kunne ikke indlæse grafen.</p>";
+        }
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    const labels = result.graph.map(p => p.month);
+    const data = result.graph.map(p => p.balance);
+
+    // Ryd tidligere chart hvis der findes en
+    if (debtChartInstance) {
+        debtChartInstance.destroy();
+    }
+
+    debtChartInstance = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Restgæld over tid",
+                data: data,
+                tension: 0.15,
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx){
+                            const value = ctx.parsed.y;
+                            return value.toLocaleString("da-DK", {
+                                maximumFractionDigits: 0
+                            }) + " kr";
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        maxTicksLimit: 8
+                    }
+                },
+                y: {
+                    ticks: {
+                        callback: function(value){
+                            return value.toLocaleString("da-DK", {
+                                maximumFractionDigits: 0
+                            }) + " kr";
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
+
+
 
 function resetAll(){
     const ids=["loan1-name","loan1-principal","loan1-rate","loan1-min","loan1-extra","loan1-start",
                "loan2-name","loan2-principal","loan2-rate","loan2-min","loan2-extra","loan2-start"];
-    ids.forEach(id=>document.getElementById(id).value="");
+    ids.forEach(id=>{
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
     document.querySelectorAll(".card.kpi p").forEach(p=>p.textContent="–");
-    document.querySelector(".table-basic tbody").innerHTML="<tr><td>–</td><td>–</td><td>–</td></tr>"; document.getElementById("error-box").innerText="";
-    document.querySelector(".chart-placeholder").innerHTML="<p>Tilføj et lån for at se grafen.</p>";
+
+    const tbody = document.querySelector(".table-basic tbody");
+    if (tbody){
+        tbody.innerHTML="<tr><td>–</td><td>–</td><td>–</td></tr>";
+    }
+
+    const errorBox = document.getElementById("error-box");
+    if (errorBox){
+        errorBox.innerText="";
+    }
+
+    const chartEl = document.querySelector(".chart-placeholder");
+    if (chartEl) {
+        chartEl.innerHTML = "";
+        const canvas = document.createElement("canvas");
+        canvas.id = "debtChart";
+        chartEl.appendChild(canvas);
+    }
+
+    if (debtChartInstance) {
+        debtChartInstance.destroy();
+        debtChartInstance = null;
+    }
 }
+
 
 document.querySelector(".btn-tool-reset").addEventListener("click", resetAll);
 

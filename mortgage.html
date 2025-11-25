@@ -1,57 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="da">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Boligberegner – Finlytics</title>
+  <link rel="stylesheet" href="styles.css">
 
-  <link rel="stylesheet" href="styles-base.css">
-  <link rel="stylesheet" href="styles-components.css">
-  <link rel="stylesheet" href="styles-hero.css">
-  <link rel="stylesheet" href="styles-tools.css">
-  <link rel="stylesheet" href="styles-patch.css">
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="mortgage.css">
+  <script src="navbar.js" defer></script>
 </head>
-
 <body>
-<header class="container site-header">
-  <nav class="nav-bar">
-    <a href="index.html" class="nav-logo">Finlytics</a>
-    <div class="nav-links">
-      <a href="index.html">Investeringsberegner</a>
-      <a href="tax.html">Skatteberegner</a>
-      <a href="tax-helper.html">Årsopgørelsesguide</a>
-      <a href="about.html">Om Finlytics</a>
-      <a href="debt.html">Gældsplanlægger</a>
-      <a href="mortgage.html">Boligberegner</a>
-      <a href="rental.html">Udlejningsberegner</a>
+  <div id="site-header"></div>
+
+  <!-- NAV -->
+  <!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Forstå dit boliglån – før du siger ja.</h1>
+
+      <p class="hero-subtitle">
+        Beregn lånebeløb, månedlig ydelse og samlede renter, så du kan se, hvad boliglånet
+        betyder for din økonomi – både nu og på sigt.
+      </p>
+
+      <ul class="hero-bullets">
+        <li>🏠 Beregn boliglån og månedlig ydelse.</li>
+        <li>📊 Se samlede renter over lånets løbetid.</li>
+        <li>🔍 Test forskellige renter, løbetider og udbetaling.</li>
+      </ul>
+
+      <p class="hero-disclaimer">
+        Beregningerne er vejledende og udgør ikke personlig finansiel rådgivning.
+      </p>
+
+      <button class="hero-cta"
+        onclick="document.querySelector('main').scrollIntoView({ behavior: 'smooth' });">
+        Beregn boliglån
+      </button>
     </div>
-  </nav>
+
+    <div class="hero-illustration">
+      <img src="img/hero-invest.svg" class="hero-illu-img" alt="Boligberegner illustration">
+    </div>
+  </div>
 </header>
 
-  <header class="hero hero-standard">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1 class="hero-title">Boligberegner</h1>
-        <p class="hero-subtitle">Forstå dine boligudgifter, lån og økonomiske scenarier.</p>
-        <ul class="hero-bullets">
-          <li>Vejledende beregning</li><li>Boligbudget</li><li>Gratis og anonym</li>
-        </ul>
-        <p class="hero-disclaimer">Dette værktøj er vejledende og ikke finansiel rådgivning.</p>
-      </div>
-      <div class="hero-illustration">
-        <img src="img/hero-invest.svg" class="hero-illu-img">
-      </div>
-    </div>
-  </header>
 
+  <!-- TOOL ACTION BAR -->
   <div class="tool-action-bar container">
-    <button class="btn-tool-pdf">Rapport (PDF)</button>
-    <button class="btn-tool-reset">Ryd alt</button>
+    <button class="btn btn-secondary btn-tool-pdf">Rapport (PDF)</button>
+    <button class="btn btn-danger btn-tool-reset">Ryd alt</button>
   </div>
 
-  <main class="container">
-    <!-- Tool content kommer senere -->
+  <!-- TOOL LAYOUT -->
+  <main class="container grid">
+    <!-- INPUT CARD -->
+    <div class="card">
+      <h2>Bolig &amp; lån</h2>
+      <p class="card-subtext">Indtast de vigtigste tal for dit boliglån.</p>
+
+      <label for="home-price">Boligpris (DKK)</label>
+      <input type="number" id="home-price" placeholder="2.000.000" />
+
+      <label for="downpayment">Udbetaling (DKK)</label>
+      <input type="number" id="downpayment" placeholder="200.000" />
+
+      <label for="mortgage-years">Løbetid (år)</label>
+      <input type="number" id="mortgage-years" placeholder="30" />
+
+      <label for="mortgage-rate">Årlig rente (%)</label>
+      <input type="number" id="mortgage-rate" placeholder="4" />
+
+      <label for="interest-only-years">Afdragsfri periode (år)</label>
+      <input type="number" id="interest-only-years" placeholder="0" />
+    </div>
+
+    <!-- RESULT CARD -->
+    <div class="card">
+      <h2>Overblik &amp; resultater</h2>
+
+      <div class="grid kpi-grid">
+        <div class="card kpi">
+          <h4>Lånebeløb</h4>
+          <p id="kpi-loan-amount">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Månedlig ydelse</h4>
+          <p id="kpi-monthly-payment">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Samlede renter</h4>
+          <p id="kpi-total-interest">–</p>
+        </div>
+      </div>
+
+      <h3>Restgæld</h3>
+      <ul class="bullet-list">
+        <li>Efter 5 år: <strong id="kpi-balance-5y">–</strong></li>
+        <li>Efter 10 år: <strong id="kpi-balance-10y">–</strong></li>
+      </ul>
+
+      <div id="mortgage-error" class="error-box"></div>
+    </div>
   </main>
 
-<script src="mortgage.js"></script>
+  <!-- SCRIPTS -->
+  <script src="mortgage.js"></script>
+  
+<script src="../shared/pdfEngine.js"></script>
 </body>
 </html>

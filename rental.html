@@ -1,57 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="da">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Udlejningsberegner – Finlytics</title>
+  <link rel="stylesheet" href="styles.css">
 
-  <link rel="stylesheet" href="styles-base.css">
-  <link rel="stylesheet" href="styles-components.css">
-  <link rel="stylesheet" href="styles-hero.css">
-  <link rel="stylesheet" href="styles-tools.css">
-  <link rel="stylesheet" href="styles-patch.css">
+  <!-- DS CSS -->
+  <link rel="stylesheet" href="rental.css">
+  <script src="navbar.js" defer></script>
 </head>
 
 <body>
-<header class="container site-header">
-  <nav class="nav-bar">
-    <a href="index.html" class="nav-logo">Finlytics</a>
-    <div class="nav-links">
-      <a href="index.html">Investeringsberegner</a>
-      <a href="tax.html">Skatteberegner</a>
-      <a href="tax-helper.html">Årsopgørelsesguide</a>
-      <a href="about.html">Om Finlytics</a>
-      <a href="debt.html">Gældsplanlægger</a>
-      <a href="mortgage.html">Boligberegner</a>
-      <a href="rental.html">Udlejningsberegner</a>
+  <div id="site-header"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Se dit reelle cashflow på udlejning.</h1>
+
+      <p class="hero-subtitle">
+        Beregn lejeindtægt, udgifter og tomgang, og se hvad du realistisk får tilbage – hver
+        måned og hvert år.
+      </p>
+
+      <ul class="hero-bullets">
+        <li>💸 Beregn månedligt og årligt cashflow.</li>
+        <li>🏘️ Tag højde for tomgang, vedligehold og faste udgifter.</li>
+        <li>📊 Få et samlet overblik over økonomien i din udlejning.</li>
+      </ul>
+
+      <p class="hero-disclaimer">
+        Beregningerne er vejledende og udgør ikke investerings- eller skatterådgivning.
+      </p>
+
+      <button class="hero-cta"
+        onclick="document.querySelector('main').scrollIntoView({ behavior: 'smooth' });">
+        Beregn udlejning
+      </button>
     </div>
-  </nav>
+
+    <div class="hero-illustration">
+      <img src="img/hero-invest.svg" class="hero-illu-img" alt="Udlejningsberegner illustration">
+    </div>
+  </div>
 </header>
 
-  <header class="hero hero-standard">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1 class="hero-title">Udlejningsberegner</h1>
-        <p class="hero-subtitle">Beregn udlejningens økonomi og potentielt afkast.</p>
-        <ul class="hero-bullets">
-          <li>Vejledende beregning</li><li>Lejeindtægter</li><li>Gratis og anonym</li>
-        </ul>
-        <p class="hero-disclaimer">Dette værktøj er vejledende og ikke investeringsrådgivning.</p>
-      </div>
-      <div class="hero-illustration">
-        <img src="img/hero-invest.svg" class="hero-illu-img">
-      </div>
-    </div>
-  </header>
 
   <div class="tool-action-bar container">
     <button class="btn-tool-pdf">Rapport (PDF)</button>
     <button class="btn-tool-reset">Ryd alt</button>
   </div>
 
-  <main class="container">
-    <!-- Tool content kommer senere -->
+  <main class="container grid">
+    <!-- INPUT CARD -->
+    <div class="card">
+      <h2>Udlejning & udgifter</h2>
+      <p class="card-subtext">Indtast de vigtigste tal for din udlejning.</p>
+
+      <label for="rent">Husleje (DKK/md)</label>
+      <input type="number" id="rent" placeholder="8000">
+
+      <label for="vacancy">Tomgang (%)</label>
+      <input type="number" id="vacancy" placeholder="5">
+
+      <label for="utilities">Forbrug (DKK/md)</label>
+      <input type="number" id="utilities" placeholder="0">
+
+      <label for="maintenance">Vedligehold (DKK/md)</label>
+      <input type="number" id="maintenance" placeholder="500">
+
+      <label for="property-tax">Ejendomsskat (DKK/år)</label>
+      <input type="number" id="property-tax" placeholder="10000">
+
+      <label for="insurance">Forsikring (DKK/år)</label>
+      <input type="number" id="insurance" placeholder="4500">
+
+      <label for="loan-payment">Lån – månedlig ydelse (DKK/md)</label>
+      <input type="number" id="loan-payment" placeholder="4500">
+    </div>
+
+    <!-- RESULT CARD -->
+    <div class="card">
+      <h2>Overblik & resultater</h2>
+
+      <div class="grid kpi-grid">
+        <div class="card kpi">
+          <h4>Månedligt cashflow</h4>
+          <p id="kpi-monthly">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Årligt cashflow</h4>
+          <p id="kpi-yearly">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Cashflow efter tomgang</h4>
+          <p id="kpi-adjusted">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Break-even husleje</h4>
+          <p id="kpi-breakeven">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>ROI (årligt)</h4>
+          <p id="kpi-roi">–</p>
+        </div>
+      </div>
+
+      <div id="rental-error" class="error-box"></div>
+    </div>
   </main>
 
-<script src="rental.js"></script>
+  <script src="rental.js"></script>
+  
+<script src="../shared/pdfEngine.js"></script>
 </body>
 </html>

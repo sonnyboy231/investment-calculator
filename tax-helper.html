@@ -1,55 +1,60 @@
 
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Finlytics – Tax Helper</title>
-
-  <link rel="stylesheet" href="styles-base.css">
-  <link rel="stylesheet" href="styles-components.css">
-  <link rel="stylesheet" href="styles-hero.css">
-  <link rel="stylesheet" href="styles-tools.css">
-  <link rel="stylesheet" href="styles-patch.css">
+  <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="tax-helper.css">
+<link rel="stylesheet" href="tax-helper.css">
+  <script src="navbar.js" defer></script>
 </head><body>
+  <div id="site-header"></div>
+
 
 
   <!-- ===== HERO SECTION – ÅRSOPGØRELSESGUIDE ===== -->
-  <header class="hero hero-standard">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <h1 class="hero-title">Forstå din årsopgørelse — helt enkelt.</h1>
-      <p class="hero-subtitle">Finlytics hjælper dig med at forstå dine vigtigste tal – investering, skat og årsopgørelse – hurtigt, simpelt og uden støj.</p>
+  <header class="hero hero-helper">
+    <div class="hero-inner hero-layout">
+      <!-- LEFT: TEXT + CTAS + BADGES -->
+      <div class="hero-main">
+        <h1 class="hero-title">Forstå din årsopgørelse – helt enkelt.</h1>
+        <p class="hero-subtitle">
+          En trin-for-trin guide til de vigtigste felter: indkomst, fradrag, investeringer og restskat – skrevet på almindeligt dansk.
+        </p>
 
-      <ul class="hero-bullets">
-  <li>Gratis og anonym brug</li>
-  <li>Moderne danske værktøjer</li>
-  <li>Ingen rådgivning – kun overblik</li>
-</ul>
+        <div class="hero-ctas">
+          <button class="btn btn-primary"
+            onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
+            Start guiden
+          </button>
+          <button class="btn btn-secondary"
+            onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
+            Se typiske fejl →
+          </button>
+        </div>
 
-      <p class="hero-disclaimer">Dette værktøj giver et vejledende overblik baseret på dine oplysninger. Ikke rådgivning.</p>
+        <ul class="hero-badges">
+          <li class="hero-badge">100% gratis</li>
+          <li class="hero-badge">Ingen login</li>
+          <li class="hero-badge">Simpel og forklarende</li>
+          <li class="hero-badge">Dansk vejledning</li>
+        </ul>
 
-      <div class="hero-ctas">
-        <button class="btn btn-primary">Start guiden</button>
-        <button class="btn btn-secondary">Se typiske fejl</button>
+        <p class="hero-disclaimer">
+          Guiden er vejledende og kan ikke erstatte officiel information på skat.dk eller personlig skatterådgivning.
+        </p>
+      </div>
+
+      <!-- RIGHT: ILLUSTRATION – 3 STEPS -->
+      <div class="hero-illu">
+        <div class="hero-illu-card shadow-soft helper-steps">
+          <p class="helper-text" style="margin-top:0;">Guiden tager dig igennem:</p>
+          <ol class="helper-list">
+            <li>Hvem er du – lønmodtager, investor, udlejer m.m.</li>
+            <li>Hvilke typer indkomst, fradrag og investeringer du har.</li>
+            <li>Hvilke rubrikker du skal bruge på skat.dk.</li>
+          </ol>
+        </div>
       </div>
     </div>
-
-    <div class="hero-illustration">
-      <img src="img/hero-helper.svg" class="hero-illu-img">
-    </div>
-  </div>
-</header>
-
-<header class="container site-header">
-  <nav class="nav-bar">
-    <a href="index.html" class="nav-logo">Finlytics</a>
-    <div class="nav-links">
-      <a href="index.html">Investeringsberegner</a>
-      <a href="tax.html">Skatteberegner</a>
-      <a href="tax-helper.html" class="active">Årsopgørelsesguide</a>
-      <a href="about.html">Om Finlytics</a>
-      <a href="debt.html">Gældsplanlægger</a>
-      <a href="mortgage.html">Boligberegner</a>
-      <a href="rental.html">Udlejningsberegner</a>
-    </div>
-  </nav>
-</header>
+  </header>
 
 <main class="container taxhelper-wrap">
 <h2>Årsopgørelse & Forskudsopgørelse – Guide</h2>
@@ -83,6 +88,58 @@
   <h3>3. Rubrikker du skal bruge</h3>
   <div id="rubrik-output" class="rubrik-box"></div>
   <button class="btn btn-line" onclick="prevStep()">Tilbage</button>
+
+<section class="th-premium">
+  <h2>Premium overblik</h2>
+  <div class="th-prem-grid">
+    <div class="th-prem-card th-prem-safety">
+      <h3>Trygheds-score</h3>
+      <div id="th-prem-safety-score" class="big-num">–</div>
+      <p id="th-prem-safety-text" class="helper-text">
+        Gennemfør guiden for at få en vurdering af, hvor tryg din årsopgørelse ser ud.
+      </p>
+    </div>
+
+    <div class="th-prem-card th-prem-scenarios">
+      <h3>Scenarier</h3>
+      <div class="th-prem-scenarios-grid">
+        <div class="th-prem-scenario">
+          <h4>Optimistisk</h4>
+          <p id="th-prem-s-opt" class="helper-text">–</p>
+        </div>
+        <div class="th-prem-scenario">
+          <h4>Realistisk</h4>
+          <p id="th-prem-s-real" class="helper-text">–</p>
+        </div>
+        <div class="th-prem-scenario">
+          <h4>Pessimistisk</h4>
+          <p id="th-prem-s-pess" class="helper-text">–</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="th-prem-card th-prem-error">
+      <h3>Risiko for fejl / utryghed</h3>
+      <div id="th-prem-error-risk" class="big-num">–</div>
+      <p class="helper-text">
+        Estimat baseret på hvor kompleks din situation ser ud i guiden.
+      </p>
+    </div>
+
+    <div class="th-prem-card th-prem-recos">
+      <h3>Anbefalinger</h3>
+      <ul id="th-prem-recos"></ul>
+    </div>
+  </div>
+
+  <div class="th-prem-cta">
+    <button type="button" class="btn btn-line" disabled>
+      Download årsopgørelsesrapport (kommer snart)
+    </button>
+  </div>
+</section>
+
+
 </div>
 
 <footer class="container footer">
