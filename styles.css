@@ -765,3 +765,31 @@ select{
   white-space: nowrap;
 }
 
+
+
+/* === Sprint 2 Mobile Optimization === */
+@media (max-width:768px){
+  .two-columns, .grid-2, .grid-3, .results-grid, .scenario-grid {
+    display:block!important;
+  }
+  .two-columns>*, .grid-2>*, .grid-3>* {
+    width:100%!important;
+    margin-bottom:20px!important;
+  }
+  .card, .result-card, .scenario-card {
+    width:100%!important;
+    margin:0 0 24px 0!important;
+    padding:20px!important;
+  }
+  nav {flex-wrap:wrap;gap:6px;}
+  nav a {padding:8px 12px;font-size:14px;}
+  .hero {padding:24px 12px!important;}
+  .hero h1 {font-size:26px!important;line-height:32px!important;}
+  .hero p, .hero ul li {font-size:14px!important;}
+  button, .btn {width:100%!important;}
+  canvas, .chart-wrap, .chart-container {
+    width:100%!important;
+    height:auto!important;
+    min-height:260px!important;
+  }
+}

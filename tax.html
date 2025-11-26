@@ -3,165 +3,122 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Finlytics – Skatteberegner for investeringer</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Finlytics – Skatteberegner</title>
 
+  <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="tax.css">
   <script src="navbar.js" defer></script>
 </head>
+
 <body>
-  <div id="site-header"></div>
+<div id="site-header"></div>
 
-
-
-  <!-- ===== HERO SECTION – SKATTEBEREGNER ===== -->
-  <header class="hero hero-tax">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <h1 class="hero-title">Få styr på skatten af dine investeringer – på få sekunder.</h1>
-        <p class="hero-subtitle">
-          Indtast dine gevinster, tab og udbytter, og få et samlet, vejledende overblik over, hvor meget skat du skal betale.
-        </p>
-
-        <ul class="hero-bullets">
-          <li>🔢 Dækker aktier, ETF'er og crypto.</li>
-          <li>📦 Viser både brutto-beløb og netto efter skat.</li>
-          <li>🧾 Ideel som forberedelse til din årsopgørelse.</li>
-        </ul>
-
-        <p class="hero-disclaimer">
-          Beregningen er forenklet og kan ikke erstatte personlig skatterådgivning eller din endelige årsopgørelse hos Skat.
-        </p>
-
-        <button class="hero-cta"
-          onclick="document.getElementById('tax-form').scrollIntoView({ behavior: 'smooth' });">
-          Åbn skatteberegner
-        </button>
-      </div>
-    </div>
-  </header>
-
-<main class="container tax-main">
-
-  <div class="tax-grid-layout">
-
-    <!-- INPUTS (LEFT) -->
-<section class="card tax-card">
-      <h2>Skatteberegner – investering</h2>
-      <p class="helper-text">
-        Indtast dine gevinster, tab og udbytter. Finlytics estimerer din skat på aktier, ETF'er og crypto.
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Forstå din skat på investeringer — på få sekunder.</h1>
+      <p class="hero-subtitle">
+        Få et klart overblik over skat på aktier, ETF’er og crypto. Se totalskat, nettoresultat og undgå ubehagelige overraskelser ved årsopgørelsen.
       </p>
 
-      <div class="tax-info">
-        <h3>Sådan bruger du skatteberegneren</h3>
-        <p>
-          Denne beregner er lavet til private investorer, der vil have et hurtigt overblik over,
-          hvor meget skat der skal betales af investeringer. Du udfylder felterne for de typer
-          investeringer du har (aktier, ETF'er og evt. crypto), og ser et samlet estimat på skat
-          og hvad du har tilbage efter skat.
-        </p>
-        <p>
-          Modellen er forenklet og kan ikke erstatte personlig skatterådgivning eller den endelige
-          årsopgørelse hos Skat. Tænk på den som et <strong>vejledende overblik</strong>, ikke en facitliste.
-        </p>
+      <ul class="hero-bullets">
+        <li>📊 Automatisk udregning af skat på aktier, ETF'er og crypto</li>
+        <li>🔢 Se totalskat, netto efter skat og indkomstfordeling</li>
+        <li>🧭 Premium scenarier for risiko, restskat og anbefalinger</li>
+      </ul>
 
-        <details class="tax-faq">
-          <summary>Jeg er helt ny – hvad betyder de tre typer indkomst?</summary>
-          <ul>
-            <li><strong>Aktieindkomst</strong>: Gevinst, tab og udbytte fra almindelige aktier og aktiebaserede investeringsfonde.</li>
-            <li><strong>Kapitalindkomst</strong>: Typisk gevinst/tab og udbytte fra ETF'er og fonde med lagerbeskatning.</li>
-            <li><strong>Crypto</strong>: Gevinst/tab på køb og salg af kryptovaluta, der i mange tilfælde beskattes som personlig indkomst.</li>
-          </ul>
-        </details>
-      </div>
+      <p class="hero-disclaimer">
+        Beregningen er vejledende og ikke personlig skatterådgivning.
+      </p>
 
+      <button class="hero-cta"
+        onclick="document.getElementById('tax-form').scrollIntoView({ behavior: 'smooth' });">
+        Beregn skat
+      </button>
+    </div>
+  </div>
+</header>
+
+
+<!-- ===== MAIN ===== -->
+<main class="container tax-main">
+
+  <div class="grid">
+
+    <!-- ========== INPUTS ========== -->
+    <section class="card tax-card">
+      <h2>Skatteberegner</h2>
 
       <form class="form" id="tax-form" autocomplete="off">
 
+        <!-- Aktieindkomst -->
         <div class="tax-section">
           <h3>Aktieindkomst</h3>
           <div class="row two">
             <div class="cell">
               <label for="tax-stock-gain">Realiseret gevinst (DKK)</label>
-              <input id="tax-stock-gain" type="number" min="0" step="100" placeholder="fx 25.000" />
-              <p class="field-note">Alt det du faktisk har solgt med profit i løbet af året. Urealiserede gevinster (ting du stadig ejer) skal ikke med her.</p>
+              <input id="tax-stock-gain" type="number" min="0" step="100" placeholder="fx 25.000">
             </div>
             <div class="cell">
               <label for="tax-stock-loss">Realiseret tab (DKK)</label>
-              <input id="tax-stock-loss" type="number" min="0" step="100" placeholder="fx 5.000" />
-              <p class="field-note">Tab på aktier du rent faktisk har solgt med underskud. Ikke midlertidige fald på aktier du stadig ejer.</p>
+              <input id="tax-stock-loss" type="number" min="0" step="100" placeholder="fx 5.000">
             </div>
           </div>
 
           <div class="row two">
             <div class="cell">
               <label for="tax-stock-dividend">Udbytte (DKK)</label>
-              <input id="tax-stock-dividend" type="number" min="0" step="100" placeholder="fx 2.000" />
-              <p class="field-note">Summen af alle kontante udbytter fra dine aktier i løbet af året.</p>
+              <input id="tax-stock-dividend" type="number" min="0" step="100" placeholder="fx 2.000">
             </div>
             <div class="cell">
-              <label for="tax-stock-threshold">Progressionsgrænse aktieindkomst</label>
-              <input id="tax-stock-threshold" type="number" min="0" step="1000" placeholder="fx 62.000" />
-              <p class="field-note">Grænsen hvor skatten går fra 27% til 42%. Standardbeløbet ændrer sig over tid – tjek Skat for det aktuelle niveau.</p>
+              <label for="tax-stock-threshold">Progressionsgrænse</label>
+              <input id="tax-stock-threshold" type="number" min="0" step="1000" placeholder="fx 62.000">
             </div>
           </div>
-
-          <p class="helper-text">
-            Aktieindkomst er fx gevinst og udbytte fra almindelige aktier og aktiefonde. Her bruger vi den
-            simple hovedregel: 27% skat op til progressionsgrænsen og 42% af resten. Har du både gevinst og tab,
-            modregner vi først tab i gevinster og udbytter.
-          </p>
         </div>
 
+        <!-- Kapitalindkomst -->
         <div class="tax-section">
-          <h3>Kapitalindkomst (fx ETF med lagerbeskatning)</h3>
+          <h3>Kapitalindkomst (ETF)</h3>
+
           <div class="row two">
             <div class="cell">
-              <label for="tax-capital-change">Årets værdiændring (DKK)</label>
-              <input id="tax-capital-change" type="number" step="100" placeholder="fx 10.000" />
-              <p class="field-note">Samlet plus/minus på hele året for lagerbeskattede produkter (fx ETF), også selvom du ikke har solgt.</p>
+              <label for="tax-capital-change">Årets værdiændring</label>
+              <input id="tax-capital-change" type="number" step="100" placeholder="fx 10.000">
             </div>
             <div class="cell">
-              <label for="tax-capital-dividend">Udbytte (DKK)</label>
-              <input id="tax-capital-dividend" type="number" step="100" placeholder="fx 1.000" />
-              <p class="field-note">Kontant udbytte fra fx ETF'er eller obligationer, der beskattes som kapitalindkomst.</p>
+              <label for="tax-capital-dividend">Udbytte</label>
+              <input id="tax-capital-dividend" type="number" step="100" placeholder="fx 1.000">
             </div>
           </div>
 
           <div class="row">
-            <label for="tax-capital-rate">Skatteprocent på kapitalindkomst</label>
-            <p class="field-note">Din personlige sats for kapitalindkomst. Har du ingen idé, kan 37% være et forsigtigt bud.</p>
+            <label for="tax-capital-rate">Skattesats</label>
             <select id="tax-capital-rate">
               <option value="0.37">37%</option>
               <option value="0.42">42%</option>
             </select>
           </div>
-
-          <p class="helper-text">
-            Kapitalindkomst dækker typisk over lagerbeskattede ETF'er og fonde. Her beskattes årets samlede
-            ændring (gevinst/tab + udbytte) som kapitalindkomst. Satsen afhænger af din øvrige indkomst – derfor
-            vælger du selv et niveau her.
-          </p>
         </div>
 
+        <!-- Crypto -->
         <div class="tax-section">
-          <h3>Crypto (personlig indkomst)</h3>
+          <h3>Crypto</h3>
+
           <div class="row two">
             <div class="cell">
-              <label for="tax-crypto-gain">Realiseret gevinst (DKK)</label>
-              <input id="tax-crypto-gain" type="number" step="100" placeholder="fx 15.000" />
-              <p class="field-note">Profit på salg/bytte af crypto i løbet af året – altså når du rent faktisk har lukket en handel med gevinst.</p>
+              <label for="tax-crypto-gain">Realiseret gevinst</label>
+              <input id="tax-crypto-gain" type="number" step="100" placeholder="fx 15.000">
             </div>
             <div class="cell">
-              <label for="tax-crypto-loss">Realiseret tab (DKK)</label>
-              <input id="tax-crypto-loss" type="number" step="100" placeholder="fx 3.000" />
-              <p class="field-note">Tab på crypto-handler, hvor du har solgt/byttet med underskud.</p>
+              <label for="tax-crypto-loss">Realiseret tab</label>
+              <input id="tax-crypto-loss" type="number" step="100" placeholder="fx 3.000">
             </div>
           </div>
 
           <div class="row">
-            <label for="tax-crypto-rate">Skatteprocent (personlig indkomst)</label>
-            <p class="field-note">Din samlede marginalskat på personlig indkomst. Er du i tvivl, så vælg hellere en lidt for høj sats.</p>
+            <label for="tax-crypto-rate">Skattesats</label>
             <select id="tax-crypto-rate">
               <option value="0.37">37%</option>
               <option value="0.42">42%</option>
@@ -169,11 +126,6 @@
               <option value="0.52">52%</option>
             </select>
           </div>
-
-          <p class="helper-text">
-            Crypto beskattes ofte som personlig indkomst, når du realiserer gevinst ved at sælge. Her ser vi
-            forenklet på forskellen mellem gevinst og tab, og beskatter det med den sats du vælger.
-          </p>
         </div>
 
         <div class="tax-actions">
@@ -184,114 +136,95 @@
       </form>
     </section>
 
-    <!-- RESULTS (RIGHT) -->
-<section class="card tax-card tax-results-graph-card">
-      <div class="tax-results-inner">
-        <h2>Resultater</h2>
+    <!-- ========== RESULTS ========== -->
+    <section class="card tax-card">
+      <h2>Resultater</h2>
 
-        <div class="kpis kpis-tax">
-          <div class="kpi">
-            <div class="label">Samlet skat</div>
-            <div id="tax-kpi-total" class="value">–</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Netto efter skat</div>
-            <div id="tax-kpi-net" class="value">–</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Aktier</div>
-            <div id="tax-kpi-stock" class="value">–</div>
-          </div>
-          <div class="kpi">
-            <div class="label">ETF / kapital</div>
-            <div id="tax-kpi-capital" class="value">–</div>
-          </div>
-          <div class="kpi">
-            <div class="label">Crypto</div>
-            <div id="tax-kpi-crypto" class="value">–</div>
-          </div>
-        </div>
+      <div class="kpis kpis-tax">
+        <div class="kpi"><div class="label">Samlet skat</div><div id="tax-kpi-total" class="value">–</div></div>
+        <div class="kpi"><div class="label">Netto efter skat</div><div id="tax-kpi-net" class="value">–</div></div>
+        <div class="kpi"><div class="label">Aktier</div><div id="tax-kpi-stock" class="value">–</div></div>
+        <div class="kpi"><div class="label">ETF / kapital</div><div id="tax-kpi-capital" class="value">–</div></div>
+        <div class="kpi"><div class="label">Crypto</div><div id="tax-kpi-crypto" class="value">–</div></div>
+      </div>
 
-        <div class="chart-wrap tax-chart">
-          <canvas id="tax-chart" width="640" height="260"></canvas>
-          <p class="note">
-            Den blå søjle viser brutto-beløbet før skat. Den grønne søjle viser netto efter skat.
-          </p>
-        </div>
-
-        <p class="helper-text">
-          Beregningen er forenklet og tager ikke højde for alle særlige regler, fradrag og individuelle forhold.
-          Brug altid din egen årsopgørelse og eventuel rådgiver som endeligt grundlag.
-        </p>
+      <div class="chart-wrap tax-chart">
+        <canvas id="tax-chart" width="640" height="260"></canvas>
       </div>
     </section>
+
   </div>
 
-
-  <!-- TAX PREMIUM OUTPUT -->
-  <section class="card tax-card tax-premium-output">
+   <!-- PREMIUM SECTION -->
+  <section class="premium-output ip-premium">
     <h2>Premium overblik</h2>
-    <div class="tax-prem-grid">
-      <div class="tax-prem-risk-card">
+
+    <div class="ip-grid">
+
+      <!-- Trygheds-score -->
+      <div class="card risk-card">
         <h3>Trygheds-score</h3>
         <div id="tax-prem-risk-score" class="big-num">–</div>
-        <p id="tax-prem-risk-text" class="muted small">
-          Beregn for at se en vurdering af din risiko for restskat.
-        </p>
+        <div id="tax-prem-risk-text" class="muted" style="margin-top:6px; font-size:14px;">
+          Indtast dine tal og beregn for at se en vurdering.
+        </div>
       </div>
 
-      <div class="tax-prem-scenarios">
+      <!-- Scenarier -->
+      <div class="card scenario-wrapper">
         <h3>Scenarier</h3>
-        <div class="tax-prem-scenarios-grid">
-          <div class="card mini">
+        <div class="scenario-cards">
+          <div class="scenario-card card">
             <h4>Optimistisk</h4>
             <div id="tax-prem-s-opt" class="big-num">–</div>
           </div>
-          <div class="card mini">
+          <div class="scenario-card card">
             <h4>Realistisk</h4>
             <div id="tax-prem-s-real" class="big-num">–</div>
           </div>
-          <div class="card mini">
+          <div class="scenario-card card">
             <h4>Pessimistisk</h4>
             <div id="tax-prem-s-pess" class="big-num">–</div>
           </div>
         </div>
       </div>
 
-      <div class="tax-prem-success">
+      <!-- Risiko for restskat -->
+      <div class="card success-meter">
         <h3>Risiko for restskat</h3>
         <div id="tax-prem-rest" class="big-num">–</div>
-        <p class="muted small">
-          Vi estimerer en vejledende sandsynlighed baseret på dine indtastede tal.
-        </p>
       </div>
 
-      <div class="tax-prem-recos">
+      <!-- Anbefalinger -->
+      <div class="card recommendations">
         <h3>Anbefalinger</h3>
         <ul id="tax-prem-recos"></ul>
       </div>
-    </div>
 
-    <div class="tax-prem-cta">
-      <button type="button" class="btn btn-line" disabled>
-        Premium skatrapport (kommer snart)
-      </button>
+      <!-- CTA -->
+      <div class="premium-cta">
+        <button type="button" class="btn btn-line" disabled>
+          Premium skatrapport (kommer snart)
+        </button>
+      </div>
+
     </div>
   </section>
 
 
 </main>
 
-  <!-- ===== FOOTER ===== -->
-  <footer class="container foot">
-    <span>© 2025 Finlytics</span>
-  </footer>
+<footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
 
-  <script>
-    document.querySelector('.foot span').innerHTML =
-      "© " + new Date().getFullYear() + " Finlytics";
-  </script>
-  <script src="tax.js"></script>
+<script>
+document.querySelector('.foot span').innerHTML =
+  "© " + new Date().getFullYear() + " Finlytics";
+</script>
+
+<script src="tax.js"></script>
 
 </body>
 </html>
+
