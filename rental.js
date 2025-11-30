@@ -1,22 +1,33 @@
-// Udlejningsberegner v1 – Finlytics
+ // Udlejningsberegner v1 – Finlytics
 
-// Bind events (script ligger i bunden af <body>, så DOM er klar)
-const primaryBtn = document.querySelector(".hero .btn.btn-primary");
-if (primaryBtn) {
-  primaryBtn.addEventListener("click", handleRentalCalculate);
-}
+document.addEventListener("DOMContentLoaded", () => {
+  // Beregn-knap i kortet
+  const calcBtn = document.getElementById("btn-rental-calc");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", handleRentalCalculate);
+  }
 
-const resetBtn = document.querySelector(".btn-tool-reset");
-if (resetBtn) {
-  resetBtn.addEventListener("click", resetRentalUI);
-}
+  // "Ryd alt" i topbaren
+  const resetBtn = document.querySelector(".btn-tool-reset");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", resetRentalUI);
+  }
 
-const pdfBtn = document.querySelector(".btn-tool-pdf");
-if (pdfBtn) {
-  pdfBtn.addEventListener("click", () => {
-    alert("PDF-rapport kommer i en senere version.");
-  });
-}
+  // Lokal "Ryd felter" under inputs (samme funktion)
+  const clearBtn = document.getElementById("btn-rental-clear");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", resetRentalUI);
+  }
+
+  // PDF-knap (placeholder)
+  const pdfBtn = document.querySelector(".btn-tool-pdf");
+  if (pdfBtn) {
+    pdfBtn.addEventListener("click", () => {
+      alert("PDF-rapport kommer i en senere version.");
+    });
+  }
+});
+
 
 function handleRentalCalculate() {
   clearRentalError();

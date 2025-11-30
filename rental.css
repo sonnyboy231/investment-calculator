@@ -1,2 +1,7 @@
 @import url("../shared/styles.css");
 /* rental overrides */
+
+/* Lidt ekstra luft over knapperne i boliglånskortet */
+.tax-actions {
+  margin-top: 18px;
+}

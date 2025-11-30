@@ -110,7 +110,11 @@
           </ul>
         </div>
 
-        <button id="calc-btn" type="submit" class="btn btn-primary">Beregn</button>
+       <div class="tax-actions">
+        <button id="calc-btn" type="submit" class="btn btn-glow">Beregn skat</button>
+        <button id="btn-clear-data-big" type="button" class="btn btn-line">Ryd felter</button>
+      </div>
+
       </form>
 
       <!-- ===== MONTE CARLO CARD ===== -->
@@ -162,7 +166,12 @@
 
     <!-- ===== RESULTS (RIGHT COLUMN) ===== -->
     <section class="card">
-      <h2>Resultater</h2>
+  <div class="card-header">
+    <h2>Resultater</h2>
+    <button class="btn btn-tool-pdf">Download PDF</button>
+  </div>
+
+
 
       <div class="kpis">
         <div class="kpi"><div class="label">Total indskud</div><div id="kpi-contrib" class="value">–</div></div>
@@ -293,20 +302,23 @@
     <!-- PREMIUM OUTPUT – SLUT -->
 
 
-<!-- ===== FOOTER ===== -->
-  <footer class="container foot">
-    <span>© 2025 Finlytics</span>
-  </footer>
+<footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
 
- <script>
-    document.querySelector('.foot span').innerHTML =
-      "© " + new Date().getFullYear() + " Finlytics";
-  </script>
+<script src="utils.js" defer></script>
+<script src="navbar.js" defer></script>
+<script src="pdfEngine.js" defer></script>
+<script src="invest.js" defer></script>
 
-  <!-- Korrekt JS-fil til investeringsberegneren -->
-  <script src="invest.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
 </body>
 </html>
 
-</body>
-</html>

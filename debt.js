@@ -179,15 +179,22 @@ function renderKPIs(result){
     kpis[2].textContent = formatDKK(result.summary.monthlyPayment);
 }
 
-function renderTable(result){
-    const tbody=document.querySelector(".table-basic tbody");
-    tbody.innerHTML="";
-    result.table.forEach(row=>{
-        const tr=document.createElement("tr");
-        tr.innerHTML=`<td>${row.year}</td><td>${row.balance}</td><td>${row.interest}</td>`;
-        tbody.appendChild(tr);
-    });
+function renderTable(result) {
+  const tbody = document.querySelector(".table-basic tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+  result.table.forEach((row) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row.year}</td>
+      <td>${formatDKK(row.balance)} kr.</td>
+      <td>${formatDKK(row.interest)} kr.</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
+
 
 
 function renderGraph(result){
@@ -298,22 +305,6 @@ function resetAll(){
     }
 }
 
-
-document.querySelector(".btn-tool-reset").addEventListener("click", resetAll);
-
-document.querySelector(".btn.btn-primary").addEventListener("click", ()=>{
-    const loans=getLoansFromUI();
-    const strategy=getStrategyFromUI();
-    const check=validateLoans(loans);
-    if(!check.valid){ document.getElementById("error-box").innerText = check.errors.join("\n"); return; } else { document.getElementById("error-box").innerText=""; }
-    const result=calculateDebtPlan(loans, strategy);
-    renderGraph(result);
-    renderKPIs(result);
-    renderTable(result);
-    renderGraph(result);
-});
-
-
 function generateDebtPDF(){
     const loans = getLoansFromUI();
     const strategy = getStrategyFromUI();
@@ -322,6 +313,7 @@ function generateDebtPDF(){
         // fejl vises allerede via validateLoans + error-box i main flow
         return;
     }
+
     const result = calculateDebtPlan(loans, strategy);
     let graphImage = null;
     try{
@@ -344,12 +336,90 @@ function generateDebtPDF(){
     }
 }
 
-document.addEventListener('DOMContentLoaded', function(){
-    const pdfBtn = document.querySelector('.btn-tool-pdf');
-    if (pdfBtn){
-        pdfBtn.addEventListener('click', function(ev){
-            ev.preventDefault();
-            generateDebtPDF();
-        });
+function runDebtCalculation() {
+  const loans = getLoansFromUI();
+  const strategy = getStrategyFromUI();
+  const check = validateLoans(loans);
+  const errorBox = document.getElementById("error-box");
+
+  if (!check.valid) {
+    if (errorBox) errorBox.innerText = check.errors.join("\n");
+    return;
+  }
+
+  if (errorBox) errorBox.innerText = "";
+
+  const result = calculateDebtPlan(loans, strategy);
+  renderGraph(result);
+  renderKPIs(result);
+  renderTable(result);
+}
+
+function generateDebtPDF() {
+  const loans = getLoansFromUI();
+  const strategy = getStrategyFromUI();
+  const check = validateLoans(loans);
+
+  if (!check.valid) return;
+
+  const result = calculateDebtPlan(loans, strategy);
+  let graphImage = null;
+
+  try {
+    const canvas = document.getElementById("debtChart");
+    if (canvas && canvas.toDataURL) {
+      graphImage = canvas.toDataURL("image/png");
     }
+  } catch (e) {
+    console.error("Kunne ikke hente graf-billede til PDF", e);
+  }
+
+  if (typeof generateDebtPDFEngine === "function") {
+    generateDebtPDFEngine(result, graphImage);
+  } else if (
+    window.FinlyticsPDF &&
+    typeof window.FinlyticsPDF.generateDebtPDFEngine === "function"
+  ) {
+    window.FinlyticsPDF.generateDebtPDFEngine(result, graphImage);
+  } else if (window.alert) {
+    window.alert("PDF-motor ikke klar endnu.");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const heroBtn = document.querySelector(".hero .btn.btn-primary");
+  if (heroBtn) {
+    heroBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      runDebtCalculation();
+      document
+        .querySelector("main.container.grid")
+        ?.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+
+  const calcBtn = document.getElementById("btn-debt-calc");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      runDebtCalculation();
+    });
+  }
+
+  const clearBtn = document.getElementById("btn-debt-clear");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      resetAll();
+    });
+  }
+
+  const pdfBtn = document.querySelector(".btn-tool-pdf");
+  if (pdfBtn) {
+    pdfBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      generateDebtPDF();
+    });
+  }
 });
+

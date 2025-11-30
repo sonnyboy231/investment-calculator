@@ -137,8 +137,12 @@
     </section>
 
     <!-- ========== RESULTS ========== -->
-    <section class="card tax-card">
-      <h2>Resultater</h2>
+   <section class="card">
+  <div class="card-header">
+    <h2>Resultater</h2>
+    <button class="btn btn-tool-pdf">Download PDF</button>
+  </div>
+
 
       <div class="kpis kpis-tax">
         <div class="kpi"><div class="label">Samlet skat</div><div id="tax-kpi-total" class="value">–</div></div>
@@ -218,13 +222,32 @@
   <span>© 2025 Finlytics</span>
 </footer>
 
+<!-- Fælles JS-helpers -->
+<script src="utils.js" defer></script>
+
+<!-- Navbar (fælles for alle sider) -->
+<script src="navbar.js" defer></script>
+
+<!-- Sidespecifik logik: Investeringsberegner -->
+<script src="tax.js" defer></script>
+
+<footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
+
+<script src="utils.js" defer></script>
+<script src="navbar.js" defer></script>
+<script src="pdfEngine.js" defer></script>
+<script src="tax.js" defer></script>
+
 <script>
-document.querySelector('.foot span').innerHTML =
-  "© " + new Date().getFullYear() + " Finlytics";
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
 </script>
-
-<script src="tax.js"></script>
-
 </body>
 </html>
 

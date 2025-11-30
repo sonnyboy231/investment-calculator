@@ -1,4 +1,9 @@
+ /* =========================================
+   FINLYTICS DESIGN TOKENS
+   (Farver, spacing, fontscale, radius, skygger)
+   ========================================= */
 :root{
+  /* Legacy Finlytics background tokens */
   --bg:#0d1220;
   --panel:#121a2e;
   --panel-2:#0e1528;
@@ -10,7 +15,54 @@
   --warn:#ff8e7a;
   --radius:16px;
   --shadow:0 10px 35px rgba(0,0,0,.45);
+
+  /* Brand colors */
+  --color-primary: #4F46E5;
+  --color-primary-soft: #6366F1;
+  --color-primary-subtle: #EEF2FF;
+
+  --color-accent: #22C55E;
+  --color-accent-soft: #BBF7D0;
+
+  /* Neutrals */
+  --color-surface: #0B1220;
+  --color-surface-soft: #111827;
+  --color-border-soft: rgba(148,163,184,0.35);
+
+  /* Status / feedback */
+  --color-success: #10B981;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+
+  /* Typography scale */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+
+  --fs-hero: 48px;
+  --fs-h1: 32px;
+  --fs-h2: 24px;
+  --fs-h3: 20px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+
+  /* Spacing scale */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-96: 96px;
+
+  /* Radius */
+  --radius-card: 16px;
+  --radius-button: 999px;
+
+  /* Soft shadow variant */
+  --shadow-soft: 0 10px 30px rgba(15,23,42,0.45);
 }
+
 
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -81,13 +133,32 @@ body{
 .grid{display:grid; gap:16px}
 @media (min-width: 980px){ .grid{ grid-template-columns: 1fr 1fr; } }
 
-.card{
+.card{ 
   background:linear-gradient(180deg, var(--panel), var(--panel-2));
   border:1px solid var(--border);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:16px;
 }
+
+/* Card header med titel + actions (fx PDF-knap) */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;           /* lidt luft mellem titel og knap */
+  margin-bottom: 1rem; /* afstand ned til indholdet i kortet */
+}
+
+.card-header h2 {
+  margin: 0;           /* så H2 ikke skubber layoutet */
+}
+
+.card-header .btn {
+  white-space: nowrap; /* så "Download PDF" ikke bryder linjen */
+}
+
+
 .card.sub{ margin-top:12px }
 
 h2{margin:0 0 10px 0; font-size:20px}
@@ -234,16 +305,6 @@ input:active{ transform: translateY(1px) }
   margin-bottom: 10px;
   padding-left: 20px;
   line-height: 1.5;
-}
-
-/* Hero Beregn button */
-#calc-btn{
-  height: 54px;
-  font-size: 18px;
-  box-shadow: 0 4px 18px rgba(108,168,255,.25);
-}
-#calc-btn:hover{
-  filter: brightness(1.08);
 }
 
 /* KPI cards enhanced visuals */
@@ -511,62 +572,6 @@ input:active{ transform: translateY(1px) }
 }
 
 
-/* ============================================
-   GLOBAL DESIGN SYSTEM v1 – Finlytics
-   ============================================ */
-
-/* Inter font import */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* Design tokens */
-:root{
-  /* Brand colors */
-  --color-primary: #4F46E5;
-  --color-primary-soft: #6366F1;
-  --color-primary-subtle: #EEF2FF;
-
-  --color-accent: #22C55E;
-  --color-accent-soft: #BBF7D0;
-
-  /* Neutrals */
-  --color-surface: #0B1220;
-  --color-surface-soft: #111827;
-  --color-border-soft: rgba(148,163,184,0.35);
-
-  /* Status */
-  --color-success: #10B981;
-  --color-error: #EF4444;
-  --color-warning: #F59E0B;
-
-  /* Typography scale */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-
-  --fs-hero: 48px;
-  --fs-h1: 32px;
-  --fs-h2: 24px;
-  --fs-h3: 20px;
-  --fs-body: 16px;
-  --fs-small: 14px;
-
-  /* Spacing scale */
-  --space-4: 4px;
-  --space-8: 8px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-24: 24px;
-  --space-32: 32px;
-  --space-48: 48px;
-  --space-64: 64px;
-  --space-96: 96px;
-
-  /* Radius */
-  --radius-card: 16px;
-  --radius-button: 999px;
-
-  /* Shadows */
-  --shadow-soft: 0 10px 30px rgba(15,23,42,0.45);
-}
-
 /* Global font override */
 body{
   font-family: var(--font-sans);
@@ -682,6 +687,33 @@ select{
 .premium-cta .btn-line{
   min-width:260px;
 }
+
+/* =========================
+   GLOBAL TOOL ACTIONS
+   ========================= */
+
+.tool-action-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.tool-actions-bottom {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tool-actions-bottom .btn-primary,
+.tool-actions-bottom .btn-danger,
+.tool-action-bar .btn-primary,
+.tool-action-bar .btn-danger {
+  min-width: 160px;
+}
+
+
 
 /* Desktop layout */
 @media (min-width: 900px){

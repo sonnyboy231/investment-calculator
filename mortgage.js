@@ -1,14 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const primaryBtn = document.querySelector(".hero .btn.btn-primary");
-  if (primaryBtn) {
-    primaryBtn.addEventListener("click", handleMortgageCalculate);
+  // Beregn-knappen i kortet
+  const calcBtn = document.getElementById("btn-mortgage-calc");
+  if (calcBtn) {
+    calcBtn.addEventListener("click", handleMortgageCalculate);
   }
 
+  // "Ryd alt" i topbaren
   const resetBtn = document.querySelector(".btn-tool-reset");
   if (resetBtn) {
     resetBtn.addEventListener("click", resetMortgageUI);
   }
 
+  // "Ryd felter" under inputs (samme funktion)
+  const clearBtn = document.getElementById("btn-mortgage-clear");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", resetMortgageUI);
+  }
+
+  // PDF-knap (placeholder)
   const pdfBtn = document.querySelector(".btn-tool-pdf");
   if (pdfBtn) {
     pdfBtn.addEventListener("click", () => {

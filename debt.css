@@ -1,2 +1,51 @@
 @import url("../shared/styles.css");
 /* debt overrides */
+
+/* === Debt Planner – År-for-år tabel (premium style) === */
+
+.table-basic {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums; /* pænere kolonne-align på tal */
+}
+
+/* Header */
+.table-basic thead tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.table-basic th {
+  padding: 6px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Cells */
+.table-basic td {
+  padding: 6px 12px;
+  color: var(--muted);
+}
+
+/* Højre-justér tal-kolonner (restgæld + rente) */
+.table-basic th:nth-child(2),
+.table-basic th:nth-child(3),
+.table-basic td:nth-child(2),
+.table-basic td:nth-child(3) {
+  text-align: right;
+}
+
+/* Zebra rows + subtil premium feel */
+.table-basic tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.table-basic tbody tr:nth-child(even) {
+  background: rgba(255,255,255,0.02);
+}
+
+.table-basic tbody tr:hover {
+  background: rgba(255,255,255,0.05);
+}

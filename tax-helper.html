@@ -2,7 +2,6 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><title>Finlytics – Tax Helper</title>
   <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="tax-helper.css">
-<link rel="stylesheet" href="tax-helper.css">
   <script src="navbar.js" defer></script>
 </head><body>
   <div id="site-header"></div>
@@ -10,51 +9,35 @@
 
 
   <!-- ===== HERO SECTION – ÅRSOPGØRELSESGUIDE ===== -->
-  <header class="hero hero-helper">
-    <div class="hero-inner hero-layout">
-      <!-- LEFT: TEXT + CTAS + BADGES -->
-      <div class="hero-main">
-        <h1 class="hero-title">Forstå din årsopgørelse – helt enkelt.</h1>
-        <p class="hero-subtitle">
-          En trin-for-trin guide til de vigtigste felter: indkomst, fradrag, investeringer og restskat – skrevet på almindeligt dansk.
-        </p>
+  <header class="hero">
+  <div class="hero-inner container">
+    <div class="hero-text">
+      <p class="hero-kicker">Årsopgørelse & forskudsopgørelse – gjort simpelt.</p>
 
-        <div class="hero-ctas">
-          <button class="btn btn-primary"
-            onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
-            Start guiden
-          </button>
-          <button class="btn btn-secondary"
-            onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
-            Se typiske fejl →
-          </button>
-        </div>
+      <h1>Forstå din årsopgørelse – helt enkelt.</h1>
 
-        <ul class="hero-badges">
-          <li class="hero-badge">100% gratis</li>
-          <li class="hero-badge">Ingen login</li>
-          <li class="hero-badge">Simpel og forklarende</li>
-          <li class="hero-badge">Dansk vejledning</li>
-        </ul>
+      <p class="hero-lead">
+        En trin-for-trin guide til de vigtigste felter: indkomst, fradrag, investeringer og restskat – skrevet på almindeligt dansk.
+      </p>
 
-        <p class="hero-disclaimer">
-          Guiden er vejledende og kan ikke erstatte officiel information på skat.dk eller personlig skatterådgivning.
-        </p>
-      </div>
+      <ul class="hero-bullets">
+        <li>📄 Gå felt for felt igennem indkomst, fradrag og investeringer.</li>
+        <li>✅ Find de rigtige rubrikker på skat.dk – uden at drukne i tekniske ord.</li>
+        <li>🧾 Bliv bedre forberedt på både års- og forskudsopgørelse.</li>
+      </ul>
 
-      <!-- RIGHT: ILLUSTRATION – 3 STEPS -->
-      <div class="hero-illu">
-        <div class="hero-illu-card shadow-soft helper-steps">
-          <p class="helper-text" style="margin-top:0;">Guiden tager dig igennem:</p>
-          <ol class="helper-list">
-            <li>Hvem er du – lønmodtager, investor, udlejer m.m.</li>
-            <li>Hvilke typer indkomst, fradrag og investeringer du har.</li>
-            <li>Hvilke rubrikker du skal bruge på skat.dk.</li>
-          </ol>
-        </div>
-      </div>
+      <p class="hero-disclaimer">
+        Guiden er vejledende og kan ikke erstatte officiel information på skat.dk eller personlig skatterådgivning.
+      </p>
+
+      <button class="hero-cta"
+        onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
+        Start guiden
+      </button>
     </div>
-  </header>
+  </div>
+</header>
+
 
 <main class="container taxhelper-wrap">
 <h2>Årsopgørelse & Forskudsopgørelse – Guide</h2>
@@ -138,13 +121,32 @@
     </button>
   </div>
 </section>
-
-
 </div>
 
-<footer class="container footer">
-<p class="disclaimer">Finlytics yder ingen økonomisk rådgivning. Alt indhold er vejledende.</p>
+<footer class="container foot">
+  <span>© 2025 Finlytics</span>
 </footer>
 
-<script src="tax-helper.js"></script>
-</main></body></html>
+<!-- Fælles JS-helpers -->
+<script src="utils.js" defer></script>
+
+<!-- Navbar (fælles for alle sider) -->
+<script src="navbar.js" defer></script>
+
+<!-- PDF-motor (fælles til alle PDF-knapper) -->
+<script src="pdfEngine.js" defer></script>
+
+<!-- Sidespecifik logik: Årsopgørelse / Skat guide -->
+<script src="tax-helper.js" defer></script>
+
+<!-- Opdater årstal i footeren -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
+</body>
+</html>

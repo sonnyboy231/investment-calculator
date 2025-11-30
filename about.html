@@ -80,12 +80,23 @@
 
 
   <footer class="container foot">
-    <span>© 2025 Finlytics</span>
-  </footer>
+  <span>© 2025 Finlytics</span>
+</footer>
 
+<!-- Fælles JS-helpers -->
+<script src="utils.js" defer></script>
+
+<!-- Navbar (fælles for alle sider) -->
+<script src="navbar.js" defer></script>
+
+<!-- Opdater årstal i footeren -->
 <script>
-  document.querySelector('.foot span').innerHTML = "© " + new Date().getFullYear() + " Finlytics";
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
 </script>
-
 </body>
 </html>

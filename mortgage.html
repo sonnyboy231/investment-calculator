@@ -47,13 +47,6 @@
   </div>
 </header>
 
-
-  <!-- TOOL ACTION BAR -->
-  <div class="tool-action-bar container">
-    <button class="btn btn-secondary btn-tool-pdf">Rapport (PDF)</button>
-    <button class="btn btn-danger btn-tool-reset">Ryd alt</button>
-  </div>
-
   <!-- TOOL LAYOUT -->
   <main class="container grid">
     <!-- INPUT CARD -->
@@ -75,11 +68,26 @@
 
       <label for="interest-only-years">Afdragsfri periode (år)</label>
       <input type="number" id="interest-only-years" placeholder="0" />
+   
+      <div class="tax-actions">
+        <button type="button" id="btn-mortgage-calc" class="btn btn-glow">
+          Beregn boliglån
+        </button>
+        <button type="button" id="btn-mortgage-clear" class="btn btn-line">
+          Ryd felter
+        </button>
+      </div>
+
+   
     </div>
 
     <!-- RESULT CARD -->
-    <div class="card">
-      <h2>Overblik &amp; resultater</h2>
+   <section class="card">
+  <div class="card-header">
+    <h2>Resultater</h2>
+    <button class="btn btn-tool-pdf">Download PDF</button>
+  </div>
+
 
       <div class="grid kpi-grid">
         <div class="card kpi">
@@ -108,9 +116,23 @@
     </div>
   </main>
 
-  <!-- SCRIPTS -->
-  <script src="mortgage.js"></script>
-  
-<script src="../shared/pdfEngine.js"></script>
+ <footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
+
+<script src="utils.js" defer></script>
+<script src="navbar.js" defer></script>
+<script src="pdfEngine.js" defer></script>
+<script src="mortgage.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
 </body>
 </html>
+

@@ -50,12 +50,6 @@
   </div>
 </header>
 
-
-  <div class="tool-action-bar container">
-    <button class="btn-tool-pdf">Rapport (PDF)</button>
-    <button class="btn-tool-reset">Ryd alt</button>
-  </div>
-
   <main class="container grid">
     <div class="card">
       <h2>Dine lån</h2>
@@ -127,10 +121,7 @@
         <input type="month" id="loan2-start">
       </div>
 
-      <button class="btn btn-secondary" disabled>Tilføj lån (kommer snart)</button>
-
       <hr />
-
       <h3>Strategi</h3>
 
       <label>
@@ -144,10 +135,27 @@
         Avalanche (højeste rente først)
       </label>
       <p class="microcopy">Betal lån med højest rente først for færrest renteudgifter.</p>
+      <div class="tax-actions">
+ 
+        <button type="button" id="btn-debt-calc" class="btn btn-glow">
+    Beregn gældsplan
+  </button>
+  <button type="button" id="btn-debt-clear" class="btn btn-line">
+    Ryd felter
+  </button>
+</div>
+
+
+
+    
     </div>
 
-    <div class="card">
-      <h2>Overblik &amp; resultater</h2>
+    <section class="card">
+  <div class="card-header">
+    <h2>Resultater</h2>
+    <button class="btn btn-tool-pdf">Download PDF</button>
+  </div>
+
 
       <div class="grid kpi-grid">
         <div class="card kpi">
@@ -213,8 +221,24 @@
     </div>
   </main>
 
-  <script src="debt.js"></script>
-  
-<script src="../shared/pdfEngine.js"></script>
+  <footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
+
+<script src="utils.js" defer></script>
+<script src="navbar.js" defer></script>
+<script src="pdfEngine.js" defer></script>
+<script src="debt.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
 </body>
 </html>
+
+
