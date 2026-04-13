@@ -1,0 +1,152 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Finlytics – Tax Helper</title>
+  <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="tax-helper.css">
+  <script src="navbar.js" defer></script>
+</head><body>
+  <div id="site-header"></div>
+
+
+
+  <!-- ===== HERO SECTION – ÅRSOPGØRELSESGUIDE ===== -->
+  <header class="hero">
+  <div class="hero-inner container">
+    <div class="hero-text">
+      <p class="hero-kicker">Årsopgørelse & forskudsopgørelse – gjort simpelt.</p>
+
+      <h1>Forstå din årsopgørelse – helt enkelt.</h1>
+
+      <p class="hero-lead">
+        En trin-for-trin guide til de vigtigste felter: indkomst, fradrag, investeringer og restskat – skrevet på almindeligt dansk.
+      </p>
+
+      <ul class="hero-bullets">
+        <li>📄 Gå felt for felt igennem indkomst, fradrag og investeringer.</li>
+        <li>✅ Find de rigtige rubrikker på skat.dk – uden at drukne i tekniske ord.</li>
+        <li>🧾 Bliv bedre forberedt på både års- og forskudsopgørelse.</li>
+      </ul>
+
+      <p class="hero-disclaimer">
+        Guiden er vejledende og kan ikke erstatte officiel information på skat.dk eller personlig skatterådgivning.
+      </p>
+
+      <button class="hero-cta"
+        onclick="document.getElementById('step1').scrollIntoView({ behavior: 'smooth' });">
+        Start guiden
+      </button>
+    </div>
+  </div>
+</header>
+
+
+<main class="container taxhelper-wrap">
+<h2>Årsopgørelse & Forskudsopgørelse – Guide</h2>
+<p class="helper-text">Denne guide er vejledende og hjælper dig med at finde de rigtige rubrikker på skat.dk.</p>
+
+<div id="step1" class="th-step active">
+  <h3>1. Hvem er du?</h3>
+  <div class="th-select">
+    <label><input type="checkbox" value="lonmodtager"> Lønmodtager</label>
+    <label><input type="checkbox" value="investor"> Investor</label>
+    <label><input type="checkbox" value="udlejer"> Udlejer</label>
+    <label><input type="checkbox" value="studerende"> Studerende</label>
+  </div>
+  <button class="btn btn-glow" onclick="nextStep()">Næste</button>
+</div>
+
+<div id="step2" class="th-step">
+  <h3>2. Hvad har du haft i år?</h3>
+  <div class="th-select">
+    <label><input type="checkbox" value="aktie"> Aktiegevinst/tab</label>
+    <label><input type="checkbox" value="etf"> ETF / kapitalindkomst</label>
+    <label><input type="checkbox" value="udbytte"> Udbytte</label>
+    <label><input type="checkbox" value="koersel"> Kørselsfradrag</label>
+    <label><input type="checkbox" value="rente"> Renteudgifter</label>
+  </div>
+  <button class="btn btn-line" onclick="prevStep()">Tilbage</button>
+  <button class="btn btn-glow" onclick="nextStep()">Næste</button>
+</div>
+
+<div id="step3" class="th-step">
+  <h3>3. Rubrikker du skal bruge</h3>
+  <div id="rubrik-output" class="rubrik-box"></div>
+  <button class="btn btn-line" onclick="prevStep()">Tilbage</button>
+
+<section class="th-premium">
+  <h2>Premium overblik</h2>
+  <div class="th-prem-grid">
+    <div class="th-prem-card th-prem-safety">
+      <h3>Trygheds-score</h3>
+      <div id="th-prem-safety-score" class="big-num">–</div>
+      <p id="th-prem-safety-text" class="helper-text">
+        Gennemfør guiden for at få en vurdering af, hvor tryg din årsopgørelse ser ud.
+      </p>
+    </div>
+
+    <div class="th-prem-card th-prem-scenarios">
+      <h3>Scenarier</h3>
+      <div class="th-prem-scenarios-grid">
+        <div class="th-prem-scenario">
+          <h4>Optimistisk</h4>
+          <p id="th-prem-s-opt" class="helper-text">–</p>
+        </div>
+        <div class="th-prem-scenario">
+          <h4>Realistisk</h4>
+          <p id="th-prem-s-real" class="helper-text">–</p>
+        </div>
+        <div class="th-prem-scenario">
+          <h4>Pessimistisk</h4>
+          <p id="th-prem-s-pess" class="helper-text">–</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="th-prem-card th-prem-error">
+      <h3>Risiko for fejl / utryghed</h3>
+      <div id="th-prem-error-risk" class="big-num">–</div>
+      <p class="helper-text">
+        Estimat baseret på hvor kompleks din situation ser ud i guiden.
+      </p>
+    </div>
+
+    <div class="th-prem-card th-prem-recos">
+      <h3>Anbefalinger</h3>
+      <ul id="th-prem-recos"></ul>
+    </div>
+  </div>
+
+  <div class="th-prem-cta">
+    <button type="button" class="btn btn-line" disabled>
+      Download årsopgørelsesrapport (kommer snart)
+    </button>
+  </div>
+</section>
+</div>
+
+<footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
+
+<!-- Fælles JS-helpers -->
+<script src="utils.js" defer></script>
+
+<!-- Navbar (fælles for alle sider) -->
+<script src="navbar.js" defer></script>
+
+<!-- PDF-motor (fælles til alle PDF-knapper) -->
+<script src="pdfEngine.js" defer></script>
+
+<!-- Sidespecifik logik: Årsopgørelse / Skat guide -->
+<script src="tax-helper.js" defer></script>
+
+<!-- Opdater årstal i footeren -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
+</body>
+</html>

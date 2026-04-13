@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gældsplanlægger – Finlytics</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="debt.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="navbar.js" defer></script>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Få styr på din gæld – og bliv gældsfri hurtigere.</h1>
+
+      <p class="hero-subtitle">
+        Få et samlet overblik over alle dine lån, sammenlign snowball- og avalanche-metoderne
+        og se hvornår du realistisk kan blive gældsfri.
+      </p>
+
+      <ul class="hero-bullets">
+        <li>📚 Saml alle lån ét sted.</li>
+        <li>📉 Se hvornår du kan være gældsfri.</li>
+        <li>⚙️ Test effekten af ekstra afdrag på få sekunder.</li>
+      </ul>
+
+      <p class="hero-disclaimer">
+        Dette værktøj er vejledende og udgør ikke personlig gældsrådgivning.
+      </p>
+
+      <button class="hero-cta"
+        onclick="document.querySelector('main').scrollIntoView({ behavior: 'smooth' });">
+        Start gældsplan
+      </button>
+
+      <div id="error-box"></div>
+    </div>
+
+    <div class="hero-illustration">
+      <img src="img/hero-invest.svg" class="hero-illu-img" alt="Gældsplanlægger illustration" />
+    </div>
+  </div>
+</header>
+
+  <main class="container grid">
+    <div class="card">
+      <h2>Dine lån</h2>
+      <p class="card-subtext">Tilføj dine lån for at se, hvornår du realistisk kan blive gældsfri.</p>
+
+      <!-- LÅN 1 -->
+      <div class="card loan-card">
+        <h3>Lån 1</h3>
+
+        <label for="loan1-name">Lånenavn</label>
+        <input type="text" id="loan1-name" placeholder="Forbrugslån">
+
+        <label for="loan1-type">Lånetype</label>
+        <select id="loan1-type">
+          <option>Forbrugslån</option>
+          <option>Billån</option>
+          <option>Kreditkort</option>
+          <option>Studielån</option>
+          <option>Realkredit</option>
+          <option>Andet</option>
+        </select>
+
+        <label for="loan1-principal">Restgæld (DKK)</label>
+        <input type="number" id="loan1-principal" placeholder="50.000">
+
+        <label for="loan1-rate">Årlig rente (%)</label>
+        <input type="number" id="loan1-rate" placeholder="4.2">
+
+        <label for="loan1-min">Minimum ydelse (DKK/md)</label>
+        <input type="number" id="loan1-min" placeholder="850">
+
+        <label for="loan1-extra">Ekstra afdrag (DKK/md)</label>
+        <input type="number" id="loan1-extra" placeholder="0">
+
+        <label for="loan1-start">Startdato</label>
+        <input type="month" id="loan1-start">
+      </div>
+
+      <!-- LÅN 2 -->
+      <div class="card loan-card">
+        <h3>Lån 2</h3>
+
+        <label for="loan2-name">Lånenavn</label>
+        <input type="text" id="loan2-name" placeholder="Billån">
+
+        <label for="loan2-type">Lånetype</label>
+        <select id="loan2-type">
+          <option>Forbrugslån</option>
+          <option>Billån</option>
+          <option>Kreditkort</option>
+          <option>Studielån</option>
+          <option>Realkredit</option>
+          <option>Andet</option>
+        </select>
+
+        <label for="loan2-principal">Restgæld (DKK)</label>
+        <input type="number" id="loan2-principal" placeholder="85.000">
+
+        <label for="loan2-rate">Årlig rente (%)</label>
+        <input type="number" id="loan2-rate" placeholder="7.5">
+
+        <label for="loan2-min">Minimum ydelse (DKK/md)</label>
+        <input type="number" id="loan2-min" placeholder="1.200">
+
+        <label for="loan2-extra">Ekstra afdrag (DKK/md)</label>
+        <input type="number" id="loan2-extra" placeholder="300">
+
+        <label for="loan2-start">Startdato</label>
+        <input type="month" id="loan2-start">
+      </div>
+
+      <hr />
+      <h3>Strategi</h3>
+
+      <label>
+        <input type="radio" name="strategy" value="snowball" checked>
+        Snowball (mindste lån først)
+      </label>
+      <p class="microcopy">Betal det mindste lån ud først for hurtigere motivation.</p>
+
+      <label>
+        <input type="radio" name="strategy" value="avalanche">
+        Avalanche (højeste rente først)
+      </label>
+      <p class="microcopy">Betal lån med højest rente først for færrest renteudgifter.</p>
+      <div class="tax-actions">
+ 
+        <button type="button" id="btn-debt-calc" class="btn btn-glow">
+    Beregn gældsplan
+  </button>
+  <button type="button" id="btn-debt-clear" class="btn btn-line">
+    Ryd felter
+  </button>
+</div>
+
+
+
+    
+    </div>
+
+    <section class="card">
+  <div class="card-header">
+    <h2>Resultater</h2>
+    <button class="btn btn-tool-pdf">Download PDF</button>
+  </div>
+
+
+      <div class="grid kpi-grid">
+        <div class="card kpi">
+          <h4>Forventet gældfri dato</h4>
+          <p>–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Samlede renteudgifter</h4>
+          <p>–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Månedlig betaling</h4>
+          <p>–</p>
+        </div>
+      </div>
+
+      <div class="chart-placeholder">
+        <canvas id="debtChart"></canvas>
+      </div>
+
+      <h3>År-for-år overblik (kommer snart)</h3>
+
+      <table class="table-basic">
+        <thead>
+          <tr>
+            <th>År</th>
+            <th>Restgæld</th>
+            <th>Betalt rente</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>–</td><td>–</td></tr>
+          <tr><td>2</td><td>–</td><td>–</td></tr>
+          <tr><td>3</td><td>–</td><td>–</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card premium-placeholder">
+      <h2>Scenarier &amp; anbefalinger (Premium)</h2>
+
+      <h3>Scenarier</h3>
+      <ul>
+        <li><strong>Baseline:</strong> Din gæld afvikles med minimumsbetalinger.</li>
+        <li><strong>+500 kr/md:</strong> Hurtigere gældfri + reduceret rente.</li>
+        <li><strong>+1.500 kr/md:</strong> Markant hurtigere gældfri og store rentespænd.</li>
+      </ul>
+
+      <h3>Anbefalinger</h3>
+      <ul>
+        <li>Fokusér ekstra afdrag på lån med højest rente</li>
+        <li>Små ekstra afdrag giver stor tidsbesparelse</li>
+        <li>Undgå nye lån under afbetalingen</li>
+        <li>Gennemgå dine lån årligt</li>
+      </ul>
+
+      <p class="premium-disclaimer">
+        Dette værktøj er vejledende og ikke personlig gældsrådgivning.
+        Brugeren har selv ansvar for økonomiske beslutninger og aftaler med bank eller kreditorer.
+      </p>
+    </div>
+  </main>
+
+  <footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
+
+<script src="utils.js" defer></script>
+<script src="navbar.js" defer></script>
+<script src="pdfEngine.js" defer></script>
+<script src="debt.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
+</body>
+</html>
+
+

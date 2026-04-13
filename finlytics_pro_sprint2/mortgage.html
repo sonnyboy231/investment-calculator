@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boligberegner – Finlytics</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="mortgage.css">
+  <script src="navbar.js" defer></script>
+</head>
+<body>
+  <div id="site-header"></div>
+
+  <!-- NAV -->
+  <!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Forstå dit boliglån – før du siger ja.</h1>
+
+      <p class="hero-subtitle">
+        Beregn lånebeløb, månedlig ydelse og samlede renter, så du kan se, hvad boliglånet
+        betyder for din økonomi – både nu og på sigt.
+      </p>
+
+      <ul class="hero-bullets">
+        <li>🏠 Beregn boliglån og månedlig ydelse.</li>
+        <li>📊 Se samlede renter over lånets løbetid.</li>
+        <li>🔍 Test forskellige renter, løbetider og udbetaling.</li>
+      </ul>
+
+      <p class="hero-disclaimer">
+        Beregningerne er vejledende og udgør ikke personlig finansiel rådgivning.
+      </p>
+
+      <button class="hero-cta"
+        onclick="document.querySelector('main').scrollIntoView({ behavior: 'smooth' });">
+        Beregn boliglån
+      </button>
+    </div>
+
+    <div class="hero-illustration">
+      <img src="img/hero-invest.svg" class="hero-illu-img" alt="Boligberegner illustration">
+    </div>
+  </div>
+</header>
+
+  <!-- TOOL LAYOUT -->
+  <main class="container grid">
+    <!-- INPUT CARD -->
+    <div class="card">
+      <h2>Bolig &amp; lån</h2>
+      <p class="card-subtext">Indtast de vigtigste tal for dit boliglån.</p>
+
+      <label for="home-price">Boligpris (DKK)</label>
+      <input type="number" id="home-price" placeholder="2.000.000" />
+
+      <label for="downpayment">Udbetaling (DKK)</label>
+      <input type="number" id="downpayment" placeholder="200.000" />
+
+      <label for="mortgage-years">Løbetid (år)</label>
+      <input type="number" id="mortgage-years" placeholder="30" />
+
+      <label for="mortgage-rate">Årlig rente (%)</label>
+      <input type="number" id="mortgage-rate" placeholder="4" />
+
+      <label for="interest-only-years">Afdragsfri periode (år)</label>
+      <input type="number" id="interest-only-years" placeholder="0" />
+   
+      <div class="tax-actions">
+        <button type="button" id="btn-mortgage-calc" class="btn btn-glow">
+          Beregn boliglån
+        </button>
+        <button type="button" id="btn-mortgage-clear" class="btn btn-line">
+          Ryd felter
+        </button>
+      </div>
+
+   
+    </div>
+
+    <!-- RESULT CARD -->
+   <section class="card">
+  <div class="card-header">
+    <h2>Resultater</h2>
+    <button class="btn btn-tool-pdf">Download PDF</button>
+  </div>
+
+
+      <div class="grid kpi-grid">
+        <div class="card kpi">
+          <h4>Lånebeløb</h4>
+          <p id="kpi-loan-amount">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Månedlig ydelse</h4>
+          <p id="kpi-monthly-payment">–</p>
+        </div>
+
+        <div class="card kpi">
+          <h4>Samlede renter</h4>
+          <p id="kpi-total-interest">–</p>
+        </div>
+      </div>
+
+      <h3>Restgæld</h3>
+      <ul class="bullet-list">
+        <li>Efter 5 år: <strong id="kpi-balance-5y">–</strong></li>
+        <li>Efter 10 år: <strong id="kpi-balance-10y">–</strong></li>
+      </ul>
+
+      <div id="mortgage-error" class="error-box"></div>
+    </div>
+  </main>
+
+ <footer class="container foot">
+  <span>© 2025 Finlytics</span>
+</footer>
+
+<script src="utils.js" defer></script>
+<script src="navbar.js" defer></script>
+<script src="pdfEngine.js" defer></script>
+<script src="mortgage.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const footSpan = document.querySelector(".foot span");
+    if (footSpan) {
+      footSpan.textContent = `© ${new Date().getFullYear()} Finlytics`;
+    }
+  });
+</script>
+</body>
+</html>
+

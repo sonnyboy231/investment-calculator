@@ -1,0 +1,273 @@
+@import url("../shared/styles.css");
+
+/* ===========================
+   Tax Helper – page layout
+   =========================== */
+
+.taxhelper-wrap{
+  margin-top:32px;
+  margin-bottom:40px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+}
+
+/* Intro heading & helper text */
+.taxhelper-wrap > h2{
+  margin:0;
+  font-size:24px;
+}
+
+.taxhelper-wrap > .helper-text{
+  margin:0;
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* ===========================
+   Steps – container & cards
+   =========================== */
+
+.th-step{
+  display:none;
+  background:linear-gradient(135deg, rgba(18,26,46,0.96), rgba(6,10,22,0.98));
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:var(--shadow);
+  padding:20px 22px 18px;
+}
+
+.th-step.active{
+  display:block;
+  animation:th-step-fade-in .18s ease-out;
+}
+
+@keyframes th-step-fade-in{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Step heading */
+.th-step > h3{
+  margin:0 0 8px;
+  font-size:20px;
+  font-weight:600;
+}
+
+/* Tekst under heading hvis der er en <p> direkte i steppet */
+.th-step > p{
+  margin:0 0 16px;
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* ===========================
+   Step 1 & 2 – checkbox options
+   =========================== */
+
+.th-select{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+/* Hele rækken er klikbar “pill”-card */
+.th-select label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  cursor:pointer;
+  font-size:15px;
+  transition:
+    background .15s ease,
+    border-color .15s ease,
+    box-shadow .15s ease,
+    transform .08s ease;
+}
+
+.th-select label:hover{
+  background:rgba(255,255,255,0.07);
+  border-color:rgba(148,190,255,0.9);
+  box-shadow:0 10px 24px rgba(0,0,0,0.55);
+  transform:translateY(-1px);
+}
+
+/* Native checkbox – synlig, men med mint farve */
+.th-select label input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+  margin-left:12px;
+  accent-color:var(--mint);
+  cursor:pointer;
+}
+
+/* ===========================
+   Step buttons
+   =========================== */
+
+.th-step .btn{
+  margin-top:8px;
+}
+
+.th-step .btn + .btn{
+  margin-left:8px;
+}
+
+/* På mobil: knapper i kolonne */
+@media (max-width:720px){
+  .th-step .btn{
+    width:100%;
+  }
+  .th-step .btn + .btn{
+    margin-left:0;
+    margin-top:8px;
+  }
+}
+
+/* ===========================
+   Rubrik-output (Step 3)
+   =========================== */
+
+.rubrik-box{
+  margin:8px 0 18px;
+  padding:16px 18px;
+  border-radius:14px;
+  background:rgba(10,16,32,0.95);
+  border:1px solid rgba(148,190,255,0.4);
+  box-shadow:0 18px 40px rgba(2,6,23,0.85);
+  font-size:14px;
+  line-height:1.6;
+}
+
+.rubrik-box h4{
+  margin:0 0 6px;
+  font-size:15px;
+}
+
+.rubrik-box p{
+  margin:0 0 4px;
+}
+
+/* ===========================
+   Premium section
+   =========================== */
+
+.th-premium{
+  margin-top:32px;
+  padding:22px 22px 20px;
+  border-radius:var(--radius);
+  background:
+    radial-gradient(circle at top left, rgba(99,230,190,0.08), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(108,168,255,0.12), transparent 60%),
+    linear-gradient(135deg, #090e1b, #050814);
+  border:1px solid rgba(148,190,255,0.35);
+  box-shadow:0 22px 50px rgba(15,23,42,0.95);
+}
+
+.th-premium > h2{
+  margin-top:0;
+  margin-bottom:8px;
+  font-size:20px;
+}
+
+.th-premium > p.helper-text{
+  margin-bottom:18px;
+}
+
+.th-prem-grid{
+  display:grid;
+  grid-template-columns:2fr 3fr;
+  gap:16px;
+}
+
+.th-prem-card{
+  background:rgba(11,18,40,0.9);
+  border-radius:14px;
+  border:1px solid rgba(148,190,255,0.35);
+  padding:14px 16px 13px;
+  box-shadow:0 14px 30px rgba(0,0,0,0.7);
+}
+
+.th-prem-card h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+
+/* Big number display */
+.big-num{
+  font-size:32px;
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+/* Scenario grid */
+.th-prem-scenarios-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+.th-prem-scenario{
+  padding:8px 10px;
+  border-radius:10px;
+  background:rgba(15,23,42,0.9);
+  border:1px solid rgba(148,190,255,0.3);
+}
+
+.th-prem-scenario h4{
+  margin:0 0 4px;
+  font-size:13px;
+}
+
+/* Tag-liste */
+.th-prem-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+
+.th-prem-tag{
+  font-size:11px;
+  padding:3px 8px;
+  border-radius:999px;
+  border:1px solid rgba(148,190,255,0.5);
+  background:rgba(15,23,42,0.9);
+}
+
+/* CTA nederst */
+.th-prem-cta{
+  margin-top:16px;
+  text-align:right;
+}
+
+/* ===========================
+   Responsive
+   =========================== */
+
+@media (max-width:900px){
+  .th-prem-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width:600px){
+  .taxhelper-wrap{
+    margin-top:24px;
+    margin-bottom:32px;
+    gap:18px;
+  }
+}
